@@ -2,8 +2,8 @@ using Godot;
 
 public class Bullet : KinematicBody2D
 {
-    private Vector2 BulletMovement;
-    private int _speed = 180;
+    private Vector2 bulletMovement;
+    private int speed = 180;
 
     public override void _Ready()
     {
@@ -13,7 +13,7 @@ public class Bullet : KinematicBody2D
 
     public override void _PhysicsProcess(float delta)
     {
-        var didCollide = MoveAndCollide(BulletMovement * _speed * delta);
+        var didCollide = MoveAndCollide(bulletMovement * speed * delta);
         if (didCollide != null)
         {
             if (didCollide.Collider is KinematicBody2D)
@@ -36,6 +36,6 @@ public class Bullet : KinematicBody2D
 
     public void SetDirection(Vector2 direction)
     {
-        BulletMovement = direction;
+        bulletMovement = direction;
     }
 }
