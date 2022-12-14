@@ -1,0 +1,77 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Images/UI/Main.png" type="Texture" id=1]
+[ext_resource path="res://Scripts/MainMenu.cs" type="Script" id=2]
+[ext_resource path="res://Styles/Themes/MainTheme_Large.tres" type="Theme" id=3]
+
+[node name="TitleScreen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 3 )
+script = ExtResource( 2 )
+
+[node name="Background" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 1 )
+expand = true
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -132.0
+custom_constants/margin_right = 8
+custom_constants/margin_top = 8
+custom_constants/margin_left = 8
+custom_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 760.0
+margin_bottom = 124.0
+custom_constants/separation = 32
+
+[node name="FirstButtons" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+margin_right = 200.0
+margin_bottom = 116.0
+rect_min_size = Vector2( 200, 0 )
+custom_constants/separation = 16
+
+[node name="Start" type="Button" parent="MarginContainer/HBoxContainer/FirstButtons"]
+margin_right = 200.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 0, 50 )
+text = "Start"
+
+[node name="Exit" type="Button" parent="MarginContainer/HBoxContainer/FirstButtons"]
+margin_top = 66.0
+margin_right = 200.0
+margin_bottom = 116.0
+rect_min_size = Vector2( 0, 50 )
+text = "Exit"
+
+[node name="SecondaryButtons" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+margin_left = 232.0
+margin_right = 432.0
+margin_bottom = 116.0
+custom_constants/separation = 16
+
+[node name="TopDown" type="Button" parent="MarginContainer/HBoxContainer/SecondaryButtons"]
+margin_right = 200.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 200, 50 )
+text = "Top Down Style"
+
+[node name="FirstPerson" type="Button" parent="MarginContainer/HBoxContainer/SecondaryButtons"]
+margin_top = 66.0
+margin_right = 200.0
+margin_bottom = 116.0
+rect_min_size = Vector2( 200, 50 )
+text = "First Person Style"
+
+[connection signal="button_up" from="MarginContainer/HBoxContainer/FirstButtons/Start" to="." method="_on_Start_button_up"]
+[connection signal="button_up" from="MarginContainer/HBoxContainer/FirstButtons/Exit" to="." method="_on_Exit_button_up"]
+[connection signal="button_up" from="MarginContainer/HBoxContainer/SecondaryButtons/TopDown" to="." method="_on_TopDown_button_up"]
+[connection signal="button_up" from="MarginContainer/HBoxContainer/SecondaryButtons/FirstPerson" to="." method="_on_FirstPerson_button_up"]
