@@ -498,6 +498,8 @@ end_node = "Idle"
 
 [node name="HuntingPlayer" type="KinematicBody2D"]
 scale = Vector2( 1.5, 1.5 )
+collision_layer = 3
+collision_mask = 3
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]

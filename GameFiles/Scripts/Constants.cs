@@ -3,6 +3,7 @@
     public static class Constants
     {
         // Levels
+        public static string MainMenu = "res://Scenes/MainMenu.tscn";
         public static string TopDownStart = "res://Scenes/TopDownStart.tscn";
         public static string FirstPersonStart = "res://Scenes/FirstPersonStart.tscn";
 

@@ -13,6 +13,12 @@ namespace TrailHunting.Scripts.Managers
             Linker = linker;
         }
 
+        public static void End() 
+        {
+            //show results
+            Linker.GetTree().ChangeScene(Constants.MainMenu);
+        }
+
         public static (MapType, List<int>) BuildTopDownLevel()
         {
             var getMapType = (MapType)new Random().Next(0, 5);

@@ -331,4 +331,9 @@ public class TopDownStart : Node2D
             SpawnTerrain(spawnObject);
         }
     }
+
+    private void _on_EndButton_button_up()
+    {
+        GameManager.End();
+    }
 }

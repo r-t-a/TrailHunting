@@ -3,12 +3,21 @@
 [ext_resource path="res://Images/SpriteSheets/deer.png" type="Texture" id=1]
 [ext_resource path="res://Scripts/TopDownScripts/Entities/Animals/Deer.cs" type="Script" id=2]
 
-[sub_resource type="CircleShape2D" id=8]
-radius = 16.0
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 1 )
+region = Rect2( 64, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 1 )
+region = Rect2( 128, 0, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=11]
 atlas = ExtResource( 1 )
 region = Rect2( 32, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=15]
 atlas = ExtResource( 1 )
@@ -18,28 +27,16 @@ region = Rect2( 0, 0, 32, 32 )
 atlas = ExtResource( 1 )
 region = Rect2( 96, 0, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=12]
-atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=13]
-atlas = ExtResource( 1 )
-region = Rect2( 64, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=14]
-atlas = ExtResource( 1 )
-region = Rect2( 128, 0, 32, 32 )
-
 [sub_resource type="SpriteFrames" id=17]
 animations = [ {
+"frames": [ SubResource( 13 ), SubResource( 14 ) ],
+"loop": true,
+"name": "RunRight",
+"speed": 5.0
+}, {
 "frames": [ SubResource( 11 ) ],
 "loop": true,
 "name": "Dead",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 15 ), SubResource( 16 ) ],
-"loop": true,
-"name": "RunLeft",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 12 ) ],
@@ -47,11 +44,14 @@ animations = [ {
 "name": "Idle",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 13 ), SubResource( 14 ) ],
+"frames": [ SubResource( 15 ), SubResource( 16 ) ],
 "loop": true,
-"name": "RunRight",
+"name": "RunLeft",
 "speed": 5.0
 } ]
+
+[sub_resource type="CircleShape2D" id=8]
+radius = 16.0
 
 [sub_resource type="CircleShape2D" id=10]
 radius = 16.0
@@ -62,13 +62,13 @@ collision_layer = 3
 collision_mask = 3
 script = ExtResource( 2 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-z_index = 1
-shape = SubResource( 8 )
-
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 1, 1 )
 frames = SubResource( 17 )
 animation = "RunRight"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 8 )
 
 [node name="BounceOff" type="Area2D" parent="."]
 

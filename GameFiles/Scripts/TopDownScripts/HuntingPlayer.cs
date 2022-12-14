@@ -6,7 +6,7 @@ public class HuntingPlayer : KinematicBody2D
     public delegate void ShotBullet();
 
     [Export]
-    public int Speed = 75;
+    public int Speed = 80;
 
     public Vector2 lookDirection;
 
@@ -31,13 +31,11 @@ public class HuntingPlayer : KinematicBody2D
     {
         if (!_isMoving)
         {
-            Speed = 0;
             AnimationTree.Set("parameters/Idle/blend_position", lookDirection);
             AnimationNode.Travel("Idle");
         }
         else
         {
-            Speed = 60;
             _moveDirection = _moveDirection.Normalized();
             AnimationTree.Set("parameters/Walk/blend_position", _moveDirection);
             AnimationTree.Set("parameters/Idle/blend_position", _moveDirection);

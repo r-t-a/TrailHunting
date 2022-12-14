@@ -15,6 +15,10 @@ region = Rect2( 0, 0, 48, 32 )
 atlas = ExtResource( 1 )
 region = Rect2( 192, 0, 48, 32 )
 
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 1 )
+region = Rect2( 144, 0, 48, 32 )
+
 [sub_resource type="AtlasTexture" id=18]
 atlas = ExtResource( 1 )
 region = Rect2( 144, 0, 48, 32 )
@@ -22,10 +26,6 @@ region = Rect2( 144, 0, 48, 32 )
 [sub_resource type="AtlasTexture" id=19]
 atlas = ExtResource( 1 )
 region = Rect2( 48, 0, 48, 32 )
-
-[sub_resource type="AtlasTexture" id=15]
-atlas = ExtResource( 1 )
-region = Rect2( 144, 0, 48, 32 )
 
 [sub_resource type="SpriteFrames" id=11]
 animations = [ {
@@ -39,14 +39,14 @@ animations = [ {
 "name": "Dead",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 18 ), SubResource( 19 ) ],
-"loop": true,
-"name": "RunLeft",
-"speed": 5.0
-}, {
 "frames": [ SubResource( 15 ) ],
 "loop": true,
 "name": "Idle",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 18 ), SubResource( 19 ) ],
+"loop": true,
+"name": "RunLeft",
 "speed": 5.0
 } ]
 
@@ -58,9 +58,8 @@ radius = 24.0
 
 [node name="Bear" type="KinematicBody2D"]
 scale = Vector2( 1.5, 1.5 )
-z_index = 1
-collision_layer = 2
-collision_mask = 2
+collision_layer = 3
+collision_mask = 3
 script = ExtResource( 2 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
@@ -68,7 +67,6 @@ frames = SubResource( 11 )
 animation = "RunRight"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-z_index = 1
 shape = SubResource( 8 )
 
 [node name="BounceOff" type="Area2D" parent="."]

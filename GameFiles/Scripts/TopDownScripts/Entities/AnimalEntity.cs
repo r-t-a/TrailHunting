@@ -50,6 +50,11 @@ namespace TrailHunting.Scripts.TopDownScripts.Entities
             {
                 AnimatedSprite.Play("Dead");
                 MoveAndCollide(Vector2.Zero);
+                // Remove from group to continue spawning alive Animals
+                if (IsInGroup("Animals"))
+                {
+                    RemoveFromGroup("Animals");
+                }
             }
             UpdatePhysics();
         }
