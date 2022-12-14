@@ -8,28 +8,27 @@ public class HuntingPlayer : KinematicBody2D
     [Export]
     public int Speed = 80;
 
-    public Vector2 lookDirection;
+    public PackedScene Bullet;
+    public AnimationTree AnimationTree;
+    public AnimationNodeStateMachinePlayback AnimationNode;
+    public Position2D RiflePosition;
 
-    private PackedScene Bullet;
-    private AnimationTree AnimationTree;
-    private AnimationNodeStateMachinePlayback AnimationNode;
-    private Position2D RiflePosition;
-
-    private bool _isMoving = false;
     private Vector2 _moveDirection;
+    private Vector2 lookDirection;
+    private bool isMoving = false;
 
     public override void _Ready()
     {
+        Bullet = (PackedScene)ResourceLoader.Load("res://Scenes/Bullet.tscn");
         AnimationTree = GetNode<AnimationTree>("AnimationTree");
         AnimationNode = (AnimationNodeStateMachinePlayback)AnimationTree.Get("parameters/playback");
-        Bullet = (PackedScene)ResourceLoader.Load("res://Scenes/Bullet.tscn");
         RiflePosition = GetNode<Position2D>("Position2D");
         lookDirection = new Vector2(-1, 0);
     }
 
     public override void _PhysicsProcess(float delta)
     {
-        if (!_isMoving)
+        if (!isMoving)
         {
             AnimationTree.Set("parameters/Idle/blend_position", lookDirection);
             AnimationNode.Travel("Idle");
@@ -50,7 +49,7 @@ public class HuntingPlayer : KinematicBody2D
         {
             lookDirection = Vector2.Zero;
             lookDirection.y = -1;
-            if (_isMoving)
+            if (isMoving)
             {
                 _moveDirection = Vector2.Zero;
                 _moveDirection.y = -1;
@@ -60,7 +59,7 @@ public class HuntingPlayer : KinematicBody2D
         {
             lookDirection = Vector2.Zero;
             lookDirection.y = 1;
-            if (_isMoving)
+            if (isMoving)
             {
                 _moveDirection = Vector2.Zero;
                 _moveDirection.y = 1;
@@ -70,7 +69,7 @@ public class HuntingPlayer : KinematicBody2D
         {
             lookDirection = Vector2.Zero;
             lookDirection.x = -1;
-            if (_isMoving)
+            if (isMoving)
             {
                 _moveDirection = Vector2.Zero;
                 _moveDirection.x = -1;
@@ -80,7 +79,7 @@ public class HuntingPlayer : KinematicBody2D
         {
             lookDirection = Vector2.Zero;
             lookDirection.x = 1;
-            if (_isMoving)
+            if (isMoving)
             {
                 _moveDirection = Vector2.Zero;
                 _moveDirection.x = 1;
@@ -91,7 +90,7 @@ public class HuntingPlayer : KinematicBody2D
             lookDirection = Vector2.Zero;
             lookDirection.x = (float)0.8;
             lookDirection.y = (float)-0.6;
-            if (_isMoving)
+            if (isMoving)
             {
                 _moveDirection = Vector2.Zero;
                 _moveDirection.x = (float)0.8;
@@ -103,7 +102,7 @@ public class HuntingPlayer : KinematicBody2D
             lookDirection = Vector2.Zero;
             lookDirection.x = (float)-0.8;
             lookDirection.y = (float)-0.6;
-            if (_isMoving)
+            if (isMoving)
             {
                 _moveDirection = Vector2.Zero;
                 _moveDirection.x = (float)-0.8;
@@ -115,7 +114,7 @@ public class HuntingPlayer : KinematicBody2D
             lookDirection = Vector2.Zero;
             lookDirection.x = (float)-0.8;
             lookDirection.y = (float)0.6;
-            if (_isMoving)
+            if (isMoving)
             {
                 _moveDirection = Vector2.Zero;
                 _moveDirection.x = (float)-0.8;
@@ -127,7 +126,7 @@ public class HuntingPlayer : KinematicBody2D
             lookDirection = Vector2.Zero;
             lookDirection.x = (float)0.8;
             lookDirection.y = (float)0.6;
-            if (_isMoving)
+            if (isMoving)
             {
                 _moveDirection = Vector2.Zero;
                 _moveDirection.x = (float)0.8;
@@ -136,13 +135,15 @@ public class HuntingPlayer : KinematicBody2D
         }
         if (inputEvent.IsActionPressed("walk"))
         {
-            _isMoving = !_isMoving;
-            _moveDirection = _isMoving ? lookDirection : Vector2.Zero;
+            isMoving = !isMoving;
+            _moveDirection = isMoving ? lookDirection : Vector2.Zero;
         }
         if (inputEvent.IsActionPressed("shoot"))
         {
-            if (_isMoving)
+            if (isMoving)
+            {
                 return;
+            }
 
             var bullet = (KinematicBody2D)Bullet.Instance();
             GetParent().AddChild(bullet);

@@ -28,7 +28,6 @@ public class MainMenu : Control
 
     private void _on_FirstPerson_button_up()
     {
-        // TODO
-        //GetTree().ChangeScene(Constants.FirstPersonStart);
+        GetTree().ChangeScene(Constants.FirstPersonStart);
     }
 }

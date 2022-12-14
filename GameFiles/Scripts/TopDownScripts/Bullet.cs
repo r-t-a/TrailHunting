@@ -16,9 +16,8 @@ public class Bullet : KinematicBody2D
         var didCollide = MoveAndCollide(bulletMovement * speed * delta);
         if (didCollide != null)
         {
-            if (didCollide.Collider is KinematicBody2D)
+            if (didCollide.Collider is KinematicBody2D collider)
             {
-                var collider = (KinematicBody2D)didCollide.Collider;
                 collider.Call("WasShot");
                 QueueFree();
             }
