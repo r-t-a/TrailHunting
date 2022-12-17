@@ -1,6 +1,5 @@
 using Godot;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using TrailHunting.Scripts.Helpers;
 using TrailHunting.Scripts.Managers;
@@ -11,8 +10,7 @@ public class FirstPersonStart : Node2D
     public GridContainer AmmoContainer;
     public TextureButton ReloadButton;
 
-    private Dictionary<int, string> levels = new Dictionary<int, string>();
-    private string currentLevel;
+    private int currentLevel;
     private bool canShoot;
 
     public override void _Ready()
@@ -24,12 +22,6 @@ public class FirstPersonStart : Node2D
         AmmoContainer = GetNode<GridContainer>("CanvasLayer/Background/MarginContainer/HBoxContainer/GridContainer");
         ReloadButton = GetNode<TextureButton>("CanvasLayer/Background/MarginContainer/HBoxContainer/Reload");
         ReloadButton.Disabled = true;
-
-        levels.Add(0, "res://Images/UI/Plains_1.png");
-        levels.Add(1, "res://Images/UI/Plains_2.png");
-        levels.Add(2, "res://Images/UI/Plains_3.png");
-        levels.Add(3, "res://Images/UI/Desert_1.png");
-        levels.Add(4, "res://Images/UI/Desert_2.png");
 
         BuildMap();
     }
@@ -81,39 +73,19 @@ public class FirstPersonStart : Node2D
 
     private void _on_Exit_button_up()
     {
+        Input.SetCustomMouseCursor(null);
         GameManager.End();
     }
 
+    //Call GDScript to change Texture, C# not supported when exporting?
     private void BuildMap()
     {
-        currentLevel = GetRandomNext();
-        if (!string.IsNullOrWhiteSpace(currentLevel))
+        var randomMap = new Random().Next(5);
+        if (currentLevel == randomMap)
         {
-            SetBackgroundTexture(currentLevel.LoadImage());
+            BuildMap();
         }
-        else
-        {
-            currentLevel = "res://Images/UI/Plains_1.png";
-            SetBackgroundTexture(currentLevel.LoadImage());
-        }
-    }
-
-    private string GetRandomNext()
-    {
-        var tempcurrent = currentLevel;
-        var randomStart = new Random().Next(levels.Count);
-        currentLevel = levels.FirstOrDefault(x => x.Key == randomStart).Value;
-        if (currentLevel == tempcurrent)
-        {
-            GetRandomNext();
-        }
-        return currentLevel;
-    }
-
-    private void SetBackgroundTexture(Image imageBackground)
-    {
-        var imageTexture = new ImageTexture();
-        imageTexture.CreateFromImage(imageBackground);
-        LevelBackground.Texture = imageTexture;
+        currentLevel = randomMap;
+        LevelBackground.Call("loadNewBackground", randomMap);
     }
 }

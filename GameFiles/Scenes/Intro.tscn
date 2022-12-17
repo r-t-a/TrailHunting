@@ -6,6 +6,14 @@
 [ext_resource path="res://Images/Splash/splash_animation_adrive_idle.png" type="Texture" id=4]
 [ext_resource path="res://Images/Splash/splash_animation_boot.png" type="Texture" id=5]
 
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 768, 592 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 4 )
+region = Rect2( 768, 0, 768, 592 )
+
 [sub_resource type="AtlasTexture" id=29]
 atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 768, 592 )
@@ -50,14 +58,6 @@ region = Rect2( 6912, 0, 768, 592 )
 atlas = ExtResource( 3 )
 region = Rect2( 7680, 0, 768, 592 )
 
-[sub_resource type="AtlasTexture" id=23]
-atlas = ExtResource( 4 )
-region = Rect2( 0, 0, 768, 592 )
-
-[sub_resource type="AtlasTexture" id=24]
-atlas = ExtResource( 4 )
-region = Rect2( 768, 0, 768, 592 )
-
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 1 )
 region = Rect2( 0, 0, 768, 592 )
@@ -82,6 +82,14 @@ region = Rect2( 2304, 0, 768, 592 )
 atlas = ExtResource( 1 )
 region = Rect2( 3072, 0, 768, 592 )
 
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 1 )
+region = Rect2( 2304, 0, 768, 592 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 1 )
+region = Rect2( 3072, 0, 768, 592 )
+
 [sub_resource type="AtlasTexture" id=25]
 atlas = ExtResource( 5 )
 region = Rect2( 0, 0, 768, 592 )
@@ -98,25 +106,17 @@ region = Rect2( 1536, 0, 768, 592 )
 atlas = ExtResource( 5 )
 region = Rect2( 2304, 0, 768, 592 )
 
-[sub_resource type="AtlasTexture" id=8]
-atlas = ExtResource( 1 )
-region = Rect2( 2304, 0, 768, 592 )
-
-[sub_resource type="AtlasTexture" id=9]
-atlas = ExtResource( 1 )
-region = Rect2( 3072, 0, 768, 592 )
-
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
-"frames": [ SubResource( 29 ), SubResource( 30 ), SubResource( 31 ), SubResource( 32 ), SubResource( 33 ), SubResource( 34 ), SubResource( 35 ), SubResource( 36 ), SubResource( 37 ), SubResource( 38 ), SubResource( 39 ) ],
-"loop": true,
-"name": "OpenDisk",
-"speed": 8.0
-}, {
 "frames": [ SubResource( 23 ), SubResource( 24 ) ],
 "loop": true,
 "name": "IdleA",
 "speed": 2.0
+}, {
+"frames": [ SubResource( 29 ), SubResource( 30 ), SubResource( 31 ), SubResource( 32 ), SubResource( 33 ), SubResource( 34 ), SubResource( 35 ), SubResource( 36 ), SubResource( 37 ), SubResource( 38 ), SubResource( 39 ) ],
+"loop": true,
+"name": "OpenDisk",
+"speed": 8.0
 }, {
 "frames": [ SubResource( 2 ), SubResource( 3 ) ],
 "loop": true,
@@ -128,15 +128,15 @@ animations = [ {
 "name": "Enter",
 "speed": 2.0
 }, {
-"frames": [ SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ) ],
-"loop": true,
-"name": "Boot",
-"speed": 3.0
-}, {
 "frames": [ SubResource( 8 ), SubResource( 9 ) ],
 "loop": true,
 "name": "EnterIdle",
 "speed": 2.0
+}, {
+"frames": [ SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ) ],
+"loop": true,
+"name": "Boot",
+"speed": 3.0
 } ]
 
 [node name="Intro" type="Control"]
