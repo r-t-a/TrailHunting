@@ -242,9 +242,9 @@ texture = ExtResource( 2 )
 stretch_mode = 4
 
 [node name="Reload" type="TextureButton" parent="CanvasLayer/Background/MarginContainer/HBoxContainer"]
-margin_left = 478.0
+margin_left = 410.0
 margin_top = 15.0
-margin_right = 538.0
+margin_right = 470.0
 margin_bottom = 65.0
 rect_min_size = Vector2( 60, 50 )
 size_flags_horizontal = 6
@@ -256,6 +256,16 @@ expand = true
 stretch_mode = 4
 
 [node name="Move" type="Button" parent="CanvasLayer/Background/MarginContainer/HBoxContainer"]
+margin_left = 496.0
+margin_top = 20.0
+margin_right = 616.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 120, 40 )
+size_flags_horizontal = 12
+size_flags_vertical = 4
+text = "Move"
+
+[node name="Exit" type="Button" parent="CanvasLayer/Background/MarginContainer/HBoxContainer"]
 margin_left = 632.0
 margin_top = 20.0
 margin_right = 752.0
@@ -263,7 +273,7 @@ margin_bottom = 60.0
 rect_min_size = Vector2( 120, 40 )
 size_flags_horizontal = 12
 size_flags_vertical = 4
-text = "Move"
+text = "Quit"
 
 [node name="LevelImage" type="Sprite" parent="."]
 texture = ExtResource( 4 )
@@ -286,4 +296,5 @@ smoothing_enabled = true
 [connection signal="mouse_entered" from="CanvasLayer/Background/MarginContainer" to="." method="_on_MarginContainer_mouse_entered"]
 [connection signal="pressed" from="CanvasLayer/Background/MarginContainer/HBoxContainer/Reload" to="." method="_on_Reload_pressed"]
 [connection signal="button_up" from="CanvasLayer/Background/MarginContainer/HBoxContainer/Move" to="." method="_on_Move_button_up"]
+[connection signal="button_up" from="CanvasLayer/Background/MarginContainer/HBoxContainer/Exit" to="." method="_on_Exit_button_up"]
 [connection signal="mouse_entered" from="LevelImage/Area2D" to="." method="_on_LevelImage_mouse_entered"]

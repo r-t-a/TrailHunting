@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TrailHunting.Scripts.Helpers;
+using TrailHunting.Scripts.Managers;
 
 public class FirstPersonStart : Node2D
 {
@@ -70,14 +71,17 @@ public class FirstPersonStart : Node2D
 
     private void _on_MarginContainer_mouse_entered()
     {
-        GD.Print("mouse off");
         canShoot = false;
     }
 
     private void _on_LevelImage_mouse_entered()
     {
-        GD.Print("mouse on");
         canShoot = !ReloadButton.Pressed;
+    }
+
+    private void _on_Exit_button_up()
+    {
+        GameManager.End();
     }
 
     private void BuildMap()
