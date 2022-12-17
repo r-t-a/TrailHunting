@@ -3,31 +3,36 @@ using TrailHunting.Scripts;
 
 public class MainMenu : Control
 {
-    public VBoxContainer SecondaryButtons;
+    public AnimatedSprite AnimatedSprite;
 
     public override void _Ready()
     {
-        SecondaryButtons = GetNode<VBoxContainer>("MarginContainer/HBoxContainer/SecondaryButtons");
-        SecondaryButtons.Visible = false;
+        AnimatedSprite = GetNodeOrNull<AnimatedSprite>("AnimatedSprite");
+        AnimatedSprite.Play("Idle");
+        AnimatedSprite.Playing = true;
     }
 
-    private void _on_Start_button_up()
+    public override void _Input(InputEvent inputEvent)
     {
-        SecondaryButtons.Visible = true;
-    }
+        if (inputEvent.IsActionPressed("num1"))
+        {
+            AnimatedSprite.Play("NextOptions");
+        }
+        if (inputEvent.IsActionPressed("num2"))
+        {
+            GetTree().ChangeScene(Constants.TopDownStart);
+        }
+        if (inputEvent.IsActionPressed("num3"))
+        {
+            GetTree().ChangeScene(Constants.FirstPersonStart);
+        }
+        if (inputEvent.IsActionPressed("num8"))
+        {
 
-    private void _on_Exit_button_up()
-    {
-        GetTree().Quit();
-    }
-
-    private void _on_TopDown_button_up()
-    {
-        GetTree().ChangeScene(Constants.TopDownStart);
-    }
-
-    private void _on_FirstPerson_button_up()
-    {
-        GetTree().ChangeScene(Constants.FirstPersonStart);
+        }
+        if (inputEvent.IsActionPressed("num9"))
+        {
+            GetTree().Quit();
+        }
     }
 }

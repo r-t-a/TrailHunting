@@ -6,7 +6,7 @@ using TrailHunting.Scripts.Helpers;
 
 public class FirstPersonStart : Node2D
 {
-    public TextureRect LevelBackground;
+    public Sprite LevelBackground;
     public GridContainer AmmoContainer;
     public TextureButton ReloadButton;
 
@@ -19,7 +19,7 @@ public class FirstPersonStart : Node2D
         var reticle = ResourceLoader.Load("res://Images/UI/reticle.png");
         Input.SetCustomMouseCursor(reticle);
         
-        LevelBackground = GetNode<TextureRect>("LevelImage");
+        LevelBackground = GetNode<Sprite>("LevelImage");
         AmmoContainer = GetNode<GridContainer>("CanvasLayer/Background/MarginContainer/HBoxContainer/GridContainer");
         ReloadButton = GetNode<TextureButton>("CanvasLayer/Background/MarginContainer/HBoxContainer/Reload");
         ReloadButton.Disabled = true;
@@ -70,11 +70,13 @@ public class FirstPersonStart : Node2D
 
     private void _on_MarginContainer_mouse_entered()
     {
+        GD.Print("mouse off");
         canShoot = false;
     }
 
     private void _on_LevelImage_mouse_entered()
     {
+        GD.Print("mouse on");
         canShoot = !ReloadButton.Pressed;
     }
 

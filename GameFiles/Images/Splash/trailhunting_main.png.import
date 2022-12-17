@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/icon.png-1dae0151bcff3427c23b78fa53c350bf.stex"
+path="res://.import/trailhunting_main.png-db7e910ca5ca3c1d4c06549e5811bf86.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Icons/icon.png"
-dest_files=[ "res://.import/icon.png-1dae0151bcff3427c23b78fa53c350bf.stex" ]
+source_file="res://Images/Splash/trailhunting_main.png"
+dest_files=[ "res://.import/trailhunting_main.png-db7e910ca5ca3c1d4c06549e5811bf86.stex" ]
 
 [params]
 
