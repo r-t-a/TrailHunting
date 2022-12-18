@@ -16,15 +16,17 @@ public class MainMenu : Control
     {
         if (inputEvent.IsActionPressed("num1"))
         {
-            AnimatedSprite.Play("NextOptions");
+            // Show next options when First Person is done
+            //AnimatedSprite.Play("NextOptions");
+            GetTree().ChangeScene(Constants.TopDownStart);
         }
         if (inputEvent.IsActionPressed("num2"))
         {
-            GetTree().ChangeScene(Constants.TopDownStart);
+            //GetTree().ChangeScene(Constants.TopDownStart);
         }
         if (inputEvent.IsActionPressed("num3"))
         {
-            GetTree().ChangeScene(Constants.FirstPersonStart);
+            //GetTree().ChangeScene(Constants.FirstPersonStart);
         }
         if (inputEvent.IsActionPressed("num8"))
         {

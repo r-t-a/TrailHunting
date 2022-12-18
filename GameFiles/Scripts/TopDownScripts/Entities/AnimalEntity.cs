@@ -59,9 +59,10 @@ namespace TrailHunting.Scripts.TopDownScripts.Entities
             UpdatePhysics();
         }
 
-        public void SetSpawn(SpawnQuadrant spawn)
+        public void SetSpawn(int spawn)
         {
-            (Motion, MoveDirection) = spawn.MovementBasedOnSpawn();
+            var spawnQuadrant = (SpawnQuadrant)spawn;
+            (Motion, MoveDirection) = spawnQuadrant.MovementBasedOnSpawn();
         }
 
         public static (Vector2 motion, MoveDirection direction) RandomizeMovement(Random rnd)

@@ -3,6 +3,10 @@
 [ext_resource path="res://Scripts/TopDownScripts/Entities/Animals/Buffalo.cs" type="Script" id=1]
 [ext_resource path="res://Images/SpriteSheets/buffalo.png" type="Texture" id=2]
 
+[sub_resource type="AtlasTexture" id=17]
+atlas = ExtResource( 2 )
+region = Rect2( 48, 0, 48, 40 )
+
 [sub_resource type="AtlasTexture" id=20]
 atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 48, 40 )
@@ -15,10 +19,6 @@ region = Rect2( 96, 0, 48, 40 )
 atlas = ExtResource( 2 )
 region = Rect2( 192, 0, 48, 40 )
 
-[sub_resource type="AtlasTexture" id=17]
-atlas = ExtResource( 2 )
-region = Rect2( 48, 0, 48, 40 )
-
 [sub_resource type="AtlasTexture" id=18]
 atlas = ExtResource( 2 )
 region = Rect2( 48, 0, 48, 40 )
@@ -29,6 +29,11 @@ region = Rect2( 144, 0, 48, 40 )
 
 [sub_resource type="SpriteFrames" id=11]
 animations = [ {
+"frames": [ SubResource( 17 ) ],
+"loop": true,
+"name": "Idle",
+"speed": 5.0
+}, {
 "frames": [ SubResource( 20 ), SubResource( 21 ) ],
 "loop": true,
 "name": "RunRight",
@@ -37,11 +42,6 @@ animations = [ {
 "frames": [ SubResource( 12 ) ],
 "loop": true,
 "name": "Dead",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 17 ) ],
-"loop": true,
-"name": "Idle",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 18 ), SubResource( 19 ) ],

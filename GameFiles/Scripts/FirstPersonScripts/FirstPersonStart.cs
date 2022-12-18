@@ -86,6 +86,6 @@ public class FirstPersonStart : Node2D
             BuildMap();
         }
         currentLevel = randomMap;
-        LevelBackground.Call("loadNewBackground", randomMap);
+        //LevelBackground.Call("loadNewBackground", randomMap);
     }
 }

@@ -18,6 +18,7 @@ public class TopDownStart : Node2D
     [Export]
     public int LargeGameCounter;
 
+    public TileMap GroundTileMap;
     public PackedScene Player;
     public PackedScene Deer;
     public PackedScene Rabbit;
@@ -26,18 +27,17 @@ public class TopDownStart : Node2D
     public PackedScene Buck;
     public PackedScene Buffalo;
 
-    private TileMap groundTileMap;
     private List<Area2D> spawns = new List<Area2D>();
 
     public override void _Ready()
     {
-        groundTileMap = GetNode<TileMap>("TileMap");
+        GroundTileMap = GetNodeOrNull<TileMap>("TileMap");
 
         Player = (PackedScene)ResourceLoader.Load("res://Scenes/HuntingPlayer.tscn");
         Deer = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/Deer.tscn");
         Rabbit = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/Rabbit.tscn");
         Squirrel = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/Squirrel.tscn");
-        Buffalo = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/Rabbit.tscn");
+        Buffalo = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/Buffalo.tscn");
         Bear = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/Bear.tscn");
         Buck = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/Buck.tscn");
 
@@ -83,20 +83,15 @@ public class TopDownStart : Node2D
         LargeGameCounter += 1;
     }
 
-    private void _on_HuntingPlayer_ShotBullet()
-    {
-    }
-
     private void _on_SpawnTimer_timeout()
     {
         var currentSpawn = GetTree().GetNodesInGroup("Animals");
         if (currentSpawn.Count >= Constants.MaxAnimalSpawn)
             return;
 
-        var boundaryTiles = groundTileMap.GetUsedCellsById(1);
-        boundaryTiles.Shuffle();
-        var spawnTile = (Vector2)boundaryTiles[new Random().Next(0, boundaryTiles.Count - 1)];
-        var randAnimal = new Random().Next(0, 6);
+        var boundaryTiles = GroundTileMap.GetUsedCellsById(1);
+        var spawnTile = (Vector2)boundaryTiles[new Random().Next(boundaryTiles.Count - 1)];
+        var randAnimal = new Random().Next(6);
 
         if (spawnTile.x == 0)
         {
@@ -126,7 +121,7 @@ public class TopDownStart : Node2D
     private void SpawnPlayer()
     {
         var spawnPoint = spawns.FirstOrDefault(x => x.Name == GameManager.GetSpawnPoint());
-        spawnPoint = spawnPoint ?? GetNode<Area2D>("Spawns/Spawn1"); // If something goes wrong default to Spawn1
+        spawnPoint = spawnPoint ?? GetNodeOrNull<Area2D>("Spawns/Spawn1"); // If something goes wrong default to Spawn1
         var player = (KinematicBody2D)Player.Instance();
         player.Position = spawnPoint.Position;
         AddChild(player);
@@ -147,49 +142,49 @@ public class TopDownStart : Node2D
 
     private void SpawnAnimal(int animal, Vector2 location, SpawnQuadrant spawn)
     {
-        var global = groundTileMap.MapToWorld(location);
+        var global = GroundTileMap.MapToWorld(location);
         switch ((Animals)animal)
         {
             case Animals.Squirrel:
                 var squirrel = (KinematicBody2D)Squirrel.Instance();
                 squirrel.GlobalPosition = global;
-                squirrel.Call("SetSpawn", spawn);
+                squirrel.Call("SetSpawn", (int)spawn);
                 AddChild(squirrel);
                 break;
             case Animals.Rabbit:
                 var rabbit = (KinematicBody2D)Rabbit.Instance();
                 rabbit.GlobalPosition = global;
-                rabbit.Call("SetSpawn", spawn);
+                rabbit.Call("SetSpawn", (int)spawn);
                 AddChild(rabbit);
                 break;
             case Animals.Doe:
                 var deer = (KinematicBody2D)Deer.Instance();
                 deer.GlobalPosition = global;
-                deer.Call("SetSpawn", spawn);
+                deer.Call("SetSpawn", (int)spawn);
                 AddChild(deer);
                 break;
             case Animals.Buck:
                 var buck = (KinematicBody2D)Buck.Instance();
                 buck.GlobalPosition = global;
-                buck.Call("SetSpawn", spawn);
+                buck.Call("SetSpawn", (int)spawn);
                 AddChild(buck);
                 break;
             case Animals.Bear:
                 var bear = (KinematicBody2D)Bear.Instance();
                 bear.GlobalPosition = global;
-                bear.Call("SetSpawn", spawn);
+                bear.Call("SetSpawn", (int)spawn);
                 AddChild(bear);
                 break;
             case Animals.Buffalo:
                 var buffalo = (KinematicBody2D)Buffalo.Instance();
                 buffalo.GlobalPosition = global;
-                buffalo.Call("SetSpawn", spawn);
+                buffalo.Call("SetSpawn", (int)spawn);
                 AddChild(buffalo);
                 break;
             default:
                 var defaultMoreSquirrel = (KinematicBody2D)Squirrel.Instance();
                 defaultMoreSquirrel.GlobalPosition = global;
-                defaultMoreSquirrel.Call("SetSpawn", spawn);
+                defaultMoreSquirrel.Call("SetSpawn", (int)spawn);
                 AddChild(defaultMoreSquirrel);
                 break;
         }

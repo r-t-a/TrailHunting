@@ -13,16 +13,17 @@ public class HuntingPlayer : KinematicBody2D
     public AnimationNodeStateMachinePlayback AnimationNode;
     public Position2D RiflePosition;
 
-    private Vector2 _moveDirection;
+    private Vector2 moveDirection;
     private Vector2 lookDirection;
     private bool isMoving = false;
 
     public override void _Ready()
     {
         Bullet = (PackedScene)ResourceLoader.Load("res://Scenes/Bullet.tscn");
-        AnimationTree = GetNode<AnimationTree>("AnimationTree");
+
+        AnimationTree = GetNodeOrNull<AnimationTree>("AnimationTree");
         AnimationNode = (AnimationNodeStateMachinePlayback)AnimationTree.Get("parameters/playback");
-        RiflePosition = GetNode<Position2D>("Position2D");
+        RiflePosition = GetNodeOrNull<Position2D>("Position2D");
         lookDirection = new Vector2(-1, 0);
     }
 
@@ -35,11 +36,11 @@ public class HuntingPlayer : KinematicBody2D
         }
         else
         {
-            _moveDirection = _moveDirection.Normalized();
-            AnimationTree.Set("parameters/Walk/blend_position", _moveDirection);
-            AnimationTree.Set("parameters/Idle/blend_position", _moveDirection);
+            moveDirection = moveDirection.Normalized();
+            AnimationTree.Set("parameters/Walk/blend_position", moveDirection);
+            AnimationTree.Set("parameters/Idle/blend_position", moveDirection);
             AnimationNode.Travel("Walk");
-            MoveAndSlide(_moveDirection * Speed);
+            MoveAndSlide(moveDirection * Speed);
         }
     }
 
@@ -51,8 +52,8 @@ public class HuntingPlayer : KinematicBody2D
             lookDirection.y = -1;
             if (isMoving)
             {
-                _moveDirection = Vector2.Zero;
-                _moveDirection.y = -1;
+                moveDirection = Vector2.Zero;
+                moveDirection.y = -1;
             }
         }
         if (inputEvent.IsActionPressed("ui_down"))
@@ -61,8 +62,8 @@ public class HuntingPlayer : KinematicBody2D
             lookDirection.y = 1;
             if (isMoving)
             {
-                _moveDirection = Vector2.Zero;
-                _moveDirection.y = 1;
+                moveDirection = Vector2.Zero;
+                moveDirection.y = 1;
             }
         }
         if (inputEvent.IsActionPressed("ui_left"))
@@ -71,8 +72,8 @@ public class HuntingPlayer : KinematicBody2D
             lookDirection.x = -1;
             if (isMoving)
             {
-                _moveDirection = Vector2.Zero;
-                _moveDirection.x = -1;
+                moveDirection = Vector2.Zero;
+                moveDirection.x = -1;
             }
         }
         if (inputEvent.IsActionPressed("ui_right"))
@@ -81,8 +82,8 @@ public class HuntingPlayer : KinematicBody2D
             lookDirection.x = 1;
             if (isMoving)
             {
-                _moveDirection = Vector2.Zero;
-                _moveDirection.x = 1;
+                moveDirection = Vector2.Zero;
+                moveDirection.x = 1;
             }
         }
         if (inputEvent.IsActionPressed("ui_upright"))
@@ -92,9 +93,9 @@ public class HuntingPlayer : KinematicBody2D
             lookDirection.y = (float)-0.6;
             if (isMoving)
             {
-                _moveDirection = Vector2.Zero;
-                _moveDirection.x = (float)0.8;
-                _moveDirection.y = (float)-0.6;
+                moveDirection = Vector2.Zero;
+                moveDirection.x = (float)0.8;
+                moveDirection.y = (float)-0.6;
             }
         }
         if (inputEvent.IsActionPressed("ui_upleft"))
@@ -104,9 +105,9 @@ public class HuntingPlayer : KinematicBody2D
             lookDirection.y = (float)-0.6;
             if (isMoving)
             {
-                _moveDirection = Vector2.Zero;
-                _moveDirection.x = (float)-0.8;
-                _moveDirection.y = (float)-0.6;
+                moveDirection = Vector2.Zero;
+                moveDirection.x = (float)-0.8;
+                moveDirection.y = (float)-0.6;
             }
         }
         if (inputEvent.IsActionPressed("ui_bottomleft"))
@@ -116,9 +117,9 @@ public class HuntingPlayer : KinematicBody2D
             lookDirection.y = (float)0.6;
             if (isMoving)
             {
-                _moveDirection = Vector2.Zero;
-                _moveDirection.x = (float)-0.8;
-                _moveDirection.y = (float)0.6;
+                moveDirection = Vector2.Zero;
+                moveDirection.x = (float)-0.8;
+                moveDirection.y = (float)0.6;
             }
         }
         if (inputEvent.IsActionPressed("ui_bottomright"))
@@ -128,15 +129,15 @@ public class HuntingPlayer : KinematicBody2D
             lookDirection.y = (float)0.6;
             if (isMoving)
             {
-                _moveDirection = Vector2.Zero;
-                _moveDirection.x = (float)0.8;
-                _moveDirection.y = (float)0.6;
+                moveDirection = Vector2.Zero;
+                moveDirection.x = (float)0.8;
+                moveDirection.y = (float)0.6;
             }
         }
         if (inputEvent.IsActionPressed("walk"))
         {
             isMoving = !isMoving;
-            _moveDirection = isMoving ? lookDirection : Vector2.Zero;
+            moveDirection = isMoving ? lookDirection : Vector2.Zero;
         }
         if (inputEvent.IsActionPressed("shoot"))
         {
