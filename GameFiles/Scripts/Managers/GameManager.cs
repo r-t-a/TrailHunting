@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Godot;
+using System;
 using System.Collections.Generic;
 using TrailHunting.Scripts.Enums;
 
@@ -7,6 +8,7 @@ namespace TrailHunting.Scripts.Managers
     public class GameManager
     {
         public static Linker Linker { get; private set; }
+        public static bool IsTypeA { get; private set; }
 
         public GameManager(Linker linker)
         {
@@ -17,6 +19,11 @@ namespace TrailHunting.Scripts.Managers
         {
             //show results
             Linker.GetTree().ChangeScene(Constants.MainMenu);
+        }
+
+        public static void SetGameType()
+        {
+            IsTypeA = !IsTypeA;
         }
 
         public static (MapType, List<int>) BuildTopDownLevel()
@@ -51,10 +58,39 @@ namespace TrailHunting.Scripts.Managers
             return (getMapType, terrainList);
         }
 
+        public static string BuildFirstPersonLevel()
+        {
+            var getMapType = (MapType)new Random().Next(0, 5);
+            switch(getMapType)
+            {
+                default:
+                case MapType.Woods:
+                    return "Woods";
+                case MapType.Desert:
+                    return "Desert";
+                case MapType.Plains:
+                    return "Plains";
+                case MapType.Mountains:
+                    return "Mountains";
+            }
+        }
+
         public static string GetSpawnPoint()
         {
             var spawnPoint = new Random().Next(1, 13);
             return $"{Constants.Spawn}{spawnPoint}";
+        }
+
+        public static string GetAirSpawnPoint()
+        {
+            var spawnPoint = new Random().Next(1, 7);
+            return $"{Constants.AirSpawn}{spawnPoint}";
+        }
+
+        public static string GetGroundSpawnPoint()
+        {
+            var spawnPoint = new Random().Next(1, 13);
+            return $"{Constants.GroundSpawn}{spawnPoint}";
         }
     }
 }

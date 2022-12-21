@@ -34,25 +34,25 @@ public class TopDownStart : Node2D
         GroundTileMap = GetNodeOrNull<TileMap>("TileMap");
 
         Player = (PackedScene)ResourceLoader.Load("res://Scenes/HuntingPlayer.tscn");
-        Deer = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/Deer.tscn");
-        Rabbit = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/Rabbit.tscn");
-        Squirrel = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/Squirrel.tscn");
-        Buffalo = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/Buffalo.tscn");
-        Bear = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/Bear.tscn");
-        Buck = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/Buck.tscn");
+        Deer = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/TopDown/Deer.tscn");
+        Rabbit = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/TopDown/Rabbit.tscn");
+        Squirrel = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/TopDown/Squirrel.tscn");
+        Buffalo = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/TopDown/Buffalo.tscn");
+        Bear = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/TopDown/Bear.tscn");
+        Buck = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/TopDown/Buck.tscn");
 
-        spawns.Add(GetNode<Area2D>("Spawns/Spawn1"));
-        spawns.Add(GetNode<Area2D>("Spawns/Spawn2"));
-        spawns.Add(GetNode<Area2D>("Spawns/Spawn3"));
-        spawns.Add(GetNode<Area2D>("Spawns/Spawn4"));
-        spawns.Add(GetNode<Area2D>("Spawns/Spawn5"));
-        spawns.Add(GetNode<Area2D>("Spawns/Spawn6"));
-        spawns.Add(GetNode<Area2D>("Spawns/Spawn7"));
-        spawns.Add(GetNode<Area2D>("Spawns/Spawn8"));
-        spawns.Add(GetNode<Area2D>("Spawns/Spawn9"));
-        spawns.Add(GetNode<Area2D>("Spawns/Spawn10"));
-        spawns.Add(GetNode<Area2D>("Spawns/Spawn11"));
-        spawns.Add(GetNode<Area2D>("Spawns/Spawn12"));
+        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn1"));
+        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn2"));
+        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn3"));
+        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn4"));
+        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn5"));
+        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn6"));
+        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn7"));
+        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn8"));
+        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn9"));
+        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn10"));
+        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn11"));
+        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn12"));
 
         BuildLevel();
     }
@@ -109,6 +109,11 @@ public class TopDownStart : Node2D
         {
             SpawnAnimal(randAnimal, spawnTile, SpawnQuadrant.Bottom);
         }
+    }
+
+    private void _on_GameTimer_timeout()
+    {
+        GameManager.End();
     }
     #endregion
 
@@ -325,10 +330,5 @@ public class TopDownStart : Node2D
             }
             SpawnTerrain(spawnObject);
         }
-    }
-
-    private void _on_EndButton_button_up()
-    {
-        GameManager.End();
     }
 }

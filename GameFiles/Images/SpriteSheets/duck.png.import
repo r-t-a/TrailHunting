@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Plains_3.png-8beceef1532d7be5b5e9247580d9b5c2.stex"
+path="res://.import/duck.png-c245e757f0f7eb2582e9008f8aea5379.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/UI/Plains_3.png"
-dest_files=[ "res://.import/Plains_3.png-8beceef1532d7be5b5e9247580d9b5c2.stex" ]
+source_file="res://Images/SpriteSheets/duck.png"
+dest_files=[ "res://.import/duck.png-c245e757f0f7eb2582e9008f8aea5379.stex" ]
 
 [params]
 
@@ -31,5 +31,5 @@ process/invert_color=false
 process/normal_map_invert_y=false
 stream=false
 size_limit=0
-detect_3d=true
+detect_3d=false
 svg/scale=1.0

@@ -9,9 +9,12 @@
 
         // Nodes
         public static string Spawn = "Spawn";
+        public static string AirSpawn = "AirSpawn";
+        public static string GroundSpawn = "GroundSpawn";
 
         // Game Variables
         public static int MaxAnimalSpawn = 3;
         public static int MaxTerrainSpawn = 5;
+        public static int MaxAnimalFirstPersonSpawn = 10;
     }
 }

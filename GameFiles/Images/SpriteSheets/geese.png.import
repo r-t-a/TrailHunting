@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Plains_2.png-2fbb57ed24bc31bcb5b6d0c797dc2ba9.stex"
+path="res://.import/geese.png-29e4779880959a5978a0c60501ce051a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/UI/Plains_2.png"
-dest_files=[ "res://.import/Plains_2.png-2fbb57ed24bc31bcb5b6d0c797dc2ba9.stex" ]
+source_file="res://Images/SpriteSheets/geese.png"
+dest_files=[ "res://.import/geese.png-29e4779880959a5978a0c60501ce051a.stex" ]
 
 [params]
 
