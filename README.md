@@ -3,7 +3,7 @@
 
 Oregon Trail inspired hunting mini game made using [Godot](https://godotengine.org/)
 
-<img src="https://img.itch.zone/aW1nLzEwODA0MzUwLnBuZw==/315x250%23c/io2RKC.png" width="100" height="80">
+<img src="https://img.itch.zone/aW1nLzEwODU3NDMzLnBuZw==/105x83%23/SV0K2G.png" width="100" height="80">
 
 [Play on itch.io](https://itch.io/embed-upload/7021556?color=333333)
 
