@@ -9,5 +9,6 @@ Oregon Trail inspired hunting mini game made using [Godot](https://godotengine.o
 
 |||
 |:--|--:|
+| Oregon Trail 1 | Oregon Trail 2|
 | ![image alt <](/Images/Preview1.png?raw=true "Preview 1") |  ![image alt >](/Images/Preview3.png?raw=true "Preview 3") |
 | ![image alt <](/Images/Preview2.png?raw=true "Preview 2") |  ![image alt >](/Images/Preview4.png?raw=true "Preview 4") |
