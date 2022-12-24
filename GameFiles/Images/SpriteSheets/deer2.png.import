@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/splash_animation_idle.png-7e5c93340e7302259766b72a670da797.stex"
+path="res://.import/deer2.png-91176c9c623e03b352133bcbcf38f97e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Splash/splash_animation_idle.png"
-dest_files=[ "res://.import/splash_animation_idle.png-7e5c93340e7302259766b72a670da797.stex" ]
+source_file="res://Images/SpriteSheets/deer2.png"
+dest_files=[ "res://.import/deer2.png-91176c9c623e03b352133bcbcf38f97e.stex" ]
 
 [params]
 
@@ -31,5 +31,5 @@ process/invert_color=false
 process/normal_map_invert_y=false
 stream=false
 size_limit=0
-detect_3d=true
+detect_3d=false
 svg/scale=1.0

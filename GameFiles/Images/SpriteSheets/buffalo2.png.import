@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/splash_animation_diskimg.png-440b50a87d5165d40a42f7c1369ea177.stex"
+path="res://.import/buffalo2.png-17c79b657707e595a9c5e19185fa0c24.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Splash/splash_animation_diskimg.png"
-dest_files=[ "res://.import/splash_animation_diskimg.png-440b50a87d5165d40a42f7c1369ea177.stex" ]
+source_file="res://Images/SpriteSheets/buffalo2.png"
+dest_files=[ "res://.import/buffalo2.png-17c79b657707e595a9c5e19185fa0c24.stex" ]
 
 [params]
 
@@ -31,5 +31,5 @@ process/invert_color=false
 process/normal_map_invert_y=false
 stream=false
 size_limit=0
-detect_3d=true
+detect_3d=false
 svg/scale=1.0

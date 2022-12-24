@@ -2,12 +2,15 @@
 {
     public static class Constants
     {
+        // Files
+        public const string SavedPlayerFileName = "user://player-save.json";
+
         // Levels
         public static string MainMenu = "res://Scenes/MainMenu.tscn";
         public static string TopDownStart = "res://Scenes/TopDownStart.tscn";
         public static string FirstPersonStart = "res://Scenes/FirstPersonStart.tscn";
 
-        // Nodes
+        // Spawn Nodes
         public static string Spawn = "Spawn";
         public static string AirSpawn = "AirSpawn";
         public static string GroundSpawn = "GroundSpawn";

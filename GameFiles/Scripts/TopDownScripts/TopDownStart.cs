@@ -19,6 +19,7 @@ public class TopDownStart : Node2D
     public int LargeGameCounter;
 
     public TileMap GroundTileMap;
+    public Timer SpawnTimer;
     public PackedScene Player;
     public PackedScene Deer;
     public PackedScene Rabbit;
@@ -32,6 +33,7 @@ public class TopDownStart : Node2D
     public override void _Ready()
     {
         GroundTileMap = GetNodeOrNull<TileMap>("TileMap");
+        SpawnTimer = GetNodeOrNull<Timer>("SpawnTimer");
 
         Player = (PackedScene)ResourceLoader.Load("res://Scenes/HuntingPlayer.tscn");
         Deer = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/TopDown/Deer.tscn");
@@ -113,6 +115,20 @@ public class TopDownStart : Node2D
 
     private void _on_GameTimer_timeout()
     {
+        SpawnTimer.Stop();
+        GameManager.BuildTopDownResultsDialog(SmallGameCounter, MediumGameCounter, MedLargeGameCounter, LargeGameCounter);
+        GameManager.ResultsDialog.Show();
+    }
+
+    private void _on_AcceptDialog_modal_closed()
+    {
+        GameManager.ResultsDialog.Hide();
+        GameManager.End();
+    }
+
+    private void _on_AcceptDialog_confirmed()
+    {
+        GameManager.ResultsDialog.Hide();
         GameManager.End();
     }
     #endregion
@@ -329,6 +345,18 @@ public class TopDownStart : Node2D
                     break;
             }
             SpawnTerrain(spawnObject);
+        }
+    }
+
+    private void Cleanup()
+    {
+        var currentSpawn = GetTree().GetNodesInGroup("Animals");
+        foreach (var spawn in currentSpawn)
+        {
+            if (spawn is KinematicBody2D node)
+            {
+                node.QueueFree();
+            }
         }
     }
 }

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/splash_animation_boot.png-e5c0cd4d19151208eb273c73e46cfe52.stex"
+path="res://.import/rabbit2.png-2511a10d1bfeaf16703313a0291e88e7.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Splash/splash_animation_boot.png"
-dest_files=[ "res://.import/splash_animation_boot.png-e5c0cd4d19151208eb273c73e46cfe52.stex" ]
+source_file="res://Images/SpriteSheets/rabbit2.png"
+dest_files=[ "res://.import/rabbit2.png-2511a10d1bfeaf16703313a0291e88e7.stex" ]
 
 [params]
 
@@ -31,5 +31,5 @@ process/invert_color=false
 process/normal_map_invert_y=false
 stream=false
 size_limit=0
-detect_3d=true
+detect_3d=false
 svg/scale=1.0

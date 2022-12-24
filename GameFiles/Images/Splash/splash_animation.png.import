@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/splash_animation_adrive_idle.png-efabd87049228a06e7db2e9829cddd2f.stex"
+path="res://.import/splash_animation.png-755e2c634b27bafed7e9e320211cadd3.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Splash/splash_animation_adrive_idle.png"
-dest_files=[ "res://.import/splash_animation_adrive_idle.png-efabd87049228a06e7db2e9829cddd2f.stex" ]
+source_file="res://Images/Splash/splash_animation.png"
+dest_files=[ "res://.import/splash_animation.png-755e2c634b27bafed7e9e320211cadd3.stex" ]
 
 [params]
 
@@ -31,5 +31,5 @@ process/invert_color=false
 process/normal_map_invert_y=false
 stream=false
 size_limit=0
-detect_3d=true
+detect_3d=false
 svg/scale=1.0

@@ -1,29 +1,56 @@
 ﻿using Godot;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using TrailHunting.Scripts.Enums;
+using TrailHunting.Scripts.Models;
 
 namespace TrailHunting.Scripts.Managers
 {
     public class GameManager
     {
+        public static PlayerManager PlayerManager { get; private set; }
         public static Linker Linker { get; private set; }
-        public static bool IsTypeA { get; private set; }
+        public static AcceptDialog ResultsDialog { get; private set; }
+        public static bool IsFirstPersonStyle { get; private set; }
+
+        private static int _smallGame = 4;
+        private static int _mediumGame = 90;
+        private static int _medLargeGame = 200;
+        private static int _largeGame = 400;
 
         public GameManager(Linker linker)
         {
             Linker = linker;
+            PlayerManager = new PlayerManager();
         }
 
         public static void End() 
         {
-            //show results
             Linker.GetTree().ChangeScene(Constants.MainMenu);
+            Save();
         }
 
-        public static void SetGameType()
+        public static void BuildTopDownResultsDialog(int smallCounter, int mediumCounter, int medLargeCounter, int largeCounter)
         {
-            IsTypeA = !IsTypeA;
+            ResultsDialog = Linker.GetTree().Root.GetNode("TopDownStart").GetNodeOrNull<AcceptDialog>("CanvasLayer/AcceptDialog");
+            ResultsDialog.DialogText = $"{GetTotal(smallCounter, mediumCounter, medLargeCounter, largeCounter)} Total Meat Hunted";
+        }
+
+        public static void BuildFirstPersonResultsDialog(int smallCounter, int mediumCounter, int medLargeCounter, int largeCounter)
+        {
+            ResultsDialog = Linker.GetTree().Root.GetNode("FirstPersonStart").GetNodeOrNull<AcceptDialog>("CanvasLayer/AcceptDialog");
+            ResultsDialog.DialogText = $"{GetTotal(smallCounter, mediumCounter, medLargeCounter, largeCounter)} Total Meat Hunted";
+        }
+
+        private static int GetTotal(int smallCounter, int mediumCounter, int medLargeCounter, int largeCounter)
+        {
+            return (smallCounter * _smallGame) + (mediumCounter * _mediumGame) + (medLargeCounter * _medLargeGame) + (largeCounter * _largeGame);
+        }
+
+        public static void SetGameType(bool isFirstPerson)
+        {
+            IsFirstPersonStyle = isFirstPerson;
         }
 
         public static (MapType, List<int>) BuildTopDownLevel()
@@ -89,8 +116,50 @@ namespace TrailHunting.Scripts.Managers
 
         public static string GetGroundSpawnPoint()
         {
-            var spawnPoint = new Random().Next(1, 13);
+            var spawnPoint = new Random().Next(1, 10);
             return $"{Constants.GroundSpawn}{spawnPoint}";
+        }
+
+        public static void Load()
+        {
+            try
+            {
+                var file = new File();
+                if (file.FileExists(Constants.SavedPlayerFileName))
+                {
+                    file.Open(Constants.SavedPlayerFileName, File.ModeFlags.Read);
+                    var data = JsonConvert.DeserializeObject<PlayerData>(file.GetAsText());
+                    file.Close();
+                    if (data != null && data is PlayerData player)
+                    {
+                        
+                    }
+                }
+                else
+                {
+                    GD.Print("No Saved Data");
+                }
+            }
+            catch (Exception e)
+            {
+                GD.Print($"Exception: {e.InnerException.Message}");
+            }
+        }
+
+        public static void Save()
+        {
+            try
+            {
+                var file = new File();
+                var toJSON = JsonConvert.SerializeObject(PlayerData.ToPlayerData(PlayerManager), Formatting.Indented);
+                file.Open(Constants.SavedPlayerFileName, File.ModeFlags.Write);
+                file.StoreString(toJSON);
+                file.Close();
+            }
+            catch (Exception e)
+            {
+                GD.Print($"Failed saving {e.InnerException.Message}");
+            }
         }
     }
 }

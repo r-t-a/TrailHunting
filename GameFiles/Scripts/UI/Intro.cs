@@ -25,15 +25,7 @@ public class Intro : Control
 		{
 			if (AnimatedSprite.Animation == "Idle") 
 			{
-				AnimatedSprite.Play("Enter");
-			}
-			if (AnimatedSprite.Animation == "EnterIdle")
-			{
-				AnimatedSprite.Play("OpenDisk");
-			}
-			if (AnimatedSprite.Animation == "IdleA")
-			{
-				AnimatedSprite.Play("Boot");
+				AnimatedSprite.Play("Start");
 			}
 			time = 0;
 		}
@@ -41,17 +33,13 @@ public class Intro : Control
 
 	public override void _Input(InputEvent inputEvent)
 	{ 
-		//TODO switch to timed
 		if (inputEvent.IsActionPressed("ui_cancel"))
 		{
 			escapeCount++;
 			if (escapeCount == 3)
 			{
-				if (AnimatedSprite.Animation != "Boot")
-				{
-					AnimatedSprite.Play("Boot");
-				}
-			}
+                GetTree().ChangeScene(Constants.MainMenu);
+            }
 		}
 	}
 
@@ -61,20 +49,12 @@ public class Intro : Control
 		{
 			return;
 		}
-		if (AnimatedSprite.Animation == "Enter")
+		if (AnimatedSprite.Animation == "Start")
 		{
-			AnimatedSprite.Play("EnterIdle");
-		}
-		if (AnimatedSprite.Animation == "OpenDisk")
-		{
-			AnimatedSprite.Play("IdleA");
-		}
-		if (AnimatedSprite.Animation == "Boot")
-		{
-			AnimatedSprite.Frame = 3;
-			AnimatedSprite.Playing = false;
-			StartTimer.Start();
-		}
+            AnimatedSprite.Frame = 14;
+            AnimatedSprite.Playing = false;
+            StartTimer.Start();
+        }
 	}
 
 	private void _on_StartTimer_timeout()

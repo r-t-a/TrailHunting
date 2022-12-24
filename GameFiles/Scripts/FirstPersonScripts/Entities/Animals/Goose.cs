@@ -1,5 +1,6 @@
 using Godot;
 using TrailHunting.Scripts.FirstPersonScripts.Entities;
+using TrailHunting.Scripts.Managers;
 
 public class Goose : AnimalEntity
 {
@@ -10,17 +11,12 @@ public class Goose : AnimalEntity
     {
         HP = 1;
         Speed = 80;
-        AnimatedSprite.Play("Flying");
         Connect(nameof(SmallGameDead), Tree.GetNode("FirstPersonStart"), "_on_Goose_SmallGameDead");
-        if (Motion == Vector2.Left)
-        {
-            AnimatedSprite.FlipH = true;
-        }
     }
 
     private void _on_Goose_input_event(Node viewport, InputEvent inputEvent, int shape_idx)
     {
-        if (Input.IsActionPressed("shoot"))
+        if (Input.IsActionPressed("shoot") && GameManager.PlayerManager.CanShoot())
         {
             UpdateHP();
         }
