@@ -12,7 +12,7 @@ config_version=4
 
 config/name="Trail Hunting"
 config/description="Oregon Trail 1 and 2 recreation"
-run/main_scene="res://Scenes/Intro.tscn"
+run/main_scene="res://Scenes/TopDownStart.tscn"
 config/icon="res://Images/Icons/icon.png"
 config/windows_native_icon="res://Images/Icons/picture.ico"
 

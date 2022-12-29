@@ -14,6 +14,7 @@
         public static string Spawn = "Spawn";
         public static string AirSpawn = "AirSpawn";
         public static string GroundSpawn = "GroundSpawn";
+        public static string TimedSpawn = "TimedSpawn";
 
         // Game Variables
         public static int MaxAnimalSpawn = 3;

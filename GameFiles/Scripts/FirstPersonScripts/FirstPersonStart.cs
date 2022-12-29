@@ -21,6 +21,8 @@ public class FirstPersonStart : Node2D
 	public GridContainer AmmoContainer;
 	public TextureButton ReloadButton;
     public Timer SpawnTimer;
+    public Timer GameTimer;
+    public Button EndButton;
 
     public PackedScene Goose;
     public PackedScene Duck;
@@ -34,6 +36,7 @@ public class FirstPersonStart : Node2D
 
     private List<Area2D> airSpawns = new List<Area2D>();
 	private List<Area2D> groundSpawns = new List<Area2D>();
+    private List<Area2D> timedSpawns = new List<Area2D>();
 
 	public override void _Ready()
 	{
@@ -42,8 +45,10 @@ public class FirstPersonStart : Node2D
 		
 		LevelBackground = GetNodeOrNull<AnimatedSprite>("LevelImage");
         SpawnTimer = GetNodeOrNull<Timer>("SpawnTimer");
+        GameTimer = GetNodeOrNull<Timer>("GameTimer");
         AmmoContainer = GetNodeOrNull<GridContainer>("CanvasLayer/Background/MarginContainer/HBoxContainer/GridContainer");
 		ReloadButton = GetNodeOrNull<TextureButton>("CanvasLayer/Background/MarginContainer/HBoxContainer/Reload");
+        EndButton = GetNodeOrNull<Button>("CanvasLayer/Background/MarginContainer/HBoxContainer/End");
 		ReloadButton.Disabled = true;
         GameManager.PlayerManager.NeedsToReload = false;
 
@@ -73,8 +78,23 @@ public class FirstPersonStart : Node2D
         groundSpawns.Add(GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn7"));
         groundSpawns.Add(GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn8"));
         groundSpawns.Add(GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn9"));
+        timedSpawns.Add(GetNodeOrNull<Area2D>("TimedSpawns/TimedSpawn1"));
+        timedSpawns.Add(GetNodeOrNull<Area2D>("TimedSpawns/TimedSpawn2"));
+        timedSpawns.Add(GetNodeOrNull<Area2D>("TimedSpawns/TimedSpawn3"));
 
         LevelBackground.Playing = false; // Player controls the Frame
+
+        if (GameManager.PlayerManager.IsEndless)
+        {
+            EndButton.Visible = true;
+            GameTimer.Stop();
+        }
+        else
+        {
+            EndButton.Visible = false;
+            GameTimer.Start();
+        }
+
         BuildLevel();
 	}
 
@@ -200,17 +220,18 @@ public class FirstPersonStart : Node2D
         SpawnGroundAnimals();
     }
 
+    private void _on_End_button_up()
+    {
+        SpawnTimer.Stop();
+        GameManager.BuildFirstPersonResultsDialog(SmallGameCounter, MediumGameCounter, MedLargeGameCounter, LargeGameCounter);
+        GameManager.ResultsDialog.Show();
+    }
+
     private void _on_SpawnTimer_timeout()
     {
         SpawnAirAnimals();
-        SpawnGroundAnimals();
+        ReSpawnGroundAnimals();
     }
-
-    private void _on_Exit_button_up()
-	{
-		Input.SetCustomMouseCursor(null);
-		GameManager.End();
-	}
 
 	private void BuildMap()
 	{
@@ -272,6 +293,38 @@ public class FirstPersonStart : Node2D
         }
     }
 
+    private void ReSpawnGroundAnimals()
+    {
+        var numberToSpawn = new Random().Next(1, 3);
+        for (int i = 0; i < numberToSpawn; i++)
+        {
+            var randomAnimalSpawn = new Random().Next(0, 8);
+            var spawn = GameManager.GetTimedSpawnPoint();
+            var spawnPoint = groundSpawns.FirstOrDefault(x => x.Name == spawn);
+            if (spawnPoint != null)
+            {
+                var animal = SpawnAnimal(randomAnimalSpawn);
+                if (spawnPoint.Name.Contains("1"))
+                {
+                    animal.ZIndex = 1;
+                }
+                else if (spawnPoint.Name.Contains("2"))
+                {
+                    animal.ZIndex = 2;
+                    animal.Scale = new Vector2((float)1.4, (float)1.4);
+                }
+                else
+                {
+                    animal.ZIndex = 3;
+                    animal.Scale = new Vector2((float)1.6, (float)1.6);
+                }
+                animal.Position = spawnPoint.Position;
+                AddChild(animal);
+                animal.Call("SetMotion", Vector2.Zero);
+            }
+        }
+    }
+
     private KinematicBody2D SpawnAnimal(int animal)
     {
         switch ((Animals)animal)
@@ -282,15 +335,19 @@ public class FirstPersonStart : Node2D
                 return (KinematicBody2D)Rabbit.Instance();
             case Animals.Buck:
             case Animals.Doe:
-                return (KinematicBody2D)Deer.Instance();
+                return LevelBackground.Animation == "Mountains" || LevelBackground.Animation == "Woods" ?
+                       (KinematicBody2D)Deer.Instance() : (KinematicBody2D)Caribou.Instance();
             case Animals.Bear:
-                return (KinematicBody2D)Bear.Instance();
+                return LevelBackground.Animation == "Mountains" || LevelBackground.Animation == "Woods" ?
+                       (KinematicBody2D)Bear.Instance() : (KinematicBody2D)Rabbit.Instance();
             case Animals.Buffalo:
                 return (KinematicBody2D)Buffalo.Instance();
             case Animals.Caribou:
-                return (KinematicBody2D)Caribou.Instance();
+                return LevelBackground.Animation == "Mountains" || LevelBackground.Animation == "Woods" ?
+                       (KinematicBody2D)Deer.Instance() : (KinematicBody2D)Caribou.Instance();
             case Animals.Elk:
-                return (KinematicBody2D)Elk.Instance();
+                return LevelBackground.Animation == "Mountains" || LevelBackground.Animation == "Woods" ?
+                       (KinematicBody2D)Elk.Instance() : (KinematicBody2D)Rabbit.Instance();
             default:
                 return (KinematicBody2D)Squirrel.Instance();
         }

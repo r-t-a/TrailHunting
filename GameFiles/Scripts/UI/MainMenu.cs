@@ -5,23 +5,34 @@ using TrailHunting.Scripts.Managers;
 public class MainMenu : Control
 {
     public WindowDialog OptionsDialog;
-    public OptionButton GameTypeOptionButton;
+    public OptionButton GameTypeButton;
+    public OptionButton GameOptionButton;
 
     public override void _Ready()
     {
         OptionsDialog = GetNodeOrNull<WindowDialog>("CanvasLayer/OptionsDialog");
-        GameTypeOptionButton = OptionsDialog.GetNodeOrNull<OptionButton>("MarginContainer/VBoxContainer/GameTypeContainer/GameTypeButton");
-        if (GameManager.IsFirstPersonStyle)
+        GameTypeButton = OptionsDialog.GetNodeOrNull<OptionButton>("MarginContainer/VBoxContainer/GameTypeContainer/GameTypeButton");
+        GameOptionButton = OptionsDialog.GetNodeOrNull<OptionButton>("MarginContainer/VBoxContainer/GameOptionContainer/GameOptionButton");
+        GameManager.Load();
+        if (GameManager.PlayerManager.IsFirstPersonStyle)
         {
-            GameTypeOptionButton.Selected = 1;
+            GameOptionButton.Selected = 1;
+        }
+        if (GameManager.PlayerManager.IsEndless)
+        {
+            GameTypeButton.Selected = 1;
         }
     }
 
     public override void _Input(InputEvent inputEvent)
     {
+        if (OptionsDialog.Visible)
+        {
+            return;
+        }
         if (inputEvent.IsActionPressed("num1"))
         {
-            if (GameManager.IsFirstPersonStyle)
+            if (GameManager.PlayerManager.IsFirstPersonStyle)
             {
                 GetTree().ChangeScene(Constants.FirstPersonStart);
             }
@@ -34,11 +45,12 @@ public class MainMenu : Control
         {
             if (!OptionsDialog.Visible)
             {
-                OptionsDialog.Visible = true;
+                OptionsDialog.Popup_();
             }
         }
         if (inputEvent.IsActionPressed("num9"))
         {
+            GameManager.Save();
             GetTree().Quit();
         }
     }
@@ -53,5 +65,22 @@ public class MainMenu : Control
         {
             GameManager.SetGameType(true);
         }
+    }
+
+    private void _on_GameOptionButton_item_selected(int selected)
+    {
+        if (selected == 0)
+        {
+            GameManager.SetGameOption(false);
+        }
+        else
+        {
+            GameManager.SetGameOption(true);
+        }
+    }
+
+    private void _on_OptionsDialog_popup_hide()
+    {
+        GameManager.Save();
     }
 }

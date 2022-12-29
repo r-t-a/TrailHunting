@@ -20,6 +20,8 @@ public class TopDownStart : Node2D
 
     public TileMap GroundTileMap;
     public Timer SpawnTimer;
+    public Timer GameTimer;
+    public Button EndButton;
     public PackedScene Player;
     public PackedScene Deer;
     public PackedScene Rabbit;
@@ -34,6 +36,8 @@ public class TopDownStart : Node2D
     {
         GroundTileMap = GetNodeOrNull<TileMap>("TileMap");
         SpawnTimer = GetNodeOrNull<Timer>("SpawnTimer");
+        GameTimer = GetNodeOrNull<Timer>("GameTimer");
+        EndButton = GetNodeOrNull<Button>("CanvasLayer/End");
 
         Player = (PackedScene)ResourceLoader.Load("res://Scenes/HuntingPlayer.tscn");
         Deer = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/TopDown/Deer.tscn");
@@ -55,6 +59,17 @@ public class TopDownStart : Node2D
         spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn10"));
         spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn11"));
         spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn12"));
+
+        if (GameManager.PlayerManager.IsEndless)
+        {
+            EndButton.Visible = true;
+            GameTimer.Stop();
+        }
+        else
+        {
+            EndButton.Visible = false;
+            GameTimer.Start();
+        }
 
         BuildLevel();
     }
@@ -130,6 +145,13 @@ public class TopDownStart : Node2D
     {
         GameManager.ResultsDialog.Hide();
         GameManager.End();
+    }
+
+    private void _on_End_button_up()
+    {
+        SpawnTimer.Stop();
+        GameManager.BuildTopDownResultsDialog(SmallGameCounter, MediumGameCounter, MedLargeGameCounter, LargeGameCounter);
+        GameManager.ResultsDialog.Show();
     }
     #endregion
 
