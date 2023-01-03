@@ -9,13 +9,9 @@ using TrailHunting.Scripts.Managers;
 public class FirstPersonStart : Node2D
 {
     #region Properties
-    [Export]
     public int SmallGameCounter;
-    [Export]
     public int MediumGameCounter;
-    [Export]
     public int MedLargeGameCounter;
-    [Export]
     public int LargeGameCounter;
 
     public AnimatedSprite LevelBackground;
@@ -24,6 +20,7 @@ public class FirstPersonStart : Node2D
     public Timer SpawnTimer;
     public Timer GameTimer;
     public Button EndButton;
+    public Label DisplayTimer;
 
     public PackedScene Desert;
     public PackedScene Plains;
@@ -43,6 +40,7 @@ public class FirstPersonStart : Node2D
     private List<Area2D> airSpawns = new List<Area2D>();
     private List<Area2D> groundSpawns = new List<Area2D>();
     private List<Area2D> timedSpawns = new List<Area2D>();
+    private int ammoCount;
     #endregion
 
     #region Overrides
@@ -56,8 +54,9 @@ public class FirstPersonStart : Node2D
         AmmoContainer = GetNodeOrNull<GridContainer>("CanvasLayer/Background/MarginContainer/HBoxContainer/GridContainer");
         ReloadButton = GetNodeOrNull<TextureButton>("CanvasLayer/Background/MarginContainer/HBoxContainer/Reload");
         EndButton = GetNodeOrNull<Button>("CanvasLayer/Background/MarginContainer/HBoxContainer/End");
-        ReloadButton.Disabled = true;
+        DisplayTimer = GetNodeOrNull<Label>("CanvasLayer/Background/MarginContainer/HBoxContainer/DisplayTimer");
         GameManager.PlayerManager.NeedsToReload = false;
+        GameManager.PlayerManager.HasAmmo = true;
 
         Desert = (PackedScene)ResourceLoader.Load("res://Scenes/Levels/Desert.tscn");
         Plains = (PackedScene)ResourceLoader.Load("res://Scenes/Levels/Plains.tscn");
@@ -77,15 +76,26 @@ public class FirstPersonStart : Node2D
         if (GameManager.PlayerManager.IsEndless)
         {
             EndButton.Visible = true;
+            DisplayTimer.Visible = false;
             GameTimer.Stop();
         }
         else
         {
             EndButton.Visible = false;
+            DisplayTimer.Visible = true;
             GameTimer.Start();
         }
 
+        ammoCount = 20; //TODO other weapons, get ammo
         BuildLevel();
+    }
+
+    public override void _Process(float delta)
+    {
+        if (DisplayTimer.Visible)
+        {
+            DisplayTimer.Text = Mathf.FloorToInt(GameTimer.TimeLeft).ToString();
+        }
     }
     #endregion
 
@@ -116,6 +126,13 @@ public class FirstPersonStart : Node2D
     {
         GameManager.ResultsDialog.Hide();
         GameManager.End();
+    }
+
+    private void _on_End_button_up()
+    {
+        SpawnTimer.Stop();
+        GameManager.BuildFirstPersonResultsDialog(SmallGameCounter, MediumGameCounter, MedLargeGameCounter, LargeGameCounter);
+        GameManager.ResultsDialog.Show();
     }
 
     private void _on_Goose_SmallGameDead()
@@ -165,9 +182,13 @@ public class FirstPersonStart : Node2D
 
     private void _on_Reload_pressed()
     {
+        if (!GameManager.PlayerManager.HasAmmo)
+        {
+            return;
+        }
+
         if (GameManager.PlayerManager.NeedsToReload)
         {
-            ReloadButton.Disabled = true;
             ReloadButton.Pressed = false;
             GameManager.PlayerManager.NeedsToReload = false;
         }
@@ -182,13 +203,6 @@ public class FirstPersonStart : Node2D
         SpawnGroundAnimals();
     }
 
-    private void _on_End_button_up()
-    {
-        SpawnTimer.Stop();
-        GameManager.BuildFirstPersonResultsDialog(SmallGameCounter, MediumGameCounter, MedLargeGameCounter, LargeGameCounter);
-        GameManager.ResultsDialog.Show();
-    }
-
     private void _on_SpawnTimer_timeout()
     {
         SpawnAirAnimals();
@@ -199,16 +213,32 @@ public class FirstPersonStart : Node2D
     #region Methods
     private void UpdateWeaponAndAmmo()
     {
-        var ammoTexture = AmmoContainer.GetChildren().OfType<TextureRect>().Where(x => x.Visible);
-        if (!ammoTexture.Any())
+        if (!GameManager.PlayerManager.HasAmmo)
         {
             return;
         }
-        var lastNode = AmmoContainer.GetNode<TextureRect>(ammoTexture.LastOrDefault().GetPath());
-        AmmoContainer.RemoveChild(lastNode);
-        ReloadButton.Disabled = false;
-        ReloadButton.Pressed = true;
-        GameManager.PlayerManager.NeedsToReload = true;
+        var ammoTexture = AmmoContainer.GetChildren().OfType<ColorRect>();
+        foreach (var ammo in ammoTexture)
+        {
+            var isready = (bool)ammo.Call("GetAmmoAvailable");
+            if (isready)
+            {
+                ammo.Call("BulletUsed");
+                break;
+            }
+        }
+        ammoCount -= 1;
+        if (ammoCount == 0)
+        {
+            ReloadButton.Disabled = true;
+            GameManager.PlayerManager.NeedsToReload = false;
+            GameManager.PlayerManager.HasAmmo = false;
+        }
+        else
+        {
+            ReloadButton.Pressed = true;
+            GameManager.PlayerManager.NeedsToReload = true;
+        }
     }
 
     private void BuildLevel()

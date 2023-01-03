@@ -66,6 +66,18 @@ popup_exclusive = true
 window_title = "Results"
 dialog_autowrap = true
 
+[node name="ResultsText" type="Label" parent="CanvasLayer/AcceptDialog"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -117.0
+margin_top = 8.0
+margin_right = 117.0
+margin_bottom = 62.0
+text = "Total Meat Collected:
+2000"
+align = 1
+valign = 1
+
 [node name="End" type="Button" parent="CanvasLayer"]
 anchor_left = 1.0
 anchor_top = 1.0
@@ -75,6 +87,17 @@ margin_left = -70.0
 margin_top = -30.0
 theme = ExtResource( 2 )
 text = "End"
+
+[node name="DisplayTimer" type="Label" parent="CanvasLayer"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -70.0
+margin_top = -30.0
+theme = ExtResource( 2 )
+align = 1
+valign = 1
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource( 1 )
@@ -182,8 +205,8 @@ wait_time = 4.0
 autostart = true
 
 [node name="GameTimer" type="Timer" parent="."]
-wait_time = 30.0
-autostart = true
+wait_time = 60.0
+one_shot = true
 
 [connection signal="confirmed" from="CanvasLayer/AcceptDialog" to="." method="_on_AcceptDialog_confirmed"]
 [connection signal="modal_closed" from="CanvasLayer/AcceptDialog" to="." method="_on_AcceptDialog_modal_closed"]

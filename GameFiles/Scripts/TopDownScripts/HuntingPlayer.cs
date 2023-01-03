@@ -12,6 +12,7 @@ public class HuntingPlayer : KinematicBody2D
     public AnimationTree AnimationTree;
     public AnimationNodeStateMachinePlayback AnimationNode;
     public Position2D RiflePosition;
+    public AudioStreamPlayer2D ShotSfx;
 
     private Vector2 moveDirection;
     private Vector2 lookDirection;
@@ -24,6 +25,7 @@ public class HuntingPlayer : KinematicBody2D
         AnimationTree = GetNodeOrNull<AnimationTree>("AnimationTree");
         AnimationNode = (AnimationNodeStateMachinePlayback)AnimationTree.Get("parameters/playback");
         RiflePosition = GetNodeOrNull<Position2D>("Position2D");
+        ShotSfx = GetNodeOrNull<AudioStreamPlayer2D>("Shot");
         lookDirection = new Vector2(-1, 0);
     }
 
@@ -146,6 +148,7 @@ public class HuntingPlayer : KinematicBody2D
                 return;
             }
 
+            ShotSfx.Play();
             var bullet = (KinematicBody2D)Bullet.Instance();
             GetParent().AddChild(bullet);
             bullet.GlobalPosition = RiflePosition.GlobalPosition;

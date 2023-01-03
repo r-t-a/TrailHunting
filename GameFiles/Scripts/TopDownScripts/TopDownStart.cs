@@ -10,19 +10,16 @@ using TrailHunting.Scripts.Enums.Terrain;
 public class TopDownStart : Node2D
 {
     #region Properties
-    [Export]
     public int SmallGameCounter;
-    [Export]
     public int MediumGameCounter;
-    [Export]
     public int MedLargeGameCounter;
-    [Export]
     public int LargeGameCounter;
-
+    
     public TileMap GroundTileMap;
     public Timer SpawnTimer;
     public Timer GameTimer;
     public Button EndButton;
+    public Label DisplayTimer;
     public PackedScene Player;
     public PackedScene Deer;
     public PackedScene Rabbit;
@@ -32,6 +29,7 @@ public class TopDownStart : Node2D
     public PackedScene Buffalo;
 
     private List<Area2D> spawns = new List<Area2D>();
+    private MapType currentMap;
     #endregion
 
     #region Overrides
@@ -41,6 +39,7 @@ public class TopDownStart : Node2D
         SpawnTimer = GetNodeOrNull<Timer>("SpawnTimer");
         GameTimer = GetNodeOrNull<Timer>("GameTimer");
         EndButton = GetNodeOrNull<Button>("CanvasLayer/End");
+        DisplayTimer = GetNodeOrNull<Label>("CanvasLayer/DisplayTimer");
 
         Player = (PackedScene)ResourceLoader.Load("res://Scenes/HuntingPlayer.tscn");
         Deer = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/TopDown/Deer.tscn");
@@ -66,15 +65,25 @@ public class TopDownStart : Node2D
         if (GameManager.PlayerManager.IsEndless)
         {
             EndButton.Visible = true;
+            DisplayTimer.Visible = false;
             GameTimer.Stop();
         }
         else
         {
             EndButton.Visible = false;
+            DisplayTimer.Visible = true;
             GameTimer.Start();
         }
 
         BuildLevel();
+    }
+
+    public override void _Process(float delta)
+    {
+        if (DisplayTimer.Visible)
+        {
+            DisplayTimer.Text = Mathf.FloorToInt(GameTimer.TimeLeft).ToString();
+        }
     }
     #endregion
 
@@ -218,13 +227,17 @@ public class TopDownStart : Node2D
                 AddChild(buck);
                 break;
             case Animals.Bear:
-                var bear = (KinematicBody2D)Bear.Instance();
+                var bear = currentMap != MapType.Mountains || currentMap != MapType.Woods
+                    ? (KinematicBody2D)Rabbit.Instance()
+                    : (KinematicBody2D)Bear.Instance();
                 bear.GlobalPosition = global;
                 bear.Call("SetSpawn", (int)spawn);
                 AddChild(bear);
                 break;
             case Animals.Buffalo:
-                var buffalo = (KinematicBody2D)Buffalo.Instance();
+                var buffalo = currentMap != MapType.Plains 
+                    ? (KinematicBody2D)Buffalo.Instance()
+                    : (KinematicBody2D)Squirrel.Instance();
                 buffalo.GlobalPosition = global;
                 buffalo.Call("SetSpawn", (int)spawn);
                 AddChild(buffalo);
@@ -241,6 +254,7 @@ public class TopDownStart : Node2D
     private void BuildMap()
     {
         (MapType map, List<int> terrainObjects) = GameManager.BuildTopDownLevel();
+        currentMap = map;
         switch (map)
         {
             default:

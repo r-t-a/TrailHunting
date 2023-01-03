@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Images/UI/ui_bullet.png" type="Texture" id=1]
+[ext_resource path="res://Images/UI/ui_bullet_empty.png" type="Texture" id=2]
+[ext_resource path="res://Scripts/FirstPersonScripts/UI/BulletDisplay.cs" type="Script" id=3]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 1 ), ExtResource( 2 ) ],
+"loop": true,
+"name": "Shot",
+"speed": 5.0
+} ]
+
+[node name="BulletDisplay" type="ColorRect"]
+color = Color( 0, 0, 0, 0 )
+script = ExtResource( 3 )
+
+[node name="Bullet" type="AnimatedSprite" parent="."]
+frames = SubResource( 1 )
+animation = "Shot"

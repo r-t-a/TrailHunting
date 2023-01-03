@@ -8,9 +8,10 @@
         public int TopDownHighScore { get; set; }
 
         public bool NeedsToReload { get; set; }
+        public bool HasAmmo { get; set; }
         public bool CanShoot()
         {
-            return !NeedsToReload;
+            return !NeedsToReload && HasAmmo;
         }
     }
 }

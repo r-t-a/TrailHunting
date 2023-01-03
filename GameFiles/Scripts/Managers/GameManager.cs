@@ -33,13 +33,15 @@ namespace TrailHunting.Scripts.Managers
         public static void BuildTopDownResultsDialog(int smallCounter, int mediumCounter, int medLargeCounter, int largeCounter)
         {
             ResultsDialog = Linker.GetTree().Root.GetNode("TopDownStart").GetNodeOrNull<AcceptDialog>("CanvasLayer/AcceptDialog");
-            ResultsDialog.DialogText = $"{GetTotal(smallCounter, mediumCounter, medLargeCounter, largeCounter)} Total Meat Hunted";
+            var label = ResultsDialog.GetNodeOrNull<Label>("ResultsText");
+            label.Text = $"Total Meat Hunted:{System.Environment.NewLine}{GetTotal(smallCounter, mediumCounter, medLargeCounter, largeCounter)}";
         }
 
         public static void BuildFirstPersonResultsDialog(int smallCounter, int mediumCounter, int medLargeCounter, int largeCounter)
         {
             ResultsDialog = Linker.GetTree().Root.GetNode("FirstPersonStart").GetNodeOrNull<AcceptDialog>("CanvasLayer/AcceptDialog");
-            ResultsDialog.DialogText = $"{GetTotal(smallCounter, mediumCounter, medLargeCounter, largeCounter)} Total Meat Hunted";
+            var label = ResultsDialog.GetNodeOrNull<Label>("ResultsText");
+            label.Text = $"Total Meat Hunted:{System.Environment.NewLine}{GetTotal(smallCounter, mediumCounter, medLargeCounter, largeCounter)}";
         }
 
         private static int GetTotal(int smallCounter, int mediumCounter, int medLargeCounter, int largeCounter)
@@ -59,7 +61,7 @@ namespace TrailHunting.Scripts.Managers
 
         public static (MapType, List<int>) BuildTopDownLevel()
         {
-            var getMapType = (MapType)new Random().Next(0, 5);
+            var getMapType = (MapType)new Random().Next(0, 4);
             var terrainList = new List<int>();
             var randomTerrainAmount = new Random().Next(0, Constants.MaxTerrainSpawn + 1);
 
