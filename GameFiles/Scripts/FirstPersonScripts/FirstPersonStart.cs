@@ -8,6 +8,7 @@ using TrailHunting.Scripts.Managers;
 
 public class FirstPersonStart : Node2D
 {
+    #region Properties
     [Export]
     public int SmallGameCounter;
     [Export]
@@ -18,11 +19,16 @@ public class FirstPersonStart : Node2D
     public int LargeGameCounter;
 
     public AnimatedSprite LevelBackground;
-	public GridContainer AmmoContainer;
-	public TextureButton ReloadButton;
+    public GridContainer AmmoContainer;
+    public TextureButton ReloadButton;
     public Timer SpawnTimer;
     public Timer GameTimer;
     public Button EndButton;
+
+    public PackedScene Desert;
+    public PackedScene Plains;
+    public PackedScene River;
+    public PackedScene Woods;
 
     public PackedScene Goose;
     public PackedScene Duck;
@@ -35,22 +41,28 @@ public class FirstPersonStart : Node2D
     public PackedScene Squirrel;
 
     private List<Area2D> airSpawns = new List<Area2D>();
-	private List<Area2D> groundSpawns = new List<Area2D>();
+    private List<Area2D> groundSpawns = new List<Area2D>();
     private List<Area2D> timedSpawns = new List<Area2D>();
+    #endregion
 
-	public override void _Ready()
-	{
-		var reticle = ResourceLoader.Load("res://Images/UI/reticle.png");
-		Input.SetCustomMouseCursor(reticle, hotspot: new Vector2(8,8));
-		
-		LevelBackground = GetNodeOrNull<AnimatedSprite>("LevelImage");
+    #region Overrides
+    public override void _Ready()
+    {
+        var reticle = ResourceLoader.Load("res://Images/UI/reticle.png");
+        Input.SetCustomMouseCursor(reticle, hotspot: new Vector2(8, 8));
+
         SpawnTimer = GetNodeOrNull<Timer>("SpawnTimer");
         GameTimer = GetNodeOrNull<Timer>("GameTimer");
         AmmoContainer = GetNodeOrNull<GridContainer>("CanvasLayer/Background/MarginContainer/HBoxContainer/GridContainer");
-		ReloadButton = GetNodeOrNull<TextureButton>("CanvasLayer/Background/MarginContainer/HBoxContainer/Reload");
+        ReloadButton = GetNodeOrNull<TextureButton>("CanvasLayer/Background/MarginContainer/HBoxContainer/Reload");
         EndButton = GetNodeOrNull<Button>("CanvasLayer/Background/MarginContainer/HBoxContainer/End");
-		ReloadButton.Disabled = true;
+        ReloadButton.Disabled = true;
         GameManager.PlayerManager.NeedsToReload = false;
+
+        Desert = (PackedScene)ResourceLoader.Load("res://Scenes/Levels/Desert.tscn");
+        Plains = (PackedScene)ResourceLoader.Load("res://Scenes/Levels/Plains.tscn");
+        River = (PackedScene)ResourceLoader.Load("res://Scenes/Levels/River.tscn");
+        Woods = (PackedScene)ResourceLoader.Load("res://Scenes/Levels/Woods.tscn");
 
         Goose = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/FirstPerson/Goose.tscn");
         Duck = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/FirstPerson/Duck.tscn");
@@ -61,28 +73,6 @@ public class FirstPersonStart : Node2D
         Deer = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/FirstPerson/Deer.tscn");
         Rabbit = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/FirstPerson/Rabbit.tscn");
         Squirrel = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/FirstPerson/Squirrel.tscn");
-
-        // TODO just loop this, make max const
-        airSpawns.Add(GetNodeOrNull<Area2D>("AirSpawns/AirSpawn1"));
-        airSpawns.Add(GetNodeOrNull<Area2D>("AirSpawns/AirSpawn2"));
-        airSpawns.Add(GetNodeOrNull<Area2D>("AirSpawns/AirSpawn3"));
-        airSpawns.Add(GetNodeOrNull<Area2D>("AirSpawns/AirSpawn4"));
-        airSpawns.Add(GetNodeOrNull<Area2D>("AirSpawns/AirSpawn5"));
-        airSpawns.Add(GetNodeOrNull<Area2D>("AirSpawns/AirSpawn6"));
-		groundSpawns.Add(GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn1"));
-        groundSpawns.Add(GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn2"));
-        groundSpawns.Add(GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn3"));
-        groundSpawns.Add(GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn4"));
-        groundSpawns.Add(GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn5"));
-        groundSpawns.Add(GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn6"));
-        groundSpawns.Add(GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn7"));
-        groundSpawns.Add(GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn8"));
-        groundSpawns.Add(GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn9"));
-        timedSpawns.Add(GetNodeOrNull<Area2D>("TimedSpawns/TimedSpawn1"));
-        timedSpawns.Add(GetNodeOrNull<Area2D>("TimedSpawns/TimedSpawn2"));
-        timedSpawns.Add(GetNodeOrNull<Area2D>("TimedSpawns/TimedSpawn3"));
-
-        LevelBackground.Playing = false; // Player controls the Frame
 
         if (GameManager.PlayerManager.IsEndless)
         {
@@ -96,8 +86,10 @@ public class FirstPersonStart : Node2D
         }
 
         BuildLevel();
-	}
+    }
+    #endregion
 
+    #region Events
     public void _on_BackgroundArea_input_event(Node viewport, InputEvent inputEvent, int shape_idx)
     {
         if (inputEvent.IsActionPressed("shoot") && GameManager.PlayerManager.CanShoot())
@@ -126,39 +118,9 @@ public class FirstPersonStart : Node2D
         GameManager.End();
     }
 
-    private void UpdateWeaponAndAmmo()
-    {
-        var ammoTexture = AmmoContainer.GetChildren().OfType<TextureRect>().Where(x => x.Visible);
-        if (!ammoTexture.Any())
-        {
-            return;
-        }
-        var lastNode = AmmoContainer.GetNode<TextureRect>(ammoTexture.LastOrDefault().GetPath());
-        AmmoContainer.RemoveChild(lastNode);
-        ReloadButton.Disabled = false;
-        ReloadButton.Pressed = true;
-        GameManager.PlayerManager.NeedsToReload = true;
-    }
-
-    private void BuildLevel()
-	{
-		BuildMap();
-        SpawnAirAnimals();
-		SpawnGroundAnimals();
-    }
-
-	private void _on_Ground_body_entered(Node node)
-	{
-        if (node is KinematicBody2D body && (body.Name.Contains("Goose") ||
-            body.Name.Contains("Duck")) && (body as AnimalEntity).HP == 0)
-        {
-            (body as AnimalEntity).Motion = Vector2.Zero;
-        }
-    }
-
     private void _on_Goose_SmallGameDead()
     {
-		SmallGameCounter += 1;
+        SmallGameCounter += 1;
     }
 
     private void _on_Duck_SmallGameDead()
@@ -202,20 +164,20 @@ public class FirstPersonStart : Node2D
     }
 
     private void _on_Reload_pressed()
-	{
-		if (GameManager.PlayerManager.NeedsToReload)
-		{
-			ReloadButton.Disabled = true;
-			ReloadButton.Pressed = false;
+    {
+        if (GameManager.PlayerManager.NeedsToReload)
+        {
+            ReloadButton.Disabled = true;
+            ReloadButton.Pressed = false;
             GameManager.PlayerManager.NeedsToReload = false;
-		}
-	}
+        }
+    }
 
-	private void _on_Move_button_up()
-	{
+    private void _on_Move_button_up()
+    {
         CleanupOnMove();
         LevelBackground.Frame = LevelBackground.Frame == 0 ? 1 : 0;
-        LevelBackground.Playing = false;
+        PopulateBlockers();
         SpawnAirAnimals();
         SpawnGroundAnimals();
     }
@@ -232,15 +194,81 @@ public class FirstPersonStart : Node2D
         SpawnAirAnimals();
         ReSpawnGroundAnimals();
     }
+    #endregion
 
-	private void BuildMap()
-	{
-		LevelBackground.Play(GameManager.BuildFirstPersonLevel());
-		LevelBackground.Playing = false;
-	}
+    #region Methods
+    private void UpdateWeaponAndAmmo()
+    {
+        var ammoTexture = AmmoContainer.GetChildren().OfType<TextureRect>().Where(x => x.Visible);
+        if (!ammoTexture.Any())
+        {
+            return;
+        }
+        var lastNode = AmmoContainer.GetNode<TextureRect>(ammoTexture.LastOrDefault().GetPath());
+        AmmoContainer.RemoveChild(lastNode);
+        ReloadButton.Disabled = false;
+        ReloadButton.Pressed = true;
+        GameManager.PlayerManager.NeedsToReload = true;
+    }
 
-	private void SpawnAirAnimals()
-	{
+    private void BuildLevel()
+    {
+        BuildMap();
+        SpawnAirAnimals();
+        SpawnGroundAnimals();
+    }
+
+    private void BuildMap()
+    {
+        var pickone = new Random().Next(4);
+        switch (pickone)
+        {
+            case 0:
+                var desert = (AnimatedSprite)Desert.Instance();
+                AddChild(desert);
+                LevelBackground = desert;
+                break;
+            case 1:
+                var plains = (AnimatedSprite)Plains.Instance();
+                AddChild(plains);
+                LevelBackground = plains;
+                break;
+            case 2:
+                var river = (AnimatedSprite)River.Instance();
+                AddChild(river);
+                LevelBackground = river;
+                break;
+            case 3:
+                var woods = (AnimatedSprite)Woods.Instance();
+                AddChild(woods);
+                LevelBackground = woods;
+                break;
+        }
+
+        PopulateBlockers();
+        LevelBackground.Playing = false;
+        airSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("AirSpawns/AirSpawn1"));
+        airSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("AirSpawns/AirSpawn2"));
+        airSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("AirSpawns/AirSpawn3"));
+        airSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("AirSpawns/AirSpawn4"));
+        airSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("AirSpawns/AirSpawn5"));
+        airSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("AirSpawns/AirSpawn6"));
+        groundSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn1"));
+        groundSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn2"));
+        groundSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn3"));
+        groundSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn4"));
+        groundSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn5"));
+        groundSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn6"));
+        groundSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn7"));
+        groundSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn8"));
+        groundSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn9"));
+        timedSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("TimedSpawns/TimedSpawn1"));
+        timedSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("TimedSpawns/TimedSpawn2"));
+        timedSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("TimedSpawns/TimedSpawn3"));
+    }
+
+    private void SpawnAirAnimals()
+    {
         var numberToSpawn = new Random().Next(1, 5);
         var gooseChance = new Random().NextDouble();
         var spawn = GameManager.GetAirSpawnPoint();
@@ -248,28 +276,30 @@ public class FirstPersonStart : Node2D
         for (int i = 0; i < numberToSpawn; i++)
         {
             var animal = gooseChance > 0.5 ? (KinematicBody2D)Goose.Instance() : (KinematicBody2D)Duck.Instance();
-            animal.Position = spawnPoint.Position + new Vector2(i * 20, i * 50);
+            animal.Position = spawnPoint.Position + new Vector2(i * 20, i * 30);
             AddChild(animal);
             if (spawnPoint.Name.Contains("1") || spawnPoint.Name.Contains("2") || spawnPoint.Name.Contains("3"))
             {
                 animal.Call("SetAirMotion", Vector2.Right);
+                animal.ZIndex = 1;
             }
             else
             {
                 animal.Call("SetAirMotion", Vector2.Left);
+                animal.ZIndex = 2;
             }
         }
     }
 
-	private void SpawnGroundAnimals()
-	{
+    private void SpawnGroundAnimals()
+    {
         var numberToSpawn = new Random().Next(1, 5);
         for (int i = 0; i < numberToSpawn; i++)
         {
             var randomAnimalSpawn = new Random().Next(0, 8);
             var spawn = GameManager.GetGroundSpawnPoint();
             var spawnPoint = groundSpawns.FirstOrDefault(x => x.Name == spawn);
-            if (spawnPoint != null )
+            if (spawnPoint != null)
             {
                 var animal = SpawnAnimal(randomAnimalSpawn);
                 if (spawnPoint.Name.Contains("1") || spawnPoint.Name.Contains("2") || spawnPoint.Name.Contains("3"))
@@ -370,8 +400,46 @@ public class FirstPersonStart : Node2D
         }
     }
 
+    private void PopulateBlockers()
+    {
+        if (LevelBackground.HasNode("Blockers"))
+        {
+            if (LevelBackground.Frame == 0)
+            {
+                var blocker = LevelBackground.GetNode<StaticBody2D>("Blockers/BlockerFrame0");
+                var collision = blocker.GetChild<CollisionPolygon2D>(0);
+                collision.Disabled = false;
+            }
+            if (LevelBackground.Frame == 1)
+            {
+                var blocker = LevelBackground.GetNode<StaticBody2D>("Blockers/BlockerFrame1");
+                var collision = blocker.GetChild<CollisionPolygon2D>(0);
+                collision.Disabled = false;
+            }
+            if (LevelBackground.Frame == 2)
+            {
+                var blocker = LevelBackground.GetNode<StaticBody2D>("Blockers/BlockerFrame2");
+                var collision = blocker.GetChild<CollisionPolygon2D>(0);
+                collision.Disabled = false;
+            }
+        }
+    }
+
     private void CleanupOnMove()
-	{
+    {
+        if (LevelBackground.HasNode("Blockers"))
+        {
+            var blockerChildren = LevelBackground.GetNode("Blockers").GetChildren();
+            foreach (var blocker in blockerChildren)
+            {
+                if (blocker is StaticBody2D staticBody)
+                {
+                    var collision = (CollisionPolygon2D)staticBody.GetChild(0);
+                    collision.Disabled = true;
+                }
+            }
+        }
+
         var currentSpawn = GetTree().GetNodesInGroup("Animals");
         foreach (var spawn in currentSpawn)
         {
@@ -381,4 +449,5 @@ public class FirstPersonStart : Node2D
             }
         }
     }
+    #endregion
 }

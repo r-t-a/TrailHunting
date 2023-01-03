@@ -22,7 +22,7 @@ namespace TrailHunting.Scripts.Helpers
             }
         }
 
-        public static MoveDirection VectorToMoveDirection (this Vector2 vector)
+        public static MoveDirection VectorToMoveDirection(this Vector2 vector)
         {
             if (vector == Vector2.Zero || vector == Vector2.Left)
             {

@@ -9,6 +9,7 @@ using TrailHunting.Scripts.Enums.Terrain;
 
 public class TopDownStart : Node2D
 {
+    #region Properties
     [Export]
     public int SmallGameCounter;
     [Export]
@@ -31,7 +32,9 @@ public class TopDownStart : Node2D
     public PackedScene Buffalo;
 
     private List<Area2D> spawns = new List<Area2D>();
+    #endregion
 
+    #region Overrides
     public override void _Ready()
     {
         GroundTileMap = GetNodeOrNull<TileMap>("TileMap");
@@ -73,6 +76,7 @@ public class TopDownStart : Node2D
 
         BuildLevel();
     }
+    #endregion
 
     #region Events
     private void _on_Squirrel_SmallGameDead()
@@ -155,6 +159,7 @@ public class TopDownStart : Node2D
     }
     #endregion
 
+    #region Methods
     private void BuildLevel()
     {
         SpawnPlayer();
@@ -233,7 +238,7 @@ public class TopDownStart : Node2D
         }
     }
 
-    private void BuildMap() 
+    private void BuildMap()
     {
         (MapType map, List<int> terrainObjects) = GameManager.BuildTopDownLevel();
         switch (map)
@@ -381,4 +386,5 @@ public class TopDownStart : Node2D
             }
         }
     }
+    #endregion
 }

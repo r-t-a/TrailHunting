@@ -170,7 +170,6 @@ namespace TrailHunting.Scripts.Managers
                 var toJSON = JsonConvert.SerializeObject(PlayerData.ToPlayerData(PlayerManager), Formatting.Indented);
                 file.Open(Constants.SavedPlayerFileName, File.ModeFlags.Write);
                 file.StoreString(toJSON);
-                GD.Print(toJSON);
                 file.Close();
             }
             catch (Exception e)

@@ -1,0 +1,166 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Images/SpriteSheets/hunting_backgrounds.png" type="Texture" id=1]
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 1 )
+region = Rect2( 580, 612, 580, 306 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 612, 580, 306 )
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ SubResource( 11 ), SubResource( 12 ) ],
+"loop": true,
+"name": "River",
+"speed": 5.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 8, 32 )
+
+[sub_resource type="RectangleShape2D" id=5]
+
+[node name="River" type="AnimatedSprite"]
+scale = Vector2( 1.32, 1.62 )
+frames = SubResource( 1 )
+animation = "River"
+centered = false
+
+[node name="AirSpawns" type="Node" parent="."]
+
+[node name="AirSpawn1" type="Area2D" parent="AirSpawns"]
+position = Vector2( -32, 32 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AirSpawns/AirSpawn1"]
+shape = SubResource( 4 )
+
+[node name="AirSpawn2" type="Area2D" parent="AirSpawns"]
+position = Vector2( -56, 64 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AirSpawns/AirSpawn2"]
+shape = SubResource( 4 )
+
+[node name="AirSpawn3" type="Area2D" parent="AirSpawns"]
+position = Vector2( -80, 96 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AirSpawns/AirSpawn3"]
+shape = SubResource( 4 )
+
+[node name="AirSpawn4" type="Area2D" parent="AirSpawns"]
+position = Vector2( 816, 32 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AirSpawns/AirSpawn4"]
+shape = SubResource( 4 )
+
+[node name="AirSpawn5" type="Area2D" parent="AirSpawns"]
+position = Vector2( 792, 64 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AirSpawns/AirSpawn5"]
+shape = SubResource( 4 )
+
+[node name="AirSpawn6" type="Area2D" parent="AirSpawns"]
+position = Vector2( 840, 96 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AirSpawns/AirSpawn6"]
+shape = SubResource( 4 )
+
+[node name="GroundSpawns" type="Node" parent="."]
+
+[node name="GroundSpawn1" type="Area2D" parent="GroundSpawns"]
+position = Vector2( -32, 256 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GroundSpawns/GroundSpawn1"]
+shape = SubResource( 5 )
+
+[node name="GroundSpawn2" type="Area2D" parent="GroundSpawns"]
+position = Vector2( 96, 256 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GroundSpawns/GroundSpawn2"]
+shape = SubResource( 5 )
+
+[node name="GroundSpawn3" type="Area2D" parent="GroundSpawns"]
+position = Vector2( 704, 256 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GroundSpawns/GroundSpawn3"]
+shape = SubResource( 5 )
+
+[node name="GroundSpawn4" type="Area2D" parent="GroundSpawns"]
+position = Vector2( 40, 320 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GroundSpawns/GroundSpawn4"]
+shape = SubResource( 5 )
+
+[node name="GroundSpawn5" type="Area2D" parent="GroundSpawns"]
+position = Vector2( 192, 320 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GroundSpawns/GroundSpawn5"]
+shape = SubResource( 5 )
+
+[node name="GroundSpawn6" type="Area2D" parent="GroundSpawns"]
+position = Vector2( 280, 352 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GroundSpawns/GroundSpawn6"]
+shape = SubResource( 5 )
+
+[node name="GroundSpawn7" type="Area2D" parent="GroundSpawns"]
+position = Vector2( -32, 384 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GroundSpawns/GroundSpawn7"]
+shape = SubResource( 5 )
+
+[node name="GroundSpawn8" type="Area2D" parent="GroundSpawns"]
+position = Vector2( 312, 384 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GroundSpawns/GroundSpawn8"]
+shape = SubResource( 5 )
+
+[node name="GroundSpawn9" type="Area2D" parent="GroundSpawns"]
+position = Vector2( 128, 384 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GroundSpawns/GroundSpawn9"]
+shape = SubResource( 5 )
+
+[node name="TimedSpawns" type="Node" parent="."]
+
+[node name="TimedSpawn1" type="Area2D" parent="TimedSpawns"]
+position = Vector2( -32, 288 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TimedSpawns/TimedSpawn1"]
+shape = SubResource( 5 )
+
+[node name="TimedSpawn2" type="Area2D" parent="TimedSpawns"]
+position = Vector2( -32, 328 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TimedSpawns/TimedSpawn2"]
+shape = SubResource( 5 )
+
+[node name="TimedSpawn3" type="Area2D" parent="TimedSpawns"]
+position = Vector2( -32, 368 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TimedSpawns/TimedSpawn3"]
+shape = SubResource( 5 )
+
+[node name="Blockers" type="Node" parent="."]
+
+[node name="BlockerFrame0" type="StaticBody2D" parent="Blockers"]
+position = Vector2( 704, 408 )
+collision_layer = 4095
+collision_mask = 4095
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Blockers/BlockerFrame0"]
+position = Vector2( 3.05975, 0 )
+scale = Vector2( 0.980183, 1 )
+polygon = PoolVector2Array( -16, -16, -104, -48, -88, -64, -144, -80, -168, -104, -256, -152, -272, -184, -176, -192, -88, -144, -88, -136, 8, -112, 8, -88, 56, -80, 56, 0 )
+disabled = true
+
+[node name="BlockerFrame1" type="StaticBody2D" parent="Blockers"]
+collision_layer = 4095
+collision_mask = 4095
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Blockers/BlockerFrame1"]
+position = Vector2( 560, 408 )
+polygon = PoolVector2Array( -64, -8, -184, -16, -216, -56, -256, -80, -272, -112, -304, -120, -360, -152, -360, -184, -200, -144, -200, -128, -112, -112, -96, -88, 176, 8 )
+disabled = true
