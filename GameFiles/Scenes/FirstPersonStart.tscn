@@ -16,6 +16,12 @@ extents = Vector2( 384, 32.5 )
 [node name="FirstPersonStart" type="Node2D"]
 position = Vector2( 0, 8 )
 script = ExtResource( 3 )
+AmmoNodePath = NodePath("CanvasLayer/Background/MarginContainer/HBoxContainer/GridContainer")
+reloadButtonNodePath = NodePath("CanvasLayer/Background/MarginContainer/HBoxContainer/Reload")
+spawnTimerNodePath = NodePath("SpawnTimer")
+gameTimerNodePath = NodePath("GameTimer")
+endButtonNodePath = NodePath("CanvasLayer/Background/MarginContainer/HBoxContainer/End")
+DisplayTimeNodePath = NodePath("CanvasLayer/Background/MarginContainer/HBoxContainer/DisplayTimer")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 follow_viewport_enable = true

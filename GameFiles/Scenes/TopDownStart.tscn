@@ -49,6 +49,12 @@ extents = Vector2( 32, 32 )
 
 [node name="TopDownStart" type="Node2D"]
 script = ExtResource( 3 )
+TileMapPath = NodePath("TileMap")
+SpawnTimerPath = NodePath("SpawnTimer")
+GameTimerPath = NodePath("GameTimer")
+EndButtonPath = NodePath("CanvasLayer/End")
+DisplayTimePath = NodePath("CanvasLayer/DisplayTimer")
+SpawnNodePath = NodePath("Spawns")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

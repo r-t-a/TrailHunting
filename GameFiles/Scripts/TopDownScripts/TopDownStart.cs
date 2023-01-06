@@ -9,24 +9,41 @@ using TrailHunting.Scripts.Enums.Terrain;
 
 public class TopDownStart : Node2D
 {
+    #region Exports
+    [Export]
+    protected NodePath TileMapPath;
+    [Export]
+    protected NodePath SpawnTimerPath;
+    [Export]
+    protected NodePath GameTimerPath;
+    [Export]
+    protected NodePath EndButtonPath;
+    [Export]
+    protected NodePath DisplayTimePath;
+    [Export]
+    protected NodePath SpawnNodePath;
+
+    #endregion
+
     #region Properties
     public int SmallGameCounter;
     public int MediumGameCounter;
     public int MedLargeGameCounter;
     public int LargeGameCounter;
     
-    public TileMap GroundTileMap;
-    public Timer SpawnTimer;
-    public Timer GameTimer;
-    public Button EndButton;
-    public Label DisplayTimer;
-    public PackedScene Player;
-    public PackedScene Deer;
-    public PackedScene Rabbit;
-    public PackedScene Squirrel;
-    public PackedScene Bear;
-    public PackedScene Buck;
-    public PackedScene Buffalo;
+    private TileMap groundTileMap;
+    private Timer spawnTimer;
+    private Timer gameTimer;
+    private Button endButton;
+    private Label displayTimer;
+
+    private PackedScene player;
+    private PackedScene deer;
+    private PackedScene rabbit;
+    private PackedScene squirrel;
+    private PackedScene bear;
+    private PackedScene buck;
+    private PackedScene buffalo;
 
     private List<Area2D> spawns = new List<Area2D>();
     private MapType currentMap;
@@ -35,44 +52,44 @@ public class TopDownStart : Node2D
     #region Overrides
     public override void _Ready()
     {
-        GroundTileMap = GetNodeOrNull<TileMap>("TileMap");
-        SpawnTimer = GetNodeOrNull<Timer>("SpawnTimer");
-        GameTimer = GetNodeOrNull<Timer>("GameTimer");
-        EndButton = GetNodeOrNull<Button>("CanvasLayer/End");
-        DisplayTimer = GetNodeOrNull<Label>("CanvasLayer/DisplayTimer");
+        groundTileMap = GetNodeOrNull<TileMap>(TileMapPath);
+        spawnTimer = GetNodeOrNull<Timer>(SpawnTimerPath);
+        gameTimer = GetNodeOrNull<Timer>(GameTimerPath);
+        endButton = GetNodeOrNull<Button>(EndButtonPath);
+        displayTimer = GetNodeOrNull<Label>(DisplayTimePath);
 
-        Player = (PackedScene)ResourceLoader.Load("res://Scenes/HuntingPlayer.tscn");
-        Deer = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/TopDown/Deer.tscn");
-        Rabbit = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/TopDown/Rabbit.tscn");
-        Squirrel = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/TopDown/Squirrel.tscn");
-        Buffalo = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/TopDown/Buffalo.tscn");
-        Bear = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/TopDown/Bear.tscn");
-        Buck = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/TopDown/Buck.tscn");
+        player = (PackedScene)ResourceLoader.Load(Constants.HuntingPlayer);
+        deer = (PackedScene)ResourceLoader.Load(Constants.TopDownDeer);
+        rabbit = (PackedScene)ResourceLoader.Load(Constants.TopDownRabbit);
+        squirrel = (PackedScene)ResourceLoader.Load(Constants.TopDownSquirrel);
+        buffalo = (PackedScene)ResourceLoader.Load(Constants.TopDownBuffalo);
+        bear = (PackedScene)ResourceLoader.Load(Constants.TopDownBear);
+        buck = (PackedScene)ResourceLoader.Load(Constants.TopDownBuck);
 
-        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn1"));
-        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn2"));
-        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn3"));
-        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn4"));
-        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn5"));
-        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn6"));
-        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn7"));
-        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn8"));
-        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn9"));
-        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn10"));
-        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn11"));
-        spawns.Add(GetNodeOrNull<Area2D>("Spawns/Spawn12"));
+        spawns.Add(GetNodeOrNull<Area2D>($"{SpawnNodePath}/Spawn1"));
+        spawns.Add(GetNodeOrNull<Area2D>($"{SpawnNodePath}/Spawn2"));
+        spawns.Add(GetNodeOrNull<Area2D>($"{SpawnNodePath}/Spawn3"));
+        spawns.Add(GetNodeOrNull<Area2D>($"{SpawnNodePath}/Spawn4"));
+        spawns.Add(GetNodeOrNull<Area2D>($"{SpawnNodePath}/Spawn5"));
+        spawns.Add(GetNodeOrNull<Area2D>($"{SpawnNodePath}/Spawn6"));
+        spawns.Add(GetNodeOrNull<Area2D>($"{SpawnNodePath}/Spawn7"));
+        spawns.Add(GetNodeOrNull<Area2D>($"{SpawnNodePath}/Spawn8"));
+        spawns.Add(GetNodeOrNull<Area2D>($"{SpawnNodePath}/Spawn9"));
+        spawns.Add(GetNodeOrNull<Area2D>($"{SpawnNodePath}/Spawn10"));
+        spawns.Add(GetNodeOrNull<Area2D>($"{SpawnNodePath}/Spawn11"));
+        spawns.Add(GetNodeOrNull<Area2D>($"{SpawnNodePath}/Spawn12"));
 
         if (GameManager.PlayerManager.IsEndless)
         {
-            EndButton.Visible = true;
-            DisplayTimer.Visible = false;
-            GameTimer.Stop();
+            endButton.Visible = true;
+            displayTimer.Visible = false;
+            gameTimer.Stop();
         }
         else
         {
-            EndButton.Visible = false;
-            DisplayTimer.Visible = true;
-            GameTimer.Start();
+            endButton.Visible = false;
+            displayTimer.Visible = true;
+            gameTimer.Start();
         }
 
         BuildLevel();
@@ -80,9 +97,9 @@ public class TopDownStart : Node2D
 
     public override void _Process(float delta)
     {
-        if (DisplayTimer.Visible)
+        if (displayTimer.Visible)
         {
-            DisplayTimer.Text = Mathf.FloorToInt(GameTimer.TimeLeft).ToString();
+            displayTimer.Text = Mathf.FloorToInt(gameTimer.TimeLeft).ToString();
         }
     }
     #endregion
@@ -115,11 +132,11 @@ public class TopDownStart : Node2D
 
     private void _on_SpawnTimer_timeout()
     {
-        var currentSpawn = GetTree().GetNodesInGroup("Animals");
+        var currentSpawn = GetTree().GetNodesInGroup(Constants.Animals);
         if (currentSpawn.Count >= Constants.MaxAnimalSpawn)
             return;
 
-        var boundaryTiles = GroundTileMap.GetUsedCellsById(1);
+        var boundaryTiles = groundTileMap.GetUsedCellsById(1);
         var spawnTile = (Vector2)boundaryTiles[new Random().Next(boundaryTiles.Count - 1)];
         var randAnimal = new Random().Next(6);
 
@@ -143,7 +160,7 @@ public class TopDownStart : Node2D
 
     private void _on_GameTimer_timeout()
     {
-        SpawnTimer.Stop();
+        spawnTimer.Stop();
         GameManager.BuildTopDownResultsDialog(SmallGameCounter, MediumGameCounter, MedLargeGameCounter, LargeGameCounter);
         GameManager.ResultsDialog.Show();
     }
@@ -162,7 +179,7 @@ public class TopDownStart : Node2D
 
     private void _on_End_button_up()
     {
-        SpawnTimer.Stop();
+        spawnTimer.Stop();
         GameManager.BuildTopDownResultsDialog(SmallGameCounter, MediumGameCounter, MedLargeGameCounter, LargeGameCounter);
         GameManager.ResultsDialog.Show();
     }
@@ -178,10 +195,10 @@ public class TopDownStart : Node2D
     private void SpawnPlayer()
     {
         var spawnPoint = spawns.FirstOrDefault(x => x.Name == GameManager.GetSpawnPoint());
-        spawnPoint = spawnPoint ?? GetNodeOrNull<Area2D>("Spawns/Spawn1"); // If something goes wrong default to Spawn1
-        var player = (KinematicBody2D)Player.Instance();
-        player.Position = spawnPoint.Position;
-        AddChild(player);
+        spawnPoint = spawnPoint ?? GetNodeOrNull<Area2D>($"{SpawnNodePath}/Spawn1"); // If something goes wrong default to Spawn1
+        var user = (KinematicBody2D)player.Instance();
+        user.Position = spawnPoint.Position;
+        AddChild(user);
         spawns.Remove(spawnPoint);
     }
 
@@ -199,53 +216,53 @@ public class TopDownStart : Node2D
 
     private void SpawnAnimal(int animal, Vector2 location, SpawnQuadrant spawn)
     {
-        var global = GroundTileMap.MapToWorld(location);
+        var global = groundTileMap.MapToWorld(location);
         switch ((Animals)animal)
         {
             case Animals.Squirrel:
-                var squirrel = (KinematicBody2D)Squirrel.Instance();
-                squirrel.GlobalPosition = global;
-                squirrel.Call("SetSpawn", (int)spawn);
-                AddChild(squirrel);
+                var spawnSquirrel = (KinematicBody2D)squirrel.Instance();
+                spawnSquirrel.GlobalPosition = global;
+                spawnSquirrel.Call(Constants.SetSpawn, (int)spawn);
+                AddChild(spawnSquirrel);
                 break;
             case Animals.Rabbit:
-                var rabbit = (KinematicBody2D)Rabbit.Instance();
-                rabbit.GlobalPosition = global;
-                rabbit.Call("SetSpawn", (int)spawn);
-                AddChild(rabbit);
+                var spawnRabbit = (KinematicBody2D)rabbit.Instance();
+                spawnRabbit.GlobalPosition = global;
+                spawnRabbit.Call(Constants.SetSpawn, (int)spawn);
+                AddChild(spawnRabbit);
                 break;
             case Animals.Doe:
-                var deer = (KinematicBody2D)Deer.Instance();
-                deer.GlobalPosition = global;
-                deer.Call("SetSpawn", (int)spawn);
-                AddChild(deer);
+                var spawnDoe = (KinematicBody2D)deer.Instance();
+                spawnDoe.GlobalPosition = global;
+                spawnDoe.Call(Constants.SetSpawn, (int)spawn);
+                AddChild(spawnDoe);
                 break;
             case Animals.Buck:
-                var buck = (KinematicBody2D)Buck.Instance();
-                buck.GlobalPosition = global;
-                buck.Call("SetSpawn", (int)spawn);
-                AddChild(buck);
+                var spawnBuck = (KinematicBody2D)buck.Instance();
+                spawnBuck.GlobalPosition = global;
+                spawnBuck.Call(Constants.SetSpawn, (int)spawn);
+                AddChild(spawnBuck);
                 break;
             case Animals.Bear:
-                var bear = currentMap != MapType.Mountains || currentMap != MapType.Woods
-                    ? (KinematicBody2D)Rabbit.Instance()
-                    : (KinematicBody2D)Bear.Instance();
-                bear.GlobalPosition = global;
-                bear.Call("SetSpawn", (int)spawn);
-                AddChild(bear);
+                var spawnBearOrRabbit = currentMap != MapType.Mountains || currentMap != MapType.Woods
+                    ? (KinematicBody2D)rabbit.Instance()
+                    : (KinematicBody2D)bear.Instance();
+                spawnBearOrRabbit.GlobalPosition = global;
+                spawnBearOrRabbit.Call(Constants.SetSpawn, (int)spawn);
+                AddChild(spawnBearOrRabbit);
                 break;
             case Animals.Buffalo:
-                var buffalo = currentMap != MapType.Plains 
-                    ? (KinematicBody2D)Buffalo.Instance()
-                    : (KinematicBody2D)Squirrel.Instance();
-                buffalo.GlobalPosition = global;
-                buffalo.Call("SetSpawn", (int)spawn);
-                AddChild(buffalo);
+                var spawnBuffaloOrSquirrel = currentMap != MapType.Plains 
+                    ? (KinematicBody2D)buffalo.Instance()
+                    : (KinematicBody2D)squirrel.Instance();
+                spawnBuffaloOrSquirrel.GlobalPosition = global;
+                spawnBuffaloOrSquirrel.Call(Constants.SetSpawn, (int)spawn);
+                AddChild(spawnBuffaloOrSquirrel);
                 break;
             default:
-                var defaultMoreSquirrel = (KinematicBody2D)Squirrel.Instance();
+                var defaultMoreSquirrel = (KinematicBody2D)squirrel.Instance();
                 defaultMoreSquirrel.GlobalPosition = global;
-                defaultMoreSquirrel.Call("SetSpawn", (int)spawn);
+                defaultMoreSquirrel.Call(Constants.SetSpawn, (int)spawn);
                 AddChild(defaultMoreSquirrel);
                 break;
         }
@@ -275,10 +292,10 @@ public class TopDownStart : Node2D
 
     private void BuildWoodsLevel(List<int> levelObjects)
     {
-        var tree = (PackedScene)ResourceLoader.Load("res://Scenes/Foliage/Tree.tscn");
-        var bush = (PackedScene)ResourceLoader.Load("res://Scenes/Foliage/Bush.tscn");
-        var redFlower = (PackedScene)ResourceLoader.Load("res://Scenes/Foliage/RedFlower.tscn");
-        var purpleFlower = (PackedScene)ResourceLoader.Load("res://Scenes/Foliage/PurpleFlower.tscn");
+        var tree = (PackedScene)ResourceLoader.Load(Constants.Tree);
+        var bush = (PackedScene)ResourceLoader.Load(Constants.Bush);
+        var redFlower = (PackedScene)ResourceLoader.Load(Constants.RedFlower);
+        var purpleFlower = (PackedScene)ResourceLoader.Load(Constants.PurpleFlower);
 
         foreach (var levelObject in levelObjects)
         {
@@ -307,8 +324,8 @@ public class TopDownStart : Node2D
 
     private void BuildDesertLevel(List<int> levelObjects)
     {
-        var cactus = (PackedScene)ResourceLoader.Load("res://Scenes/Foliage/Cactus.tscn");
-        var bush = (PackedScene)ResourceLoader.Load("res://Scenes/Foliage/Bush.tscn");
+        var cactus = (PackedScene)ResourceLoader.Load(Constants.Cactus);
+        var bush = (PackedScene)ResourceLoader.Load(Constants.Bush);
 
         foreach (var levelObject in levelObjects)
         {
@@ -331,9 +348,9 @@ public class TopDownStart : Node2D
 
     private void BuildPlainsLevel(List<int> levelObjects)
     {
-        var bush = (PackedScene)ResourceLoader.Load("res://Scenes/Foliage/Bush.tscn");
-        var redFlower = (PackedScene)ResourceLoader.Load("res://Scenes/Foliage/RedFlower.tscn");
-        var purpleFlower = (PackedScene)ResourceLoader.Load("res://Scenes/Foliage/PurpleFlower.tscn");
+        var bush = (PackedScene)ResourceLoader.Load(Constants.Bush);
+        var redFlower = (PackedScene)ResourceLoader.Load(Constants.RedFlower);
+        var purpleFlower = (PackedScene)ResourceLoader.Load(Constants.PurpleFlower);
 
         foreach (var levelObject in levelObjects)
         {
@@ -359,10 +376,10 @@ public class TopDownStart : Node2D
 
     private void BuildMountainLevel(List<int> levelObjects)
     {
-        var pine = (PackedScene)ResourceLoader.Load("res://Scenes/Foliage/Pine.tscn");
-        var bush = (PackedScene)ResourceLoader.Load("res://Scenes/Foliage/Bush.tscn");
-        var redFlower = (PackedScene)ResourceLoader.Load("res://Scenes/Foliage/RedFlower.tscn");
-        var rock = (PackedScene)ResourceLoader.Load("res://Scenes/Foliage/Rock.tscn");
+        var pine = (PackedScene)ResourceLoader.Load(Constants.Pine);
+        var bush = (PackedScene)ResourceLoader.Load(Constants.Bush);
+        var redFlower = (PackedScene)ResourceLoader.Load(Constants.RedFlower);
+        var rock = (PackedScene)ResourceLoader.Load(Constants.Rock);
 
         foreach (var levelObject in levelObjects)
         {
@@ -386,18 +403,6 @@ public class TopDownStart : Node2D
                     break;
             }
             SpawnTerrain(spawnObject);
-        }
-    }
-
-    private void Cleanup()
-    {
-        var currentSpawn = GetTree().GetNodesInGroup("Animals");
-        foreach (var spawn in currentSpawn)
-        {
-            if (spawn is KinematicBody2D node)
-            {
-                node.QueueFree();
-            }
         }
     }
     #endregion

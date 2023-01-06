@@ -1,4 +1,5 @@
 using Godot;
+using TrailHunting.Scripts;
 
 public class Bullet : KinematicBody2D
 {
@@ -18,7 +19,7 @@ public class Bullet : KinematicBody2D
         {
             if (didCollide.Collider is KinematicBody2D collider)
             {
-                collider.Call("WasShot");
+                collider.Call(Constants.WasShot);
                 QueueFree();
             }
             else

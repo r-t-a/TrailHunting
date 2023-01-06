@@ -154,6 +154,8 @@ polygon = PoolVector2Array( -64, 0, -80, 48, -80, 216, -168, 256, 0, 256, 0, -8 
 disabled = true
 
 [node name="BlockerFrame1" type="StaticBody2D" parent="Blockers"]
+collision_layer = 4095
+collision_mask = 4095
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Blockers/BlockerFrame1"]
 position = Vector2( 184, 448 )

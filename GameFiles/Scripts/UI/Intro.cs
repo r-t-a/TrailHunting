@@ -3,19 +3,23 @@ using TrailHunting.Scripts;
 
 public class Intro : Control
 {
-    public AnimatedSprite AnimatedSprite;
-    public Timer StartTimer;
+    [Export]
+    protected NodePath AnimatedNodePath;
+    [Export]
+    protected NodePath TimerNodePath;
 
+    private AnimatedSprite animatedSprite;
+    private Timer startTimer;
     private int escapeCount = 0;
     private int waitTime = 3;
     private float time = 0;
 
     public override void _Ready()
     {
-        AnimatedSprite = GetNodeOrNull<AnimatedSprite>("AnimatedSprite");
-        StartTimer = GetNodeOrNull<Timer>("StartTimer");
-        AnimatedSprite.Play("Idle");
-        AnimatedSprite.Playing = true;
+        animatedSprite = GetNodeOrNull<AnimatedSprite>(AnimatedNodePath);
+        startTimer = GetNodeOrNull<Timer>(TimerNodePath);
+        animatedSprite.Play(Constants.Idle);
+        animatedSprite.Playing = true;
     }
 
     public override void _Process(float delta)
@@ -23,9 +27,9 @@ public class Intro : Control
         time += delta;
         if (time > waitTime)
         {
-            if (AnimatedSprite.Animation == "Idle")
+            if (animatedSprite.Animation == Constants.Idle)
             {
-                AnimatedSprite.Play("Start");
+                animatedSprite.Play(Constants.Start);
             }
             time = 0;
         }
@@ -33,7 +37,7 @@ public class Intro : Control
 
     public override void _Input(InputEvent inputEvent)
     {
-        if (inputEvent.IsActionPressed("ui_cancel"))
+        if (inputEvent.IsActionPressed(Constants.Cancel))
         {
             escapeCount++;
             if (escapeCount == 3)
@@ -45,15 +49,15 @@ public class Intro : Control
 
     private void _on_AnimatedSprite_animation_finished()
     {
-        if (AnimatedSprite.Animation == "Idle")
+        if (animatedSprite.Animation == Constants.Idle)
         {
             return;
         }
-        if (AnimatedSprite.Animation == "Start")
+        if (animatedSprite.Animation == Constants.Start)
         {
-            AnimatedSprite.Frame = 14;
-            AnimatedSprite.Playing = false;
-            StartTimer.Start();
+            animatedSprite.Frame = 14;
+            animatedSprite.Playing = false;
+            startTimer.Start();
         }
     }
 

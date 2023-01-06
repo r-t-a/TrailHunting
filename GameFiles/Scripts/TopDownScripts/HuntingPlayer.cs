@@ -1,31 +1,43 @@
 using Godot;
+using TrailHunting.Scripts;
 
 public class HuntingPlayer : KinematicBody2D
 {
+    #region Signals
     [Signal]
     public delegate void ShotBullet();
+    #endregion
 
+    #region Exports
     [Export]
-    public int Speed = 80;
+    protected NodePath AnimationTreeNodePath;
+    [Export] 
+    protected NodePath RifleNodePath;
+    [Export]
+    protected NodePath SoundEffectsNodePath;
+    #endregion
 
-    public PackedScene Bullet;
-    public AnimationTree AnimationTree;
-    public AnimationNodeStateMachinePlayback AnimationNode;
-    public Position2D RiflePosition;
-    public AudioStreamPlayer2D ShotSfx;
+    #region Properties
+    private PackedScene bullet;
+    private AnimationTree animationTree;
+    private AnimationNodeStateMachinePlayback animationNode;
+    private Position2D riflePosition;
+    private AudioStreamPlayer2D shotSfx;
 
+    private int speed = 80;
     private Vector2 moveDirection;
     private Vector2 lookDirection;
     private bool isMoving = false;
+    #endregion
 
+    #region Overrides
     public override void _Ready()
     {
-        Bullet = (PackedScene)ResourceLoader.Load("res://Scenes/Bullet.tscn");
-
-        AnimationTree = GetNodeOrNull<AnimationTree>("AnimationTree");
-        AnimationNode = (AnimationNodeStateMachinePlayback)AnimationTree.Get("parameters/playback");
-        RiflePosition = GetNodeOrNull<Position2D>("Position2D");
-        ShotSfx = GetNodeOrNull<AudioStreamPlayer2D>("Shot");
+        bullet = (PackedScene)ResourceLoader.Load(Constants.Bullet);
+        animationTree = GetNodeOrNull<AnimationTree>(AnimationTreeNodePath);
+        riflePosition = GetNodeOrNull<Position2D>(RifleNodePath);
+        shotSfx = GetNodeOrNull<AudioStreamPlayer2D>(SoundEffectsNodePath);
+        animationNode = (AnimationNodeStateMachinePlayback)animationTree.Get("parameters/playback");
         lookDirection = new Vector2(-1, 0);
     }
 
@@ -33,22 +45,22 @@ public class HuntingPlayer : KinematicBody2D
     {
         if (!isMoving)
         {
-            AnimationTree.Set("parameters/Idle/blend_position", lookDirection);
-            AnimationNode.Travel("Idle");
+            animationTree.Set("parameters/Idle/blend_position", lookDirection);
+            animationNode.Travel(Constants.Idle);
         }
         else
         {
             moveDirection = moveDirection.Normalized();
-            AnimationTree.Set("parameters/Walk/blend_position", moveDirection);
-            AnimationTree.Set("parameters/Idle/blend_position", moveDirection);
-            AnimationNode.Travel("Walk");
-            MoveAndSlide(moveDirection * Speed);
+            animationTree.Set("parameters/Walk/blend_position", moveDirection);
+            animationTree.Set("parameters/Idle/blend_position", moveDirection);
+            animationNode.Travel(Constants.Walk);
+            MoveAndSlide(moveDirection * speed);
         }
     }
 
     public override void _Input(InputEvent inputEvent)
     {
-        if (inputEvent.IsActionPressed("ui_up"))
+        if (inputEvent.IsActionPressed(Constants.Up))
         {
             lookDirection = Vector2.Zero;
             lookDirection.y = -1;
@@ -58,7 +70,7 @@ public class HuntingPlayer : KinematicBody2D
                 moveDirection.y = -1;
             }
         }
-        if (inputEvent.IsActionPressed("ui_down"))
+        if (inputEvent.IsActionPressed(Constants.Down))
         {
             lookDirection = Vector2.Zero;
             lookDirection.y = 1;
@@ -68,7 +80,7 @@ public class HuntingPlayer : KinematicBody2D
                 moveDirection.y = 1;
             }
         }
-        if (inputEvent.IsActionPressed("ui_left"))
+        if (inputEvent.IsActionPressed(Constants.Left))
         {
             lookDirection = Vector2.Zero;
             lookDirection.x = -1;
@@ -78,7 +90,7 @@ public class HuntingPlayer : KinematicBody2D
                 moveDirection.x = -1;
             }
         }
-        if (inputEvent.IsActionPressed("ui_right"))
+        if (inputEvent.IsActionPressed(Constants.Right))
         {
             lookDirection = Vector2.Zero;
             lookDirection.x = 1;
@@ -88,7 +100,7 @@ public class HuntingPlayer : KinematicBody2D
                 moveDirection.x = 1;
             }
         }
-        if (inputEvent.IsActionPressed("ui_upright"))
+        if (inputEvent.IsActionPressed(Constants.UpRight))
         {
             lookDirection = Vector2.Zero;
             lookDirection.x = (float)0.8;
@@ -100,7 +112,7 @@ public class HuntingPlayer : KinematicBody2D
                 moveDirection.y = (float)-0.6;
             }
         }
-        if (inputEvent.IsActionPressed("ui_upleft"))
+        if (inputEvent.IsActionPressed(Constants.UpLeft))
         {
             lookDirection = Vector2.Zero;
             lookDirection.x = (float)-0.8;
@@ -112,7 +124,7 @@ public class HuntingPlayer : KinematicBody2D
                 moveDirection.y = (float)-0.6;
             }
         }
-        if (inputEvent.IsActionPressed("ui_bottomleft"))
+        if (inputEvent.IsActionPressed(Constants.BottomLeft))
         {
             lookDirection = Vector2.Zero;
             lookDirection.x = (float)-0.8;
@@ -124,7 +136,7 @@ public class HuntingPlayer : KinematicBody2D
                 moveDirection.y = (float)0.6;
             }
         }
-        if (inputEvent.IsActionPressed("ui_bottomright"))
+        if (inputEvent.IsActionPressed(Constants.BottomRight))
         {
             lookDirection = Vector2.Zero;
             lookDirection.x = (float)0.8;
@@ -136,24 +148,25 @@ public class HuntingPlayer : KinematicBody2D
                 moveDirection.y = (float)0.6;
             }
         }
-        if (inputEvent.IsActionPressed("walk"))
+        if (inputEvent.IsActionPressed(Constants.WalkControl))
         {
             isMoving = !isMoving;
             moveDirection = isMoving ? lookDirection : Vector2.Zero;
         }
-        if (inputEvent.IsActionPressed("shoot"))
+        if (inputEvent.IsActionPressed(Constants.Shoot))
         {
             if (isMoving)
             {
                 return;
             }
 
-            ShotSfx.Play();
-            var bullet = (KinematicBody2D)Bullet.Instance();
-            GetParent().AddChild(bullet);
-            bullet.GlobalPosition = RiflePosition.GlobalPosition;
-            bullet.Call("SetDirection", lookDirection);
+            shotSfx.Play();
+            var bulletSpawn = (KinematicBody2D)bullet.Instance();
+            GetParent().AddChild(bulletSpawn);
+            bulletSpawn.GlobalPosition = riflePosition.GlobalPosition;
+            bulletSpawn.Call(Constants.SetDirection, lookDirection);
             EmitSignal(nameof(ShotBullet));
         }
     }
+    #endregion
 }

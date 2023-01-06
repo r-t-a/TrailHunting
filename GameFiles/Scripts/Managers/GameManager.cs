@@ -13,10 +13,10 @@ namespace TrailHunting.Scripts.Managers
         public static Linker Linker { get; private set; }
         public static AcceptDialog ResultsDialog { get; private set; }
 
-        private static int _smallGame = 4;
-        private static int _mediumGame = 90;
-        private static int _medLargeGame = 200;
-        private static int _largeGame = 400;
+        private static readonly int smallGame = 4;
+        private static readonly int mediumGame = 90;
+        private static readonly int medLargeGame = 200;
+        private static readonly int largeGame = 400;
 
         public GameManager(Linker linker)
         {
@@ -46,7 +46,7 @@ namespace TrailHunting.Scripts.Managers
 
         private static int GetTotal(int smallCounter, int mediumCounter, int medLargeCounter, int largeCounter)
         {
-            return (smallCounter * _smallGame) + (mediumCounter * _mediumGame) + (medLargeCounter * _medLargeGame) + (largeCounter * _largeGame);
+            return (smallCounter * smallGame) + (mediumCounter * mediumGame) + (medLargeCounter * medLargeGame) + (largeCounter * largeGame);
         }
 
         public static void SetGameOption(bool isFirstPerson)
@@ -89,23 +89,6 @@ namespace TrailHunting.Scripts.Managers
                 }
             }
             return (getMapType, terrainList);
-        }
-
-        public static string BuildFirstPersonLevel()
-        {
-            var getMapType = (MapType)new Random().Next(0, 5);
-            switch(getMapType)
-            {
-                default:
-                case MapType.Woods:
-                    return "Woods";
-                case MapType.Desert:
-                    return "Desert";
-                case MapType.Plains:
-                    return "Plains";
-                case MapType.Mountains:
-                    return "Mountains";
-            }
         }
 
         public static string GetSpawnPoint()

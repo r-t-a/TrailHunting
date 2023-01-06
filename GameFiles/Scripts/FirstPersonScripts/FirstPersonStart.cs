@@ -2,40 +2,56 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TrailHunting.Scripts;
 using TrailHunting.Scripts.Enums;
 using TrailHunting.Scripts.FirstPersonScripts.Entities;
 using TrailHunting.Scripts.Managers;
 
 public class FirstPersonStart : Node2D
 {
+    #region Exports
+    [Export]
+    protected NodePath AmmoNodePath;
+    [Export]
+    protected NodePath reloadButtonNodePath;
+    [Export]
+    protected NodePath spawnTimerNodePath;
+    [Export]
+    protected NodePath gameTimerNodePath;
+    [Export]
+    protected NodePath endButtonNodePath;
+    [Export]
+    protected NodePath DisplayTimeNodePath;
+    #endregion
+
     #region Properties
     public int SmallGameCounter;
     public int MediumGameCounter;
     public int MedLargeGameCounter;
     public int LargeGameCounter;
 
-    public AnimatedSprite LevelBackground;
-    public GridContainer AmmoContainer;
-    public TextureButton ReloadButton;
-    public Timer SpawnTimer;
-    public Timer GameTimer;
-    public Button EndButton;
-    public Label DisplayTimer;
+    private AnimatedSprite levelBackground;
+    private GridContainer ammoContainer;
+    private TextureButton reloadButton;
+    private Timer spawnTimer;
+    private Timer gameTimer;
+    private Button endButton;
+    private Label displayTimer;
 
-    public PackedScene Desert;
-    public PackedScene Plains;
-    public PackedScene River;
-    public PackedScene Woods;
+    private PackedScene desert;
+    private PackedScene plains;
+    private PackedScene river;
+    private PackedScene woods;
 
-    public PackedScene Goose;
-    public PackedScene Duck;
-    public PackedScene Bear;
-    public PackedScene Buffalo;
-    public PackedScene Elk;
-    public PackedScene Caribou;
-    public PackedScene Deer;
-    public PackedScene Rabbit;
-    public PackedScene Squirrel;
+    private PackedScene goose;
+    private PackedScene duck;
+    private PackedScene bear;
+    private PackedScene buffalo;
+    private PackedScene elk;
+    private PackedScene caribou;
+    private PackedScene deer;
+    private PackedScene rabbit;
+    private PackedScene squirrel;
 
     private List<Area2D> airSpawns = new List<Area2D>();
     private List<Area2D> groundSpawns = new List<Area2D>();
@@ -48,42 +64,42 @@ public class FirstPersonStart : Node2D
     {
         var reticle = ResourceLoader.Load("res://Images/UI/reticle.png");
         Input.SetCustomMouseCursor(reticle, hotspot: new Vector2(8, 8));
-
-        SpawnTimer = GetNodeOrNull<Timer>("SpawnTimer");
-        GameTimer = GetNodeOrNull<Timer>("GameTimer");
-        AmmoContainer = GetNodeOrNull<GridContainer>("CanvasLayer/Background/MarginContainer/HBoxContainer/GridContainer");
-        ReloadButton = GetNodeOrNull<TextureButton>("CanvasLayer/Background/MarginContainer/HBoxContainer/Reload");
-        EndButton = GetNodeOrNull<Button>("CanvasLayer/Background/MarginContainer/HBoxContainer/End");
-        DisplayTimer = GetNodeOrNull<Label>("CanvasLayer/Background/MarginContainer/HBoxContainer/DisplayTimer");
         GameManager.PlayerManager.NeedsToReload = false;
         GameManager.PlayerManager.HasAmmo = true;
 
-        Desert = (PackedScene)ResourceLoader.Load("res://Scenes/Levels/Desert.tscn");
-        Plains = (PackedScene)ResourceLoader.Load("res://Scenes/Levels/Plains.tscn");
-        River = (PackedScene)ResourceLoader.Load("res://Scenes/Levels/River.tscn");
-        Woods = (PackedScene)ResourceLoader.Load("res://Scenes/Levels/Woods.tscn");
+        spawnTimer = GetNodeOrNull<Timer>(spawnTimerNodePath);
+        gameTimer = GetNodeOrNull<Timer>(gameTimerNodePath);
+        ammoContainer = GetNodeOrNull<GridContainer>(AmmoNodePath);
+        reloadButton = GetNodeOrNull<TextureButton>(reloadButtonNodePath);
+        endButton = GetNodeOrNull<Button>(endButtonNodePath);
+        displayTimer = GetNodeOrNull<Label>(DisplayTimeNodePath);
 
-        Goose = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/FirstPerson/Goose.tscn");
-        Duck = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/FirstPerson/Duck.tscn");
-        Bear = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/FirstPerson/Bear.tscn");
-        Buffalo = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/FirstPerson/Buffalo.tscn");
-        Elk = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/FirstPerson/Elk.tscn");
-        Caribou = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/FirstPerson/Caribou.tscn");
-        Deer = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/FirstPerson/Deer.tscn");
-        Rabbit = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/FirstPerson/Rabbit.tscn");
-        Squirrel = (PackedScene)ResourceLoader.Load("res://Scenes/Animals/FirstPerson/Squirrel.tscn");
+        desert = (PackedScene)ResourceLoader.Load(Constants.Desert);
+        plains = (PackedScene)ResourceLoader.Load(Constants.Plains);
+        river = (PackedScene)ResourceLoader.Load(Constants.River);
+        woods = (PackedScene)ResourceLoader.Load(Constants.Woods);
+
+        goose = (PackedScene)ResourceLoader.Load(Constants.FirstPersonGoose);
+        duck = (PackedScene)ResourceLoader.Load(Constants.FirstPersonDuck);
+        bear = (PackedScene)ResourceLoader.Load(Constants.FirstPersonBear);
+        buffalo = (PackedScene)ResourceLoader.Load(Constants.FirstPersonBuffalo);
+        elk = (PackedScene)ResourceLoader.Load(Constants.FirstPersonElk);
+        caribou = (PackedScene)ResourceLoader.Load(Constants.FirstPersonCaribou);
+        deer = (PackedScene)ResourceLoader.Load(Constants.FirstPersonDeer);
+        rabbit = (PackedScene)ResourceLoader.Load(Constants.FirstPersonRabbit);
+        squirrel = (PackedScene)ResourceLoader.Load(Constants.FirstPersonSquirrel);
 
         if (GameManager.PlayerManager.IsEndless)
         {
-            EndButton.Visible = true;
-            DisplayTimer.Visible = false;
-            GameTimer.Stop();
+            endButton.Visible = true;
+            displayTimer.Visible = false;
+            gameTimer.Stop();
         }
         else
         {
-            EndButton.Visible = false;
-            DisplayTimer.Visible = true;
-            GameTimer.Start();
+            endButton.Visible = false;
+            displayTimer.Visible = true;
+            gameTimer.Start();
         }
 
         ammoCount = 20; //TODO other weapons, get ammo
@@ -92,9 +108,9 @@ public class FirstPersonStart : Node2D
 
     public override void _Process(float delta)
     {
-        if (DisplayTimer.Visible)
+        if (displayTimer.Visible)
         {
-            DisplayTimer.Text = Mathf.FloorToInt(GameTimer.TimeLeft).ToString();
+            displayTimer.Text = Mathf.FloorToInt(gameTimer.TimeLeft).ToString();
         }
     }
     #endregion
@@ -102,7 +118,7 @@ public class FirstPersonStart : Node2D
     #region Events
     public void _on_BackgroundArea_input_event(Node viewport, InputEvent inputEvent, int shape_idx)
     {
-        if (inputEvent.IsActionPressed("shoot") && GameManager.PlayerManager.CanShoot())
+        if (inputEvent.IsActionPressed(Constants.Shoot) && GameManager.PlayerManager.CanShoot())
         {
             UpdateWeaponAndAmmo();
             ScatterAnimals();
@@ -111,7 +127,7 @@ public class FirstPersonStart : Node2D
 
     private void _on_GameTimer_timeout()
     {
-        SpawnTimer.Stop();
+        spawnTimer.Stop();
         GameManager.BuildFirstPersonResultsDialog(SmallGameCounter, MediumGameCounter, MedLargeGameCounter, LargeGameCounter);
         GameManager.ResultsDialog.Show();
     }
@@ -130,7 +146,7 @@ public class FirstPersonStart : Node2D
 
     private void _on_End_button_up()
     {
-        SpawnTimer.Stop();
+        spawnTimer.Stop();
         GameManager.BuildFirstPersonResultsDialog(SmallGameCounter, MediumGameCounter, MedLargeGameCounter, LargeGameCounter);
         GameManager.ResultsDialog.Show();
     }
@@ -189,7 +205,7 @@ public class FirstPersonStart : Node2D
 
         if (GameManager.PlayerManager.NeedsToReload)
         {
-            ReloadButton.Pressed = false;
+            reloadButton.Pressed = false;
             GameManager.PlayerManager.NeedsToReload = false;
         }
     }
@@ -197,7 +213,7 @@ public class FirstPersonStart : Node2D
     private void _on_Move_button_up()
     {
         CleanupOnMove();
-        LevelBackground.Frame = LevelBackground.Frame == 0 ? 1 : 0;
+        levelBackground.Frame = levelBackground.Frame == 0 ? 1 : 0;
         PopulateBlockers();
         SpawnAirAnimals();
         SpawnGroundAnimals();
@@ -217,26 +233,26 @@ public class FirstPersonStart : Node2D
         {
             return;
         }
-        var ammoTexture = AmmoContainer.GetChildren().OfType<ColorRect>();
+        var ammoTexture = ammoContainer.GetChildren().OfType<ColorRect>();
         foreach (var ammo in ammoTexture)
         {
-            var isready = (bool)ammo.Call("GetAmmoAvailable");
+            var isready = (bool)ammo.Call(Constants.GetAmmoAvailable);
             if (isready)
             {
-                ammo.Call("BulletUsed");
+                ammo.Call(Constants.BulletUsed);
                 break;
             }
         }
         ammoCount -= 1;
         if (ammoCount == 0)
         {
-            ReloadButton.Disabled = true;
+            reloadButton.Disabled = true;
             GameManager.PlayerManager.NeedsToReload = false;
             GameManager.PlayerManager.HasAmmo = false;
         }
         else
         {
-            ReloadButton.Pressed = true;
+            reloadButton.Pressed = true;
             GameManager.PlayerManager.NeedsToReload = true;
         }
     }
@@ -254,47 +270,47 @@ public class FirstPersonStart : Node2D
         switch (pickone)
         {
             case 0:
-                var desert = (AnimatedSprite)Desert.Instance();
-                AddChild(desert);
-                LevelBackground = desert;
+                var desertMap = (AnimatedSprite)desert.Instance();
+                AddChild(desertMap);
+                levelBackground = desertMap;
                 break;
             case 1:
-                var plains = (AnimatedSprite)Plains.Instance();
-                AddChild(plains);
-                LevelBackground = plains;
+                var plainsMap = (AnimatedSprite)plains.Instance();
+                AddChild(plainsMap);
+                levelBackground = plainsMap;
                 break;
             case 2:
-                var river = (AnimatedSprite)River.Instance();
-                AddChild(river);
-                LevelBackground = river;
+                var riverMap = (AnimatedSprite)river.Instance();
+                AddChild(riverMap);
+                levelBackground = riverMap;
                 break;
             case 3:
-                var woods = (AnimatedSprite)Woods.Instance();
-                AddChild(woods);
-                LevelBackground = woods;
+                var woodsMap = (AnimatedSprite)woods.Instance();
+                AddChild(woodsMap);
+                levelBackground = woodsMap;
                 break;
         }
 
         PopulateBlockers();
-        LevelBackground.Playing = false;
-        airSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("AirSpawns/AirSpawn1"));
-        airSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("AirSpawns/AirSpawn2"));
-        airSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("AirSpawns/AirSpawn3"));
-        airSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("AirSpawns/AirSpawn4"));
-        airSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("AirSpawns/AirSpawn5"));
-        airSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("AirSpawns/AirSpawn6"));
-        groundSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn1"));
-        groundSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn2"));
-        groundSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn3"));
-        groundSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn4"));
-        groundSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn5"));
-        groundSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn6"));
-        groundSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn7"));
-        groundSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn8"));
-        groundSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn9"));
-        timedSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("TimedSpawns/TimedSpawn1"));
-        timedSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("TimedSpawns/TimedSpawn2"));
-        timedSpawns.Add(LevelBackground.GetNodeOrNull<Area2D>("TimedSpawns/TimedSpawn3"));
+        levelBackground.Playing = false;
+        airSpawns.Add(levelBackground.GetNodeOrNull<Area2D>("AirSpawns/AirSpawn1"));
+        airSpawns.Add(levelBackground.GetNodeOrNull<Area2D>("AirSpawns/AirSpawn2"));
+        airSpawns.Add(levelBackground.GetNodeOrNull<Area2D>("AirSpawns/AirSpawn3"));
+        airSpawns.Add(levelBackground.GetNodeOrNull<Area2D>("AirSpawns/AirSpawn4"));
+        airSpawns.Add(levelBackground.GetNodeOrNull<Area2D>("AirSpawns/AirSpawn5"));
+        airSpawns.Add(levelBackground.GetNodeOrNull<Area2D>("AirSpawns/AirSpawn6"));
+        groundSpawns.Add(levelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn1"));
+        groundSpawns.Add(levelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn2"));
+        groundSpawns.Add(levelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn3"));
+        groundSpawns.Add(levelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn4"));
+        groundSpawns.Add(levelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn5"));
+        groundSpawns.Add(levelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn6"));
+        groundSpawns.Add(levelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn7"));
+        groundSpawns.Add(levelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn8"));
+        groundSpawns.Add(levelBackground.GetNodeOrNull<Area2D>("GroundSpawns/GroundSpawn9"));
+        timedSpawns.Add(levelBackground.GetNodeOrNull<Area2D>("TimedSpawns/TimedSpawn1"));
+        timedSpawns.Add(levelBackground.GetNodeOrNull<Area2D>("TimedSpawns/TimedSpawn2"));
+        timedSpawns.Add(levelBackground.GetNodeOrNull<Area2D>("TimedSpawns/TimedSpawn3"));
     }
 
     private void SpawnAirAnimals()
@@ -305,17 +321,17 @@ public class FirstPersonStart : Node2D
         var spawnPoint = airSpawns.FirstOrDefault(x => x.Name == spawn);
         for (int i = 0; i < numberToSpawn; i++)
         {
-            var animal = gooseChance > 0.5 ? (KinematicBody2D)Goose.Instance() : (KinematicBody2D)Duck.Instance();
+            var animal = gooseChance > 0.5 ? (KinematicBody2D)goose.Instance() : (KinematicBody2D)duck.Instance();
             animal.Position = spawnPoint.Position + new Vector2(i * 20, i * 30);
             AddChild(animal);
             if (spawnPoint.Name.Contains("1") || spawnPoint.Name.Contains("2") || spawnPoint.Name.Contains("3"))
             {
-                animal.Call("SetAirMotion", Vector2.Right);
+                animal.Call(Constants.SetAirMotion, Vector2.Right);
                 animal.ZIndex = 1;
             }
             else
             {
-                animal.Call("SetAirMotion", Vector2.Left);
+                animal.Call(Constants.SetAirMotion, Vector2.Left);
                 animal.ZIndex = 2;
             }
         }
@@ -348,7 +364,7 @@ public class FirstPersonStart : Node2D
                 }
                 animal.Position = spawnPoint.Position;
                 AddChild(animal);
-                animal.Call("SetMotion", Vector2.Zero);
+                animal.Call(Constants.SetMotion, Vector2.Zero);
             }
         }
     }
@@ -380,7 +396,7 @@ public class FirstPersonStart : Node2D
                 }
                 animal.Position = spawnPoint.Position;
                 AddChild(animal);
-                animal.Call("SetMotion", Vector2.Zero);
+                animal.Call(Constants.SetMotion, Vector2.Zero);
             }
         }
     }
@@ -390,37 +406,38 @@ public class FirstPersonStart : Node2D
         switch ((Animals)animal)
         {
             case Animals.Squirrel:
-                return (KinematicBody2D)Squirrel.Instance();
+                return (KinematicBody2D)squirrel.Instance();
             case Animals.Rabbit:
-                return (KinematicBody2D)Rabbit.Instance();
+                return (KinematicBody2D)rabbit.Instance();
             case Animals.Buck:
             case Animals.Doe:
-                return LevelBackground.Animation == "Mountains" || LevelBackground.Animation == "Woods" ?
-                       (KinematicBody2D)Deer.Instance() : (KinematicBody2D)Caribou.Instance();
+                return levelBackground.Animation == Constants.RiverFrame || levelBackground.Animation == Constants.WoodsFrame ?
+                       (KinematicBody2D)deer.Instance() : (KinematicBody2D)caribou.Instance();
             case Animals.Bear:
-                return LevelBackground.Animation == "Mountains" || LevelBackground.Animation == "Woods" ?
-                       (KinematicBody2D)Bear.Instance() : (KinematicBody2D)Rabbit.Instance();
+                return levelBackground.Animation == Constants.RiverFrame || levelBackground.Animation == Constants.WoodsFrame ?
+                       (KinematicBody2D)bear.Instance() : (KinematicBody2D)rabbit.Instance();
             case Animals.Buffalo:
-                return (KinematicBody2D)Buffalo.Instance();
+                return (KinematicBody2D)buffalo.Instance();
             case Animals.Caribou:
-                return LevelBackground.Animation == "Mountains" || LevelBackground.Animation == "Woods" ?
-                       (KinematicBody2D)Deer.Instance() : (KinematicBody2D)Caribou.Instance();
+                return levelBackground.Animation == Constants.RiverFrame || levelBackground.Animation == Constants.WoodsFrame ?
+                       (KinematicBody2D)deer.Instance() : (KinematicBody2D)caribou.Instance();
             case Animals.Elk:
-                return LevelBackground.Animation == "Mountains" || LevelBackground.Animation == "Woods" ?
-                       (KinematicBody2D)Elk.Instance() : (KinematicBody2D)Rabbit.Instance();
+                return levelBackground.Animation == Constants.RiverFrame || levelBackground.Animation == Constants.WoodsFrame ?
+                       (KinematicBody2D)elk.Instance() : (KinematicBody2D)rabbit.Instance();
             default:
-                return (KinematicBody2D)Squirrel.Instance();
+                return (KinematicBody2D)squirrel.Instance();
         }
     }
 
     private void ScatterAnimals()
     {
-        var currentSpawn = GetTree().GetNodesInGroup("Animals");
+        CleanupBlockers();
+        var currentSpawn = GetTree().GetNodesInGroup(Constants.Animals);
         foreach (var spawn in currentSpawn)
         {
             if (spawn is KinematicBody2D body && body is AnimalEntity animal)
             {
-                if (animal.Name.Contains("Goose") || animal.Name.Contains("Duck") || animal.HP == 0)
+                if (animal.Name.ToLower().Contains("goose") || animal.Name.ToLower().Contains("duck") || animal.HP == 0)
                 {
                     continue;
                 }
@@ -432,23 +449,23 @@ public class FirstPersonStart : Node2D
 
     private void PopulateBlockers()
     {
-        if (LevelBackground.HasNode("Blockers"))
+        if (levelBackground.HasNode("Blockers"))
         {
-            if (LevelBackground.Frame == 0)
+            if (levelBackground.Frame == 0)
             {
-                var blocker = LevelBackground.GetNode<StaticBody2D>("Blockers/BlockerFrame0");
+                var blocker = levelBackground.GetNode<StaticBody2D>("Blockers/BlockerFrame0");
                 var collision = blocker.GetChild<CollisionPolygon2D>(0);
                 collision.Disabled = false;
             }
-            if (LevelBackground.Frame == 1)
+            if (levelBackground.Frame == 1)
             {
-                var blocker = LevelBackground.GetNode<StaticBody2D>("Blockers/BlockerFrame1");
+                var blocker = levelBackground.GetNode<StaticBody2D>("Blockers/BlockerFrame1");
                 var collision = blocker.GetChild<CollisionPolygon2D>(0);
                 collision.Disabled = false;
             }
-            if (LevelBackground.Frame == 2)
+            if (levelBackground.Frame == 2)
             {
-                var blocker = LevelBackground.GetNode<StaticBody2D>("Blockers/BlockerFrame2");
+                var blocker = levelBackground.GetNode<StaticBody2D>("Blockers/BlockerFrame2");
                 var collision = blocker.GetChild<CollisionPolygon2D>(0);
                 collision.Disabled = false;
             }
@@ -457,9 +474,22 @@ public class FirstPersonStart : Node2D
 
     private void CleanupOnMove()
     {
-        if (LevelBackground.HasNode("Blockers"))
+        CleanupBlockers();
+        var currentSpawn = GetTree().GetNodesInGroup(Constants.Animals);
+        foreach (var spawn in currentSpawn)
         {
-            var blockerChildren = LevelBackground.GetNode("Blockers").GetChildren();
+            if (spawn is KinematicBody2D node)
+            {
+                node.QueueFree();
+            }
+        }
+    }
+
+    private void CleanupBlockers()
+    {
+        if (levelBackground.HasNode("Blockers"))
+        {
+            var blockerChildren = levelBackground.GetNode("Blockers").GetChildren();
             foreach (var blocker in blockerChildren)
             {
                 if (blocker is StaticBody2D staticBody)
@@ -467,15 +497,6 @@ public class FirstPersonStart : Node2D
                     var collision = (CollisionPolygon2D)staticBody.GetChild(0);
                     collision.Disabled = true;
                 }
-            }
-        }
-
-        var currentSpawn = GetTree().GetNodesInGroup("Animals");
-        foreach (var spawn in currentSpawn)
-        {
-            if (spawn is KinematicBody2D node)
-            {
-                node.QueueFree();
             }
         }
     }

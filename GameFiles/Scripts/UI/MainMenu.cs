@@ -4,33 +4,40 @@ using TrailHunting.Scripts.Managers;
 
 public class MainMenu : Control
 {
-    public WindowDialog OptionsDialog;
-    public OptionButton GameTypeButton;
-    public OptionButton GameOptionButton;
+    [Export]
+    protected NodePath WindowsDialogPath;
+    [Export]
+    protected NodePath GameTypePath;
+    [Export]
+    protected NodePath GameOptionPath;
+
+    private WindowDialog optionsDialog;
+    private OptionButton gameTypeButton;
+    private OptionButton gameOptionButton;
 
     public override void _Ready()
     {
-        OptionsDialog = GetNodeOrNull<WindowDialog>("CanvasLayer/OptionsDialog");
-        GameTypeButton = OptionsDialog.GetNodeOrNull<OptionButton>("MarginContainer/VBoxContainer/GameTypeContainer/GameTypeButton");
-        GameOptionButton = OptionsDialog.GetNodeOrNull<OptionButton>("MarginContainer/VBoxContainer/GameOptionContainer/GameOptionButton");
+        optionsDialog = GetNodeOrNull<WindowDialog>(WindowsDialogPath);
+        gameTypeButton = GetNodeOrNull<OptionButton>(GameTypePath);
+        gameOptionButton = GetNodeOrNull<OptionButton>(GameOptionPath);
         GameManager.Load();
         if (GameManager.PlayerManager.IsFirstPersonStyle)
         {
-            GameOptionButton.Selected = 1;
+            gameOptionButton.Selected = 1;
         }
         if (GameManager.PlayerManager.IsEndless)
         {
-            GameTypeButton.Selected = 1;
+            gameTypeButton.Selected = 1;
         }
     }
 
     public override void _Input(InputEvent inputEvent)
     {
-        if (OptionsDialog.Visible)
+        if (optionsDialog.Visible)
         {
             return;
         }
-        if (inputEvent.IsActionPressed("num1"))
+        if (inputEvent.IsActionPressed(Constants.Num1))
         {
             if (GameManager.PlayerManager.IsFirstPersonStyle)
             {
@@ -41,14 +48,14 @@ public class MainMenu : Control
                 GetTree().ChangeScene(Constants.TopDownStart);
             }
         }
-        if (inputEvent.IsActionPressed("num8"))
+        if (inputEvent.IsActionPressed(Constants.Num8))
         {
-            if (!OptionsDialog.Visible)
+            if (!optionsDialog.Visible)
             {
-                OptionsDialog.Popup_();
+                optionsDialog.Popup_();
             }
         }
-        if (inputEvent.IsActionPressed("num9"))
+        if (inputEvent.IsActionPressed(Constants.Num9))
         {
             GameManager.Save();
             GetTree().Quit();
