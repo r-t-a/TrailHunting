@@ -1,25 +1,80 @@
 using Godot;
 using TrailHunting.Scripts;
+using TrailHunting.Scripts.Enums;
 using TrailHunting.Scripts.Managers;
 
 public class MainMenu : Control
 {
+    #region Exports
     [Export]
-    protected NodePath WindowsDialogPath;
+    protected NodePath WindowsDialogNodePath;
     [Export]
-    protected NodePath GameTypePath;
+    protected NodePath GameTypeNodePath;
     [Export]
-    protected NodePath GameOptionPath;
+    protected NodePath GameOptionNodePath;
+    [Export]
+    protected NodePath FirearmNodePath;
+    [Export]
+    protected NodePath PanelAnimationNodePath;
+    [Export]
+    protected NodePath GeeseCountNodePath;
+    [Export]
+    protected NodePath DuckCountNodePath;
+    [Export]
+    protected NodePath RabbitCountNodePath;
+    [Export]
+    protected NodePath SquirrelCountNodePath;
+    [Export]
+    protected NodePath DoeCountNodePath;
+    [Export]
+    protected NodePath BuckCountNodePath;
+    [Export]
+    protected NodePath CaribouCoundNodePath;
+    [Export]
+    protected NodePath ElkCountNodePath;
+    [Export]
+    protected NodePath BearCountNodePath;
+    [Export]
+    protected NodePath BuffaloCountNodePath;
+    #endregion
 
+    #region Properties
     private WindowDialog optionsDialog;
+    private AnimationPlayer panelAnimation;
     private OptionButton gameTypeButton;
     private OptionButton gameOptionButton;
+    private OptionButton firearmButton;
+    private Label geeseCountLabel;
+    private Label duckCountLabel;
+    private Label rabbitCountLabel;
+    private Label squirrelCountLabel;
+    private Label doeCountLabel;
+    private Label buckCountLabel;
+    private Label caribouCountLabel;
+    private Label elkCountLabel;
+    private Label bearCountLabel;
+    private Label buffaloCountLabel;
+    #endregion
 
+    #region Overrides
     public override void _Ready()
     {
-        optionsDialog = GetNodeOrNull<WindowDialog>(WindowsDialogPath);
-        gameTypeButton = GetNodeOrNull<OptionButton>(GameTypePath);
-        gameOptionButton = GetNodeOrNull<OptionButton>(GameOptionPath);
+        optionsDialog = GetNodeOrNull<WindowDialog>(WindowsDialogNodePath);
+        panelAnimation = GetNodeOrNull<AnimationPlayer>(PanelAnimationNodePath);
+        gameTypeButton = GetNodeOrNull<OptionButton>(GameTypeNodePath);
+        gameOptionButton = GetNodeOrNull<OptionButton>(GameOptionNodePath);
+        firearmButton = GetNodeOrNull<OptionButton>(FirearmNodePath);
+        geeseCountLabel = GetNodeOrNull<Label>(GeeseCountNodePath);
+        duckCountLabel = GetNodeOrNull<Label>(DuckCountNodePath);
+        rabbitCountLabel = GetNodeOrNull<Label>(RabbitCountNodePath);
+        squirrelCountLabel = GetNodeOrNull<Label>(SquirrelCountNodePath);
+        doeCountLabel = GetNodeOrNull<Label>(DoeCountNodePath);
+        buckCountLabel = GetNodeOrNull<Label>(BuckCountNodePath);
+        caribouCountLabel = GetNodeOrNull<Label>(CaribouCoundNodePath);
+        elkCountLabel = GetNodeOrNull<Label>(ElkCountNodePath);
+        bearCountLabel = GetNodeOrNull<Label>(BearCountNodePath);
+        buffaloCountLabel = GetNodeOrNull<Label>(BuffaloCountNodePath);
+
         GameManager.Load();
         if (GameManager.PlayerManager.IsFirstPersonStyle)
         {
@@ -29,6 +84,9 @@ public class MainMenu : Control
         {
             gameTypeButton.Selected = 1;
         }
+        firearmButton.Selected = (int)GameManager.PlayerManager.FirearmType;
+        panelAnimation.Play("Default");
+        SetPlayerStats();
     }
 
     public override void _Input(InputEvent inputEvent)
@@ -61,7 +119,9 @@ public class MainMenu : Control
             GetTree().Quit();
         }
     }
+    #endregion
 
+    #region Events
     private void _on_GameTypeButton_item_selected(int selected)
     {
         if (selected == 0)
@@ -86,8 +146,41 @@ public class MainMenu : Control
         }
     }
 
+    private void _on_GunTypeButton_item_selected(int selected)
+    {
+        GameManager.PlayerManager.FirearmType = (FirearmsType)selected;
+    }
+
+    private void _on_StatsButton_button_up()
+    {
+        optionsDialog.Hide();
+        panelAnimation.Play("Open");
+    }
+
+    private void _on_ClosePanelButton_button_up()
+    {
+        panelAnimation.Play("Close");
+    }
+
     private void _on_OptionsDialog_popup_hide()
     {
         GameManager.Save();
     }
+    #endregion
+
+    #region Methods
+    private void SetPlayerStats()
+    {
+        geeseCountLabel.Text = GameManager.PlayerManager.GooseTotal.ToString();
+        duckCountLabel.Text = GameManager.PlayerManager.DuckTotal.ToString();
+        rabbitCountLabel.Text = GameManager.PlayerManager.RabbitTotal.ToString();
+        squirrelCountLabel.Text = GameManager.PlayerManager.SquirrelTotal.ToString();
+        doeCountLabel.Text = GameManager.PlayerManager.DoeTotal.ToString();
+        buckCountLabel.Text = GameManager.PlayerManager.BuckTotal.ToString();
+        caribouCountLabel.Text = GameManager.PlayerManager.CaribouTotal.ToString();
+        elkCountLabel.Text = GameManager.PlayerManager.ElkTotal.ToString();
+        bearCountLabel.Text = GameManager.PlayerManager.BearTotal.ToString();
+        buffaloCountLabel.Text = GameManager.PlayerManager.BuffaloTotal.ToString();
+    }
+    #endregion
 }

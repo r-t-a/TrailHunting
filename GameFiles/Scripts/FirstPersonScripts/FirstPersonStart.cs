@@ -5,6 +5,7 @@ using System.Linq;
 using TrailHunting.Scripts;
 using TrailHunting.Scripts.Enums;
 using TrailHunting.Scripts.FirstPersonScripts.Entities;
+using TrailHunting.Scripts.Helpers;
 using TrailHunting.Scripts.Managers;
 
 public class FirstPersonStart : Node2D
@@ -13,15 +14,17 @@ public class FirstPersonStart : Node2D
     [Export]
     protected NodePath AmmoNodePath;
     [Export]
-    protected NodePath reloadButtonNodePath;
+    protected NodePath ReloadButtonNodePath;
     [Export]
-    protected NodePath spawnTimerNodePath;
+    protected NodePath SpawnTimerNodePath;
     [Export]
-    protected NodePath gameTimerNodePath;
+    protected NodePath GameTimerNodePath;
     [Export]
-    protected NodePath endButtonNodePath;
+    protected NodePath EndButtonNodePath;
     [Export]
     protected NodePath DisplayTimeNodePath;
+    [Export]
+    protected NodePath FirearmSpriteNodePath;
     #endregion
 
     #region Properties
@@ -31,12 +34,15 @@ public class FirstPersonStart : Node2D
     public int LargeGameCounter;
 
     private AnimatedSprite levelBackground;
+    private AnimatedSprite firearmSprite;
     private GridContainer ammoContainer;
     private TextureButton reloadButton;
     private Timer spawnTimer;
     private Timer gameTimer;
     private Button endButton;
     private Label displayTimer;
+
+    private PackedScene bulletDisplay;
 
     private PackedScene desert;
     private PackedScene plains;
@@ -67,12 +73,15 @@ public class FirstPersonStart : Node2D
         GameManager.PlayerManager.NeedsToReload = false;
         GameManager.PlayerManager.HasAmmo = true;
 
-        spawnTimer = GetNodeOrNull<Timer>(spawnTimerNodePath);
-        gameTimer = GetNodeOrNull<Timer>(gameTimerNodePath);
+        spawnTimer = GetNodeOrNull<Timer>(SpawnTimerNodePath);
+        gameTimer = GetNodeOrNull<Timer>(GameTimerNodePath);
         ammoContainer = GetNodeOrNull<GridContainer>(AmmoNodePath);
-        reloadButton = GetNodeOrNull<TextureButton>(reloadButtonNodePath);
-        endButton = GetNodeOrNull<Button>(endButtonNodePath);
+        reloadButton = GetNodeOrNull<TextureButton>(ReloadButtonNodePath);
+        endButton = GetNodeOrNull<Button>(EndButtonNodePath);
         displayTimer = GetNodeOrNull<Label>(DisplayTimeNodePath);
+        firearmSprite = GetNodeOrNull<AnimatedSprite>(FirearmSpriteNodePath);
+
+        bulletDisplay = (PackedScene)ResourceLoader.Load("res://Scenes/UI/BulletDisplay.tscn");
 
         desert = (PackedScene)ResourceLoader.Load(Constants.Desert);
         plains = (PackedScene)ResourceLoader.Load(Constants.Plains);
@@ -102,7 +111,7 @@ public class FirstPersonStart : Node2D
             gameTimer.Start();
         }
 
-        ammoCount = 20; //TODO other weapons, get ammo
+        SetWeaponAndAmmo();
         BuildLevel();
     }
 
@@ -153,46 +162,55 @@ public class FirstPersonStart : Node2D
 
     private void _on_Goose_SmallGameDead()
     {
+        GameManager.PlayerManager.GooseTotal += 1;
         SmallGameCounter += 1;
     }
 
     private void _on_Duck_SmallGameDead()
     {
+        GameManager.PlayerManager.DuckTotal += 1;
         SmallGameCounter += 1;
     }
 
     private void _on_Bear_MediumLargeGameDead()
     {
+        GameManager.PlayerManager.BearTotal += 1;
         MedLargeGameCounter += 1;
     }
 
     private void _on_Buffalo_LargeGameDead()
     {
+        GameManager.PlayerManager.BuffaloTotal += 1;
         LargeGameCounter += 1;
     }
 
     private void _on_Elk_MediumLargeGameDead()
     {
+        GameManager.PlayerManager.ElkTotal += 1;
         MedLargeGameCounter += 1;
     }
 
     private void _on_Caribou_MediumGameDead()
     {
+        GameManager.PlayerManager.CaribouTotal += 1;
         MediumGameCounter += 1;
     }
 
     private void _on_Deer_MediumGameDead()
     {
+        GameManager.PlayerManager.BuckTotal += 1;
         MediumGameCounter += 1;
     }
 
     private void _on_Rabbit_SmallGameDead()
     {
+        GameManager.PlayerManager.RabbitTotal += 1;
         SmallGameCounter += 1;
     }
 
     private void _on_Squirrel_SmallGameDead()
     {
+        GameManager.PlayerManager.SquirrelTotal += 1;
         SmallGameCounter += 1;
     }
 
@@ -227,6 +245,30 @@ public class FirstPersonStart : Node2D
     #endregion
 
     #region Methods
+    private void SetWeaponAndAmmo()
+    {
+        ammoCount = GameManager.PlayerManager.FirearmType.FirearmTypeToAmmo();
+        switch (GameManager.PlayerManager.FirearmType)
+        {
+            default:
+            case FirearmsType.Flintlock:
+                firearmSprite.Play("Flintlock");
+                break;
+            case FirearmsType.Repeating:
+                firearmSprite.Play("Repeater");
+                break;
+            case FirearmsType.Pistol:
+                firearmSprite.Play("Pistol");
+                break;
+        }
+        firearmSprite.Playing = false;
+        for(int i = 1; i <= ammoCount; i++)
+        {
+            var bullet = (ColorRect)bulletDisplay.Instance();
+            ammoContainer.AddChild(bullet);
+        }
+    }
+
     private void UpdateWeaponAndAmmo()
     {
         if (!GameManager.PlayerManager.HasAmmo)

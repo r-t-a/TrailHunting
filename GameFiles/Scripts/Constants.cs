@@ -72,6 +72,9 @@
         // Animations
         public static string Idle = "Idle";
         public static string Start = "Start";
+        public static string End = "End";
+        public static string EndIdle = "EndIdle";
+        public static string PrintDir = "PrintDir";
         public static string Walk = "Walk";
         public static string WoodsFrame = "Woods";
         public static string RiverFrame = "River";

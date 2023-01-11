@@ -3,6 +3,18 @@
 [ext_resource path="res://Images/SpriteSheets/elk.png" type="Texture" id=1]
 [ext_resource path="res://Scripts/FirstPersonScripts/Entities/Animals/Elk.cs" type="Script" id=2]
 
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 1 )
+region = Rect2( 384, 0, 64, 48 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 64, 48 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 64, 48 )
+
 [sub_resource type="AtlasTexture" id=3]
 atlas = ExtResource( 1 )
 region = Rect2( 256, 0, 64, 48 )
@@ -14,14 +26,6 @@ region = Rect2( 320, 0, 64, 48 )
 [sub_resource type="AtlasTexture" id=5]
 atlas = ExtResource( 1 )
 region = Rect2( 384, 0, 64, 48 )
-
-[sub_resource type="AtlasTexture" id=7]
-atlas = ExtResource( 1 )
-region = Rect2( 384, 0, 64, 48 )
-
-[sub_resource type="AtlasTexture" id=8]
-atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 64, 48 )
 
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 1 )
@@ -35,31 +39,27 @@ region = Rect2( 64, 0, 64, 48 )
 atlas = ExtResource( 1 )
 region = Rect2( 128, 0, 64, 48 )
 
-[sub_resource type="AtlasTexture" id=6]
-atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 64, 48 )
-
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
-"frames": [ SubResource( 3 ), SubResource( 4 ), SubResource( 5 ) ],
-"loop": true,
-"name": "Walking",
-"speed": 5.0
-}, {
 "frames": [ SubResource( 7 ), SubResource( 8 ) ],
 "loop": true,
 "name": "Dying",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 6 ) ],
+"loop": true,
+"name": "Dead",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 3 ), SubResource( 4 ), SubResource( 5 ) ],
+"loop": true,
+"name": "Walking",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 2 ), SubResource( 10 ), SubResource( 11 ), SubResource( 11 ), SubResource( 11 ), SubResource( 2 ), SubResource( 2 ), SubResource( 10 ), SubResource( 10 ), SubResource( 10 ) ],
 "loop": true,
 "name": "Idle",
 "speed": 2.0
-}, {
-"frames": [ SubResource( 6 ) ],
-"loop": true,
-"name": "Dead",
-"speed": 5.0
 } ]
 
 [sub_resource type="RectangleShape2D" id=9]
@@ -69,7 +69,7 @@ extents = Vector2( 20, 5 )
 scale = Vector2( 1.3, 1.3 )
 z_index = 1
 collision_layer = 16
-collision_mask = 16
+collision_mask = 0
 input_pickable = true
 script = ExtResource( 2 )
 

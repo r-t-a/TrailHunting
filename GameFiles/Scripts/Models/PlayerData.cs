@@ -1,4 +1,5 @@
-﻿using TrailHunting.Scripts.Managers;
+﻿using TrailHunting.Scripts.Enums;
+using TrailHunting.Scripts.Managers;
 
 namespace TrailHunting.Scripts.Models
 {
@@ -6,8 +7,19 @@ namespace TrailHunting.Scripts.Models
     {
         public bool IsFirstPersonStyle;
         public bool IsEndless;
-        public int FirstPersonHighScore;
-        public int TopDownHighScore;
+        public FirearmsType FirearmType;
+        public int FirstPersonTotal;
+        public int TopDownTotal;
+        public int SquirrelTotal;
+        public int RabbitTotal;
+        public int DoeTotal;
+        public int BuckTotal;
+        public int CaribouTotal;
+        public int ElkTotal;
+        public int BearTotal;
+        public int BuffaloTotal;
+        public int DuckTotal;
+        public int GooseTotal;
 
         public static PlayerData ToPlayerData(PlayerManager state)
         {
@@ -15,8 +27,19 @@ namespace TrailHunting.Scripts.Models
             {
                 IsFirstPersonStyle = state.IsFirstPersonStyle,
                 IsEndless = state.IsEndless,
-                FirstPersonHighScore = state.FirstPersonHighScore,
-                TopDownHighScore = state.TopDownHighScore,
+                FirearmType = state.FirearmType,
+                FirstPersonTotal = state.FirstPersonTotal,
+                TopDownTotal = state.TopDownTotal,
+                SquirrelTotal = state.SquirrelTotal,
+                RabbitTotal = state.RabbitTotal,
+                DoeTotal = state.DoeTotal,
+                BuckTotal = state.BuckTotal,
+                CaribouTotal = state.CaribouTotal,
+                ElkTotal = state.ElkTotal,
+                BearTotal = state.BearTotal,
+                BuffaloTotal = state.BuffaloTotal,
+                DuckTotal = state.DuckTotal,
+                GooseTotal = state.GooseTotal,
             };
         }
     }

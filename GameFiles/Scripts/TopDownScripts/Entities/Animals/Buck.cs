@@ -12,7 +12,7 @@ public class Buck : AnimalEntity
     {
         HP = 2;
         RunSpeed = 85;
-        Connect(nameof(MediumGameDead), Tree.GetNode("TopDownStart"), "_on_Deer_MediumGameDead");
+        Connect(nameof(MediumGameDead), Tree.GetNode("TopDownStart"), "_on_Buck_MediumGameDead");
     }
 
     public void WasShot()

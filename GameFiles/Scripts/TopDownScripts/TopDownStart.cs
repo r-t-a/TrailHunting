@@ -107,26 +107,37 @@ public class TopDownStart : Node2D
     #region Events
     private void _on_Squirrel_SmallGameDead()
     {
+        GameManager.PlayerManager.SquirrelTotal += 1;
         SmallGameCounter += 1;
     }
 
     private void _on_Rabbit_SmallGameDead()
     {
+        GameManager.PlayerManager.RabbitTotal += 1;
         SmallGameCounter += 1;
     }
 
     private void _on_Deer_MediumGameDead()
     {
+        GameManager.PlayerManager.DoeTotal += 1;
+        MediumGameCounter += 1;
+    }
+
+    private void _on_Buck_MediumGameDead()
+    {
+        GameManager.PlayerManager.BuckTotal += 1;
         MediumGameCounter += 1;
     }
 
     private void _on_Bear_MedLargeGameDead()
     {
+        GameManager.PlayerManager.BearTotal += 1;
         MedLargeGameCounter += 1;
     }
 
     private void _on_Buffalo_LargeGameDead()
     {
+        GameManager.PlayerManager.BuffaloTotal += 1;
         LargeGameCounter += 1;
     }
 

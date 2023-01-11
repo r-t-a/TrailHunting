@@ -59,11 +59,18 @@ namespace TrailHunting.Scripts.Helpers
             return MoveDirection.Left;
         }
 
-        public static Image LoadImage(this string filePath)
+        public static int FirearmTypeToAmmo(this FirearmsType firearmsType)
         {
-            var image = new Image();
-            image.Load(ProjectSettings.GlobalizePath(filePath));
-            return image;
+            switch (firearmsType)
+            {
+                default:
+                case FirearmsType.Flintlock:
+                    return 20;
+                case FirearmsType.Repeating:
+                    return 15;
+                case FirearmsType.Pistol:
+                    return 10;
+            }
         }
     }
 }

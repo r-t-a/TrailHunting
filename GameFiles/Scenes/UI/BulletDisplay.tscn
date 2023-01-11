@@ -13,6 +13,8 @@ animations = [ {
 } ]
 
 [node name="BulletDisplay" type="ColorRect"]
+size_flags_horizontal = 2
+size_flags_vertical = 6
 color = Color( 0, 0, 0, 0 )
 script = ExtResource( 3 )
 

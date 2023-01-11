@@ -53,11 +53,23 @@ public class Intro : Control
         {
             return;
         }
+        if (animatedSprite.Animation == Constants.End)
+        {
+            animatedSprite.Playing = false;
+            animatedSprite.Frame = 3;
+            startTimer.Start();
+        }
+        if (animatedSprite.Animation == Constants.EndIdle)
+        {
+            animatedSprite.Play(Constants.End);
+        }
+        if (animatedSprite.Animation == Constants.PrintDir)
+        {
+            animatedSprite.Play(Constants.EndIdle);
+        }
         if (animatedSprite.Animation == Constants.Start)
         {
-            animatedSprite.Frame = 14;
-            animatedSprite.Playing = false;
-            startTimer.Start();
+            animatedSprite.Play(Constants.PrintDir);
         }
     }
 

@@ -131,8 +131,19 @@ namespace TrailHunting.Scripts.Managers
                         {
                             IsFirstPersonStyle = player.IsFirstPersonStyle,
                             IsEndless = player.IsEndless,
-                            FirstPersonHighScore = player.FirstPersonHighScore,
-                            TopDownHighScore = player.TopDownHighScore,
+                            FirearmType = player.FirearmType,
+                            FirstPersonTotal = player.FirstPersonTotal,
+                            TopDownTotal = player.TopDownTotal,
+                            SquirrelTotal = player.SquirrelTotal,
+                            RabbitTotal = player.RabbitTotal,
+                            DoeTotal = player.DoeTotal,
+                            BuckTotal = player.BuckTotal,
+                            CaribouTotal = player.CaribouTotal,
+                            ElkTotal = player.ElkTotal,
+                            BearTotal = player.BearTotal,
+                            BuffaloTotal = player.BuffaloTotal,
+                            DuckTotal = player.DuckTotal,
+                            GooseTotal = player.GooseTotal,
                         };
                     }
                 }

@@ -11,6 +11,14 @@ region = Rect2( 256, 0, 32, 32 )
 atlas = ExtResource( 1 )
 region = Rect2( 288, 0, 32, 32 )
 
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 1 )
+region = Rect2( 320, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 32, 32 )
+
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 1 )
 region = Rect2( 96, 0, 32, 32 )
@@ -35,14 +43,6 @@ region = Rect2( 224, 0, 32, 32 )
 atlas = ExtResource( 1 )
 region = Rect2( 256, 0, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=12]
-atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=11]
-atlas = ExtResource( 1 )
-region = Rect2( 320, 0, 32, 32 )
-
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
 "frames": [ SubResource( 9 ), SubResource( 10 ) ],
@@ -50,20 +50,20 @@ animations = [ {
 "name": "Dying",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 6 ), SubResource( 5 ), SubResource( 4 ), SubResource( 3 ) ],
+"frames": [ SubResource( 11 ) ],
 "loop": true,
-"name": "Flying",
-"speed": 10.0
+"name": "Dead",
+"speed": 5.0
 }, {
 "frames": [ SubResource( 12 ) ],
 "loop": true,
 "name": "Idle",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 11 ) ],
+"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 6 ), SubResource( 5 ), SubResource( 4 ), SubResource( 3 ) ],
 "loop": true,
-"name": "Dead",
-"speed": 5.0
+"name": "Flying",
+"speed": 10.0
 } ]
 
 [sub_resource type="CircleShape2D" id=8]
@@ -73,7 +73,7 @@ radius = 6.14636
 scale = Vector2( 1.5, 1.5 )
 z_index = 1
 collision_layer = 128
-collision_mask = 128
+collision_mask = 0
 input_pickable = true
 script = ExtResource( 2 )
 
