@@ -270,7 +270,7 @@ margin_left = 256.0
 margin_right = 301.0
 margin_bottom = 16.0
 size_flags_horizontal = 10
-text = "0.0.4"
+text = "0.0.3"
 align = 1
 valign = 1
 
