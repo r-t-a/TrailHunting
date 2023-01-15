@@ -1,5 +1,6 @@
 ﻿using Godot;
 using TrailHunting.Scripts.Enums;
+using TrailHunting.Scripts.Managers;
 
 namespace TrailHunting.Scripts.Helpers
 {
@@ -65,11 +66,11 @@ namespace TrailHunting.Scripts.Helpers
             {
                 default:
                 case FirearmsType.Flintlock:
-                    return 20;
+                    return GameManager.FlintlockAmmo;
                 case FirearmsType.Repeating:
-                    return 15;
+                    return GameManager.RepeaterAmmo;
                 case FirearmsType.Pistol:
-                    return 10;
+                    return GameManager.PistolAmmo;
             }
         }
     }

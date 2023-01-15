@@ -13,11 +13,12 @@ animations = [ {
 } ]
 
 [node name="BulletDisplay" type="ColorRect"]
-size_flags_horizontal = 2
-size_flags_vertical = 6
+size_flags_horizontal = 6
+size_flags_vertical = 2
 color = Color( 0, 0, 0, 0 )
 script = ExtResource( 3 )
 
 [node name="Bullet" type="AnimatedSprite" parent="."]
 frames = SubResource( 1 )
 animation = "Shot"
+centered = false

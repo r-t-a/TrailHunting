@@ -10,5 +10,7 @@
         Buffalo = 5,
         Caribou = 6,
         Elk = 7,
+        Goose = 8,
+        Duck = 9,
     }
 }

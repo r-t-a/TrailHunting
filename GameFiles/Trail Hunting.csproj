@@ -4,6 +4,9 @@
     <RootNamespace>TrailHunting</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="Scripts\Data\gamedata.json" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
   </ItemGroup>
 </Project>

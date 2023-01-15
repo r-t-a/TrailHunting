@@ -4,6 +4,7 @@
     {
         // Files
         public const string SavedPlayerFileName = "user://player-save.json";
+        public const string GameDataFileName = "res://Scripts/Data/gamedata.json";
 
         // Main Scenes
         public static string MainMenu = "res://Scenes/MainMenu.tscn";
@@ -47,11 +48,6 @@
         public static string AirSpawn = "AirSpawn";
         public static string GroundSpawn = "GroundSpawn";
         public static string TimedSpawn = "TimedSpawn";
-
-        // Game Variables
-        public static int MaxAnimalSpawn = 3;
-        public static int MaxTerrainSpawn = 5;
-        public static int MaxAnimalFirstPersonSpawn = 10;
 
         // Controls
         public static string Cancel = "ui_cancel";

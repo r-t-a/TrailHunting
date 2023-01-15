@@ -19,6 +19,9 @@ namespace TrailHunting.Scripts.Managers
         public int BuffaloTotal { get; set; }
         public int DuckTotal { get; set; }
         public int GooseTotal { get; set; }
+        public int FlintlockTotal { get; set; }
+        public int RepeaterTotal { get; set; }
+        public int PistolTotal { get; set; }
 
         public bool NeedsToReload { get; set; }
         public bool HasAmmo { get; set; }

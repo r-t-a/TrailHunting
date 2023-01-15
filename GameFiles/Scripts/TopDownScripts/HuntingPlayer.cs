@@ -1,5 +1,6 @@
 using Godot;
 using TrailHunting.Scripts;
+using TrailHunting.Scripts.Managers;
 
 public class HuntingPlayer : KinematicBody2D
 {
@@ -24,7 +25,6 @@ public class HuntingPlayer : KinematicBody2D
     private Position2D riflePosition;
     private AudioStreamPlayer2D shotSfx;
 
-    private int speed = 80;
     private Vector2 moveDirection;
     private Vector2 lookDirection;
     private bool isMoving = false;
@@ -54,7 +54,7 @@ public class HuntingPlayer : KinematicBody2D
             animationTree.Set("parameters/Walk/blend_position", moveDirection);
             animationTree.Set("parameters/Idle/blend_position", moveDirection);
             animationNode.Travel(Constants.Walk);
-            MoveAndSlide(moveDirection * speed);
+            MoveAndSlide(moveDirection * GameManager.TopDownPlayerSpeed);
         }
     }
 

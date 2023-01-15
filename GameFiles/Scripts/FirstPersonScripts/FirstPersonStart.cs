@@ -162,55 +162,55 @@ public class FirstPersonStart : Node2D
 
     private void _on_Goose_SmallGameDead()
     {
-        GameManager.PlayerManager.GooseTotal += 1;
+        GameManager.UpdatePlayerStats(true, Animals.Goose);
         SmallGameCounter += 1;
     }
 
     private void _on_Duck_SmallGameDead()
     {
-        GameManager.PlayerManager.DuckTotal += 1;
+        GameManager.UpdatePlayerStats(true, Animals.Duck);
         SmallGameCounter += 1;
     }
 
     private void _on_Bear_MediumLargeGameDead()
     {
-        GameManager.PlayerManager.BearTotal += 1;
+        GameManager.UpdatePlayerStats(true, Animals.Bear);
         MedLargeGameCounter += 1;
     }
 
     private void _on_Buffalo_LargeGameDead()
     {
-        GameManager.PlayerManager.BuffaloTotal += 1;
+        GameManager.UpdatePlayerStats(true, Animals.Buffalo);
         LargeGameCounter += 1;
     }
 
     private void _on_Elk_MediumLargeGameDead()
     {
-        GameManager.PlayerManager.ElkTotal += 1;
+        GameManager.UpdatePlayerStats(true, Animals.Elk);
         MedLargeGameCounter += 1;
     }
 
     private void _on_Caribou_MediumGameDead()
     {
-        GameManager.PlayerManager.CaribouTotal += 1;
+        GameManager.UpdatePlayerStats(true, Animals.Caribou);
         MediumGameCounter += 1;
     }
 
     private void _on_Deer_MediumGameDead()
     {
-        GameManager.PlayerManager.BuckTotal += 1;
+        GameManager.UpdatePlayerStats(true, Animals.Buck);
         MediumGameCounter += 1;
     }
 
     private void _on_Rabbit_SmallGameDead()
     {
-        GameManager.PlayerManager.RabbitTotal += 1;
+        GameManager.UpdatePlayerStats(true, Animals.Rabbit);
         SmallGameCounter += 1;
     }
 
     private void _on_Squirrel_SmallGameDead()
     {
-        GameManager.PlayerManager.SquirrelTotal += 1;
+        GameManager.UpdatePlayerStats(true, Animals.Squirrel);
         SmallGameCounter += 1;
     }
 
@@ -240,7 +240,7 @@ public class FirstPersonStart : Node2D
     private void _on_SpawnTimer_timeout()
     {
         SpawnAirAnimals();
-        ReSpawnGroundAnimals();
+        RespawnGroundAnimals();
     }
     #endregion
 
@@ -294,8 +294,24 @@ public class FirstPersonStart : Node2D
         }
         else
         {
-            reloadButton.Pressed = true;
-            GameManager.PlayerManager.NeedsToReload = true;
+            if (GameManager.PlayerManager.FirearmType == FirearmsType.Repeating)
+            {
+                if (ammoCount % 5 == 0)
+                {
+                    reloadButton.Pressed = true;
+                    GameManager.PlayerManager.NeedsToReload = true;
+                }
+                else
+                {
+                    reloadButton.Pressed = false;
+                    GameManager.PlayerManager.NeedsToReload = false;
+                }
+            }
+            else
+            {
+                reloadButton.Pressed = true;
+                GameManager.PlayerManager.NeedsToReload = true;
+            }
         }
     }
 
@@ -411,7 +427,7 @@ public class FirstPersonStart : Node2D
         }
     }
 
-    private void ReSpawnGroundAnimals()
+    private void RespawnGroundAnimals()
     {
         var numberToSpawn = new Random().Next(1, 3);
         for (int i = 0; i < numberToSpawn; i++)

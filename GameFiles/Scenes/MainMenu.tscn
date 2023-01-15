@@ -17,7 +17,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.5 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector2( 543, 0 ), Vector2( 780, 0 ) ]
+"values": [ Vector2( 450, 0 ), Vector2( 780, 0 ) ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath(".:visible")
@@ -73,7 +73,7 @@ tracks/1/keys = {
 "times": PoolRealArray( 0, 0.5 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector2( 780, 0 ), Vector2( 543, 0 ) ]
+"values": [ Vector2( 780, 0 ), Vector2( 450, 0 ) ]
 }
 
 [sub_resource type="Animation" id=2]
@@ -135,6 +135,9 @@ CaribouCoundNodePath = NodePath("CanvasLayer/Panel/MarginContainer/VBoxContainer
 ElkCountNodePath = NodePath("CanvasLayer/Panel/MarginContainer/VBoxContainer/Elk/Value")
 BearCountNodePath = NodePath("CanvasLayer/Panel/MarginContainer/VBoxContainer/Bear/Value")
 BuffaloCountNodePath = NodePath("CanvasLayer/Panel/MarginContainer/VBoxContainer/Buffalo/Value")
+FlintlockCountNodePath = NodePath("CanvasLayer/Panel/MarginContainer/VBoxContainer/FlintLock/Value")
+RepeaterCountNodePath = NodePath("CanvasLayer/Panel/MarginContainer/VBoxContainer/Repeater/Value")
+PistolCountNodePath = NodePath("CanvasLayer/Panel/MarginContainer/VBoxContainer/Pistol/Value")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -303,8 +306,9 @@ anchor_right = 1.0
 anchor_bottom = 0.5
 margin_left = -225.0
 margin_top = -296.0
+margin_right = 95.0
 margin_bottom = 296.0
-rect_min_size = Vector2( 225, 0 )
+rect_min_size = Vector2( 320, 0 )
 theme = ExtResource( 3 )
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Panel"]
@@ -318,7 +322,7 @@ custom_constants/margin_bottom = 8
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Panel/MarginContainer"]
 margin_left = 8.0
 margin_top = 8.0
-margin_right = 217.0
+margin_right = 312.0
 margin_bottom = 584.0
 custom_constants/separation = 8
 
@@ -331,29 +335,29 @@ align = 0
 
 [node name="Label" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
 margin_top = 30.0
-margin_right = 209.0
+margin_right = 304.0
 margin_bottom = 46.0
-text = "-Totals-"
+text = "-Animal Totals-"
 align = 1
 valign = 1
 
 [node name="Geese" type="HBoxContainer" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
 margin_top = 54.0
-margin_right = 209.0
+margin_right = 304.0
 margin_bottom = 70.0
 size_flags_horizontal = 3
 alignment = 1
 
 [node name="Label" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Geese"]
-margin_right = 102.0
+margin_right = 150.0
 margin_bottom = 16.0
 size_flags_horizontal = 3
 text = "Geese: "
 valign = 1
 
 [node name="Value" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Geese"]
-margin_left = 106.0
-margin_right = 209.0
+margin_left = 154.0
+margin_right = 304.0
 margin_bottom = 16.0
 size_flags_horizontal = 3
 text = "0"
@@ -362,21 +366,21 @@ valign = 1
 
 [node name="Ducks" type="HBoxContainer" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
 margin_top = 78.0
-margin_right = 209.0
+margin_right = 304.0
 margin_bottom = 94.0
 size_flags_horizontal = 3
 alignment = 1
 
 [node name="Label" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Ducks"]
-margin_right = 102.0
+margin_right = 150.0
 margin_bottom = 16.0
 size_flags_horizontal = 3
 text = "Ducks: "
 valign = 1
 
 [node name="Value" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Ducks"]
-margin_left = 106.0
-margin_right = 209.0
+margin_left = 154.0
+margin_right = 304.0
 margin_bottom = 16.0
 size_flags_horizontal = 3
 text = "0"
@@ -385,21 +389,21 @@ valign = 1
 
 [node name="Rabbits" type="HBoxContainer" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
 margin_top = 102.0
-margin_right = 209.0
+margin_right = 304.0
 margin_bottom = 118.0
 size_flags_horizontal = 3
 alignment = 1
 
 [node name="Label" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Rabbits"]
-margin_right = 102.0
+margin_right = 150.0
 margin_bottom = 16.0
 size_flags_horizontal = 3
 text = "Rabbits: "
 valign = 1
 
 [node name="Value" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Rabbits"]
-margin_left = 106.0
-margin_right = 209.0
+margin_left = 154.0
+margin_right = 304.0
 margin_bottom = 16.0
 size_flags_horizontal = 3
 text = "0"
@@ -408,21 +412,21 @@ valign = 1
 
 [node name="Squirrels" type="HBoxContainer" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
 margin_top = 126.0
-margin_right = 209.0
+margin_right = 304.0
 margin_bottom = 142.0
 size_flags_horizontal = 3
 alignment = 1
 
 [node name="Label" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Squirrels"]
-margin_right = 102.0
+margin_right = 150.0
 margin_bottom = 16.0
 size_flags_horizontal = 3
 text = "Squirrels: "
 valign = 1
 
 [node name="Value" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Squirrels"]
-margin_left = 106.0
-margin_right = 209.0
+margin_left = 154.0
+margin_right = 304.0
 margin_bottom = 16.0
 size_flags_horizontal = 3
 text = "0"
@@ -431,21 +435,21 @@ valign = 1
 
 [node name="Doe" type="HBoxContainer" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
 margin_top = 150.0
-margin_right = 209.0
+margin_right = 304.0
 margin_bottom = 166.0
 size_flags_horizontal = 3
 alignment = 1
 
 [node name="Label" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Doe"]
-margin_right = 102.0
+margin_right = 150.0
 margin_bottom = 16.0
 size_flags_horizontal = 3
 text = "Doe: "
 valign = 1
 
 [node name="Value" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Doe"]
-margin_left = 106.0
-margin_right = 209.0
+margin_left = 154.0
+margin_right = 304.0
 margin_bottom = 16.0
 size_flags_horizontal = 3
 text = "0"
@@ -454,21 +458,21 @@ valign = 1
 
 [node name="Bucks" type="HBoxContainer" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
 margin_top = 174.0
-margin_right = 209.0
+margin_right = 304.0
 margin_bottom = 190.0
 size_flags_horizontal = 3
 alignment = 1
 
 [node name="Label" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Bucks"]
-margin_right = 102.0
+margin_right = 150.0
 margin_bottom = 16.0
 size_flags_horizontal = 3
 text = "Bucks: "
 valign = 1
 
 [node name="Value" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Bucks"]
-margin_left = 106.0
-margin_right = 209.0
+margin_left = 154.0
+margin_right = 304.0
 margin_bottom = 16.0
 size_flags_horizontal = 3
 text = "0"
@@ -477,21 +481,21 @@ valign = 1
 
 [node name="Caribou" type="HBoxContainer" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
 margin_top = 198.0
-margin_right = 209.0
+margin_right = 304.0
 margin_bottom = 214.0
 size_flags_horizontal = 3
 alignment = 1
 
 [node name="Label" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Caribou"]
-margin_right = 102.0
+margin_right = 150.0
 margin_bottom = 16.0
 size_flags_horizontal = 3
 text = "Caribou: "
 valign = 1
 
 [node name="Value" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Caribou"]
-margin_left = 106.0
-margin_right = 209.0
+margin_left = 154.0
+margin_right = 304.0
 margin_bottom = 16.0
 size_flags_horizontal = 3
 text = "0"
@@ -500,21 +504,21 @@ valign = 1
 
 [node name="Elk" type="HBoxContainer" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
 margin_top = 222.0
-margin_right = 209.0
+margin_right = 304.0
 margin_bottom = 238.0
 size_flags_horizontal = 3
 alignment = 1
 
 [node name="Label" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Elk"]
-margin_right = 102.0
+margin_right = 150.0
 margin_bottom = 16.0
 size_flags_horizontal = 3
 text = "Elk: "
 valign = 1
 
 [node name="Value" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Elk"]
-margin_left = 106.0
-margin_right = 209.0
+margin_left = 154.0
+margin_right = 304.0
 margin_bottom = 16.0
 size_flags_horizontal = 3
 text = "0"
@@ -523,21 +527,21 @@ valign = 1
 
 [node name="Bear" type="HBoxContainer" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
 margin_top = 246.0
-margin_right = 209.0
+margin_right = 304.0
 margin_bottom = 262.0
 size_flags_horizontal = 3
 alignment = 1
 
 [node name="Label" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Bear"]
-margin_right = 102.0
+margin_right = 150.0
 margin_bottom = 16.0
 size_flags_horizontal = 3
 text = "Bear: "
 valign = 1
 
 [node name="Value" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Bear"]
-margin_left = 106.0
-margin_right = 209.0
+margin_left = 154.0
+margin_right = 304.0
 margin_bottom = 16.0
 size_flags_horizontal = 3
 text = "0"
@@ -546,21 +550,98 @@ valign = 1
 
 [node name="Buffalo" type="HBoxContainer" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
 margin_top = 270.0
-margin_right = 209.0
+margin_right = 304.0
 margin_bottom = 286.0
 size_flags_horizontal = 3
 alignment = 1
 
 [node name="Label" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Buffalo"]
-margin_right = 102.0
+margin_right = 150.0
 margin_bottom = 16.0
 size_flags_horizontal = 3
 text = "Buffalo: "
 valign = 1
 
 [node name="Value" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Buffalo"]
-margin_left = 106.0
-margin_right = 209.0
+margin_left = 154.0
+margin_right = 304.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+text = "0"
+align = 2
+valign = 1
+
+[node name="Label2" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
+margin_top = 294.0
+margin_right = 304.0
+margin_bottom = 310.0
+text = "-Weapon Totals-"
+align = 1
+valign = 1
+
+[node name="FlintLock" type="HBoxContainer" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
+margin_top = 318.0
+margin_right = 304.0
+margin_bottom = 334.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/FlintLock"]
+margin_right = 150.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+text = "Flintlock Hits:"
+valign = 1
+
+[node name="Value" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/FlintLock"]
+margin_left = 154.0
+margin_right = 304.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+text = "0"
+align = 2
+valign = 1
+
+[node name="Repeater" type="HBoxContainer" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
+margin_top = 342.0
+margin_right = 304.0
+margin_bottom = 358.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Repeater"]
+margin_right = 150.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+text = "Repeater Hits:"
+valign = 1
+
+[node name="Value" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Repeater"]
+margin_left = 154.0
+margin_right = 304.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+text = "0"
+align = 2
+valign = 1
+
+[node name="Pistol" type="HBoxContainer" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer"]
+margin_top = 366.0
+margin_right = 304.0
+margin_bottom = 382.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Pistol"]
+margin_right = 150.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+text = "Pistol Hits:"
+valign = 1
+
+[node name="Value" type="Label" parent="CanvasLayer/Panel/MarginContainer/VBoxContainer/Pistol"]
+margin_left = 154.0
+margin_right = 304.0
 margin_bottom = 16.0
 size_flags_horizontal = 3
 text = "0"

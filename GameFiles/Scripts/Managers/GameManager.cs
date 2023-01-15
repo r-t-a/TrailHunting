@@ -12,11 +12,18 @@ namespace TrailHunting.Scripts.Managers
         public static PlayerManager PlayerManager { get; private set; }
         public static Linker Linker { get; private set; }
         public static AcceptDialog ResultsDialog { get; private set; }
-
-        private static readonly int smallGame = 4;
-        private static readonly int mediumGame = 90;
-        private static readonly int medLargeGame = 200;
-        private static readonly int largeGame = 400;
+        public static int TopDownPlayerSpeed { get; private set; }
+        public static int TopDownBulletSpeed { get; private set; }
+        public static int MaxAnimalSpawn { get; private set; }
+        public static int MaxTerrainSpawn { get; private set; }
+        public static int MaxAnimalFirstPersonSpawn { get; private set; }
+        public static int FlintlockAmmo { get; private set; }
+        public static int RepeaterAmmo { get; private set; }
+        public static int PistolAmmo { get; private set; }
+        public static int SmallGame { get; private set; }
+        public static int MediumGame { get; private set; }
+        public static int MediumLargeGame { get; private set; }
+        public static int LargeGame { get; private set; }
 
         public GameManager(Linker linker)
         {
@@ -28,6 +35,60 @@ namespace TrailHunting.Scripts.Managers
         {
             Linker.GetTree().ChangeScene(Constants.MainMenu);
             Save();
+        }
+
+        public static void UpdatePlayerStats(bool isFirstPerson, Animals animalShot)
+        {
+            switch (animalShot)
+            {
+                case Animals.Squirrel:
+                    PlayerManager.SquirrelTotal += 1;
+                    break;
+                case Animals.Rabbit:
+                    PlayerManager.RabbitTotal += 1;
+                    break;
+                case Animals.Doe:
+                    PlayerManager.DoeTotal += 1;
+                    break;
+                case Animals.Buck:
+                    PlayerManager.BuckTotal += 1;
+                    break;
+                case Animals.Bear:
+                    PlayerManager.BearTotal += 1;
+                    break;
+                case Animals.Buffalo:
+                    PlayerManager.BuffaloTotal += 1;
+                    break;
+                case Animals.Caribou:
+                    PlayerManager.CaribouTotal += 1;
+                    break;
+                case Animals.Elk:
+                    PlayerManager.ElkTotal += 1;
+                    break;
+                case Animals.Duck:
+                    PlayerManager.DuckTotal += 1;
+                    break;
+                case Animals.Goose:
+                    PlayerManager.GooseTotal += 1;
+                    break;
+            }
+
+            if (isFirstPerson)
+            {
+                switch (PlayerManager.FirearmType)
+                {
+                    default:
+                    case FirearmsType.Flintlock:
+                        PlayerManager.FlintlockTotal += 1;
+                        break;
+                    case FirearmsType.Repeating:
+                        PlayerManager.RepeaterTotal += 1;
+                        break;
+                    case FirearmsType.Pistol:
+                        PlayerManager.PistolTotal += 1;
+                        break;
+                }
+            }
         }
 
         public static void BuildTopDownResultsDialog(int smallCounter, int mediumCounter, int medLargeCounter, int largeCounter)
@@ -46,7 +107,7 @@ namespace TrailHunting.Scripts.Managers
 
         private static int GetTotal(int smallCounter, int mediumCounter, int medLargeCounter, int largeCounter)
         {
-            return (smallCounter * smallGame) + (mediumCounter * mediumGame) + (medLargeCounter * medLargeGame) + (largeCounter * largeGame);
+            return (smallCounter * SmallGame) + (mediumCounter * MediumGame) + (medLargeCounter * MediumLargeGame) + (largeCounter * LargeGame);
         }
 
         public static void SetGameOption(bool isFirstPerson)
@@ -63,7 +124,7 @@ namespace TrailHunting.Scripts.Managers
         {
             var getMapType = (MapType)new Random().Next(0, 4);
             var terrainList = new List<int>();
-            var randomTerrainAmount = new Random().Next(0, Constants.MaxTerrainSpawn + 1);
+            var randomTerrainAmount = new Random().Next(0, MaxTerrainSpawn + 1);
 
             for (int i = 0; i <= randomTerrainAmount; i++)
             {
@@ -115,6 +176,8 @@ namespace TrailHunting.Scripts.Managers
             return $"{Constants.TimedSpawn}{spawnPoint}";
         }
 
+
+
         public static void Load()
         {
             try
@@ -144,7 +207,47 @@ namespace TrailHunting.Scripts.Managers
                             BuffaloTotal = player.BuffaloTotal,
                             DuckTotal = player.DuckTotal,
                             GooseTotal = player.GooseTotal,
+                            FlintlockTotal = player.FlintLockTotal,
+                            RepeaterTotal = player.RepeaterTotal,
+                            PistolTotal = player.PistolTotal,
                         };
+                    }
+                }
+                else
+                {
+                    GD.Print("No Saved Data");
+                }
+            }
+            catch (Exception e)
+            {
+                GD.Print($"Exception: {e.InnerException.Message}");
+            }
+        }
+
+        public static void LoadVariables()
+        {
+            try
+            {
+                var file = new File();
+                if (file.FileExists(Constants.GameDataFileName))
+                {
+                    file.Open(Constants.GameDataFileName, File.ModeFlags.Read);
+                    var data = JsonConvert.DeserializeObject<GameData>(file.GetAsText());
+                    file.Close();
+                    if (data != null && data is GameData gameData)
+                    {
+                        TopDownBulletSpeed = gameData.TopDownBulletSpeed;
+                        TopDownPlayerSpeed = gameData.TopDownPlayerSpeed;
+                        MaxAnimalSpawn = gameData.MaxAnimalSpawn;
+                        MaxTerrainSpawn = gameData.MaxTerrainSpawn;
+                        MaxAnimalFirstPersonSpawn = gameData.MaxAnimalFirstPersonSpawn;
+                        FlintlockAmmo = gameData.FlintlockAmmo;
+                        RepeaterAmmo = gameData.RepeaterAmmo;
+                        PistolAmmo = gameData.PistolAmmo;
+                        SmallGame = gameData.SmallGame;
+                        MediumGame = gameData.MediumGame;
+                        MediumLargeGame = gameData.MediumLargeGame;
+                        LargeGame = gameData.LargeGame;
                     }
                 }
                 else

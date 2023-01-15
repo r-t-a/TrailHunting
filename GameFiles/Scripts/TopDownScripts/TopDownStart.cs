@@ -107,44 +107,44 @@ public class TopDownStart : Node2D
     #region Events
     private void _on_Squirrel_SmallGameDead()
     {
-        GameManager.PlayerManager.SquirrelTotal += 1;
+        GameManager.UpdatePlayerStats(false, Animals.Squirrel);
         SmallGameCounter += 1;
     }
 
     private void _on_Rabbit_SmallGameDead()
     {
-        GameManager.PlayerManager.RabbitTotal += 1;
+        GameManager.UpdatePlayerStats(false, Animals.Rabbit);
         SmallGameCounter += 1;
     }
 
     private void _on_Deer_MediumGameDead()
     {
-        GameManager.PlayerManager.DoeTotal += 1;
+        GameManager.UpdatePlayerStats(false, Animals.Doe);
         MediumGameCounter += 1;
     }
 
     private void _on_Buck_MediumGameDead()
     {
-        GameManager.PlayerManager.BuckTotal += 1;
+        GameManager.UpdatePlayerStats(false, Animals.Buck);
         MediumGameCounter += 1;
     }
 
     private void _on_Bear_MedLargeGameDead()
     {
-        GameManager.PlayerManager.BearTotal += 1;
+        GameManager.UpdatePlayerStats(false, Animals.Bear);
         MedLargeGameCounter += 1;
     }
 
     private void _on_Buffalo_LargeGameDead()
     {
-        GameManager.PlayerManager.BuffaloTotal += 1;
+        GameManager.UpdatePlayerStats(false, Animals.Buffalo);
         LargeGameCounter += 1;
     }
 
     private void _on_SpawnTimer_timeout()
     {
         var currentSpawn = GetTree().GetNodesInGroup(Constants.Animals);
-        if (currentSpawn.Count >= Constants.MaxAnimalSpawn)
+        if (currentSpawn.Count >= GameManager.MaxAnimalSpawn)
             return;
 
         var boundaryTiles = groundTileMap.GetUsedCellsById(1);

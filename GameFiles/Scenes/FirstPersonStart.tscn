@@ -12,12 +12,12 @@
 atlas = ExtResource( 8 )
 region = Rect2( 0, 0, 100, 80 )
 
-[sub_resource type="AtlasTexture" id=4]
-atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 200, 80 )
-
 [sub_resource type="AtlasTexture" id=6]
 atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 200, 80 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 1 )
 region = Rect2( 0, 0, 200, 80 )
 
 [sub_resource type="SpriteFrames" id=5]
@@ -27,14 +27,14 @@ animations = [ {
 "name": "Pistol",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 4 ) ],
-"loop": false,
-"name": "Flintlock",
-"speed": 5.0
-}, {
 "frames": [ SubResource( 6 ) ],
 "loop": false,
 "name": "Repeater",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 4 ) ],
+"loop": false,
+"name": "Flintlock",
 "speed": 5.0
 } ]
 
@@ -96,10 +96,10 @@ centered = false
 margin_left = 216.0
 margin_right = 396.0
 margin_bottom = 80.0
+grow_horizontal = 2
+grow_vertical = 2
 rect_min_size = Vector2( 180, 80 )
-custom_constants/vseparation = -32
-custom_constants/hseparation = 1
-columns = 10
+columns = 5
 
 [node name="Reload" type="TextureButton" parent="CanvasLayer/Background/MarginContainer/HBoxContainer"]
 margin_left = 412.0

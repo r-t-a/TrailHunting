@@ -1,0 +1,14 @@
+{
+  "FlintlockAmmo": 20,
+  "MaxAnimalFirstPersonSpawn": 10,
+  "MaxAnimalSpawn": 3,
+  "MaxTerrainSpawn": 6,
+  "PistolAmmo": 10,
+  "RepeaterAmmo": 15,
+  "TopDownBulletSpeed": 130,
+  "TopDownPlayerSpeed": 80,
+  "SmallGame": 4,
+  "MediumGame": 90,
+  "MediumLargeGame": 200,
+  "LargeGame": 400
+}

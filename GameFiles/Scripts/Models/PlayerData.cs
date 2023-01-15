@@ -20,6 +20,9 @@ namespace TrailHunting.Scripts.Models
         public int BuffaloTotal;
         public int DuckTotal;
         public int GooseTotal;
+        public int FlintLockTotal;
+        public int RepeaterTotal;
+        public int PistolTotal;
 
         public static PlayerData ToPlayerData(PlayerManager state)
         {
@@ -40,6 +43,9 @@ namespace TrailHunting.Scripts.Models
                 BuffaloTotal = state.BuffaloTotal,
                 DuckTotal = state.DuckTotal,
                 GooseTotal = state.GooseTotal,
+                FlintLockTotal = state.FlintlockTotal,
+                RepeaterTotal = state.RepeaterTotal,
+                PistolTotal = state.PistolTotal,
             };
         }
     }

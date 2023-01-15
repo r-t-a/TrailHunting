@@ -36,6 +36,12 @@ public class MainMenu : Control
     protected NodePath BearCountNodePath;
     [Export]
     protected NodePath BuffaloCountNodePath;
+    [Export]
+    protected NodePath FlintlockCountNodePath;
+    [Export]
+    protected NodePath RepeaterCountNodePath;
+    [Export]
+    protected NodePath PistolCountNodePath;
     #endregion
 
     #region Properties
@@ -54,6 +60,9 @@ public class MainMenu : Control
     private Label elkCountLabel;
     private Label bearCountLabel;
     private Label buffaloCountLabel;
+    private Label flintLockCountLabel;
+    private Label repeaterCountLabel;
+    private Label pistolCountLabel;
     #endregion
 
     #region Overrides
@@ -74,8 +83,12 @@ public class MainMenu : Control
         elkCountLabel = GetNodeOrNull<Label>(ElkCountNodePath);
         bearCountLabel = GetNodeOrNull<Label>(BearCountNodePath);
         buffaloCountLabel = GetNodeOrNull<Label>(BuffaloCountNodePath);
+        flintLockCountLabel = GetNodeOrNull<Label>(FlintlockCountNodePath);
+        repeaterCountLabel = GetNodeOrNull<Label>(RepeaterCountNodePath);
+        pistolCountLabel = GetNodeOrNull<Label>(PistolCountNodePath);
 
         GameManager.Load();
+        GameManager.LoadVariables();
         if (GameManager.PlayerManager.IsFirstPersonStyle)
         {
             gameOptionButton.Selected = 1;
@@ -181,6 +194,9 @@ public class MainMenu : Control
         elkCountLabel.Text = GameManager.PlayerManager.ElkTotal.ToString();
         bearCountLabel.Text = GameManager.PlayerManager.BearTotal.ToString();
         buffaloCountLabel.Text = GameManager.PlayerManager.BuffaloTotal.ToString();
+        flintLockCountLabel.Text = GameManager.PlayerManager.FlintlockTotal.ToString();
+        repeaterCountLabel.Text = GameManager.PlayerManager.RepeaterTotal.ToString();
+        pistolCountLabel.Text = GameManager.PlayerManager.PistolTotal.ToString();
     }
     #endregion
 }

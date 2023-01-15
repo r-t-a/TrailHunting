@@ -1,10 +1,10 @@
 using Godot;
 using TrailHunting.Scripts;
+using TrailHunting.Scripts.Managers;
 
 public class Bullet : KinematicBody2D
 {
     private Vector2 bulletMovement;
-    private int speed = 180;
 
     public override void _Ready()
     {
@@ -14,7 +14,7 @@ public class Bullet : KinematicBody2D
 
     public override void _PhysicsProcess(float delta)
     {
-        var didCollide = MoveAndCollide(bulletMovement * speed * delta);
+        var didCollide = MoveAndCollide(bulletMovement * GameManager.TopDownBulletSpeed * delta);
         if (didCollide != null)
         {
             if (didCollide.Collider is KinematicBody2D collider)
