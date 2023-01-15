@@ -1,4 +1,4 @@
-### Trail Hunter
+### Trail Hunting
 
 
 Oregon Trail inspired hunting mini game made using [Godot](https://godotengine.org/)
