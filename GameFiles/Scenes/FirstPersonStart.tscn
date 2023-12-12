@@ -8,6 +8,10 @@
 [ext_resource path="res://Images/UI/rifle_reload2.png" type="Texture" id=7]
 [ext_resource path="res://Images/UI/pistol.png" type="Texture" id=8]
 
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 200, 80 )
+
 [sub_resource type="AtlasTexture" id=7]
 atlas = ExtResource( 8 )
 region = Rect2( 0, 0, 100, 80 )
@@ -16,12 +20,13 @@ region = Rect2( 0, 0, 100, 80 )
 atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 200, 80 )
 
-[sub_resource type="AtlasTexture" id=4]
-atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 200, 80 )
-
 [sub_resource type="SpriteFrames" id=5]
 animations = [ {
+"frames": [ SubResource( 4 ) ],
+"loop": false,
+"name": "Flintlock",
+"speed": 5.0
+}, {
 "frames": [ SubResource( 7 ) ],
 "loop": false,
 "name": "Pistol",
@@ -31,15 +36,10 @@ animations = [ {
 "loop": false,
 "name": "Repeater",
 "speed": 5.0
-}, {
-"frames": [ SubResource( 4 ) ],
-"loop": false,
-"name": "Flintlock",
-"speed": 5.0
 } ]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 291.409, 153.586 )
+extents = Vector2( 242.924, 118.401 )
 
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 384, 32.5 )
@@ -51,8 +51,6 @@ AmmoNodePath = NodePath("CanvasLayer/Background/MarginContainer/HBoxContainer/Gr
 ReloadButtonNodePath = NodePath("CanvasLayer/Background/MarginContainer/HBoxContainer/Reload")
 SpawnTimerNodePath = NodePath("SpawnTimer")
 GameTimerNodePath = NodePath("GameTimer")
-EndButtonNodePath = NodePath("CanvasLayer/Background/MarginContainer/HBoxContainer/End")
-DisplayTimeNodePath = NodePath("CanvasLayer/Background/MarginContainer/HBoxContainer/DisplayTimer")
 FirearmSpriteNodePath = NodePath("CanvasLayer/Background/MarginContainer/HBoxContainer/TextureRect/FirearmSprite")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
@@ -77,7 +75,7 @@ custom_constants/margin_bottom = 8
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Background/MarginContainer"]
 margin_left = 8.0
 margin_top = 8.0
-margin_right = 786.0
+margin_right = 632.0
 margin_bottom = 88.0
 custom_constants/separation = 16
 
@@ -102,9 +100,9 @@ rect_min_size = Vector2( 180, 80 )
 columns = 5
 
 [node name="Reload" type="TextureButton" parent="CanvasLayer/Background/MarginContainer/HBoxContainer"]
-margin_left = 412.0
+margin_left = 420.0
 margin_top = 15.0
-margin_right = 472.0
+margin_right = 480.0
 margin_bottom = 65.0
 rect_min_size = Vector2( 60, 50 )
 size_flags_horizontal = 6
@@ -117,75 +115,25 @@ expand = true
 stretch_mode = 4
 
 [node name="Move" type="Button" parent="CanvasLayer/Background/MarginContainer/HBoxContainer"]
-margin_left = 488.0
+margin_left = 504.0
 margin_top = 20.0
-margin_right = 608.0
+margin_right = 624.0
 margin_bottom = 60.0
 rect_min_size = Vector2( 120, 40 )
 size_flags_horizontal = 12
 size_flags_vertical = 4
 text = "Move"
 
-[node name="End" type="Button" parent="CanvasLayer/Background/MarginContainer/HBoxContainer"]
-margin_left = 624.0
-margin_top = 20.0
-margin_right = 744.0
-margin_bottom = 60.0
-rect_min_size = Vector2( 120, 40 )
-size_flags_horizontal = 12
-size_flags_vertical = 4
-text = "End"
-
-[node name="DisplayTimer" type="Label" parent="CanvasLayer/Background/MarginContainer/HBoxContainer"]
-margin_left = 760.0
-margin_top = 32.0
-margin_right = 778.0
-margin_bottom = 48.0
-text = "60"
-align = 1
-valign = 1
-
-[node name="AcceptDialog" type="AcceptDialog" parent="CanvasLayer"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -125.0
-margin_top = -50.0
-margin_right = 125.0
-margin_bottom = 50.0
-theme = ExtResource( 5 )
-popup_exclusive = true
-window_title = "Results"
-dialog_autowrap = true
-
-[node name="ResultsText" type="Label" parent="CanvasLayer/AcceptDialog"]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -117.0
-margin_top = 8.0
-margin_right = 117.0
-margin_bottom = 62.0
-text = "Total Meat Collected:
-2000"
-align = 1
-valign = 1
-
-[node name="Camera2D" type="Camera2D" parent="."]
-anchor_mode = 0
-current = true
-limit_smoothed = true
-smoothing_enabled = true
-
 [node name="BackgroundArea" type="Area2D" parent="."]
+position = Vector2( 0, -6 )
 scale = Vector2( 1.32, 1.62 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BackgroundArea"]
-position = Vector2( 290.409, 152.586 )
+position = Vector2( 241.924, 117.401 )
 shape = SubResource( 1 )
 
 [node name="Ground" type="StaticBody2D" parent="."]
-position = Vector2( 384, 456 )
+position = Vector2( 319, 384 )
 z_index = 1
 collision_layer = 4095
 collision_mask = 4095
@@ -203,9 +151,6 @@ one_shot = true
 
 [connection signal="pressed" from="CanvasLayer/Background/MarginContainer/HBoxContainer/Reload" to="." method="_on_Reload_pressed"]
 [connection signal="button_up" from="CanvasLayer/Background/MarginContainer/HBoxContainer/Move" to="." method="_on_Move_button_up"]
-[connection signal="button_up" from="CanvasLayer/Background/MarginContainer/HBoxContainer/End" to="." method="_on_End_button_up"]
-[connection signal="confirmed" from="CanvasLayer/AcceptDialog" to="." method="_on_AcceptDialog_confirmed"]
-[connection signal="modal_closed" from="CanvasLayer/AcceptDialog" to="." method="_on_AcceptDialog_modal_closed"]
 [connection signal="input_event" from="BackgroundArea" to="." method="_on_BackgroundArea_input_event"]
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_SpawnTimer_timeout"]
 [connection signal="timeout" from="GameTimer" to="." method="_on_GameTimer_timeout"]

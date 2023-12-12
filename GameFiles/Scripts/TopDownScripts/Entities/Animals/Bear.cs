@@ -15,12 +15,12 @@ public class Bear : AnimalEntity
         Connect(nameof(MedLargeGameDead), Tree.GetNode("TopDownStart"), "_on_Bear_MedLargeGameDead");
     }
 
-    public void WasShot()
+    public override void WasShot()
     {
         if (HP == 0) 
             return;
         HP -= 1;
-        if (HP == 0)
+        if (HP == 0) 
             EmitSignal(nameof(MedLargeGameDead));
     }
 
@@ -33,13 +33,7 @@ public class Bear : AnimalEntity
         }
     }
 
-    private void _on_Timer_timeout()
-    {
-        (Motion, MoveDirection) = RandomizeMovement(new Random());
-    }
+    private void _on_Timer_timeout() => (Motion, MoveDirection) = RandomizeMovement(new Random());
 
-    private void _on_VisibilityNotifier2D_screen_exited()
-    {
-        QueueFree();
-    }
+    private void _on_VisibilityNotifier2D_screen_exited() => QueueFree();
 }

@@ -15,7 +15,7 @@ public class Buffalo : AnimalEntity
         Connect(nameof(LargeGameDead), Tree.GetNode("TopDownStart"), "_on_Buffalo_LargeGameDead");
     }
 
-    public void WasShot()
+    public override void WasShot()
     {
         if (HP == 0) 
             return;
@@ -33,13 +33,7 @@ public class Buffalo : AnimalEntity
         }
     }
 
-    private void _on_Timer_timeout()
-    {
-        (Motion, MoveDirection) = RandomizeMovement(new Random());
-    }
+    private void _on_Timer_timeout() => (Motion, MoveDirection) = RandomizeMovement(new Random());
 
-    private void _on_VisibilityNotifier2D_screen_exited()
-    {
-        QueueFree();
-    }
+    private void _on_VisibilityNotifier2D_screen_exited() => QueueFree();
 }

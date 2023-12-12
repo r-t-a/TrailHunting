@@ -5,8 +5,8 @@ namespace TrailHunting.Scripts.Models
 {
     public class PlayerData
     {
-        public bool IsFirstPersonStyle;
-        public bool IsEndless;
+        public int ModeAHighScore;
+        public int ModeBHighScore;
         public FirearmsType FirearmType;
         public int FirstPersonTotal;
         public int TopDownTotal;
@@ -20,16 +20,13 @@ namespace TrailHunting.Scripts.Models
         public int BuffaloTotal;
         public int DuckTotal;
         public int GooseTotal;
-        public int FlintLockTotal;
-        public int RepeaterTotal;
-        public int PistolTotal;
 
         public static PlayerData ToPlayerData(PlayerManager state)
         {
             return new PlayerData()
             {
-                IsFirstPersonStyle = state.IsFirstPersonStyle,
-                IsEndless = state.IsEndless,
+                ModeAHighScore = state.ModeAHighScore,
+                ModeBHighScore = state.ModeBHighScore,
                 FirearmType = state.FirearmType,
                 FirstPersonTotal = state.FirstPersonTotal,
                 TopDownTotal = state.TopDownTotal,
@@ -43,9 +40,6 @@ namespace TrailHunting.Scripts.Models
                 BuffaloTotal = state.BuffaloTotal,
                 DuckTotal = state.DuckTotal,
                 GooseTotal = state.GooseTotal,
-                FlintLockTotal = state.FlintlockTotal,
-                RepeaterTotal = state.RepeaterTotal,
-                PistolTotal = state.PistolTotal,
             };
         }
     }

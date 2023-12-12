@@ -1,8 +1,9 @@
-[gd_scene load_steps=45 format=2]
+[gd_scene load_steps=46 format=2]
 
 [ext_resource path="res://Images/SpriteSheets/hunter.png" type="Texture" id=1]
 [ext_resource path="res://Scripts/TopDownScripts/HuntingPlayer.cs" type="Script" id=2]
-[ext_resource path="res://Audio/blip.mp3" type="AudioStream" id=3]
+[ext_resource path="res://Audio/shot.mp3" type="AudioStream" id=3]
+[ext_resource path="res://Scenes/Bullet.tscn" type="PackedScene" id=4]
 
 [sub_resource type="RectangleShape2D" id=14]
 extents = Vector2( 9.33333, 16 )
@@ -208,7 +209,7 @@ tracks/1/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ Vector2( 17, -14 ) ]
+"values": [ Vector2( 17, -16 ) ]
 }
 
 [sub_resource type="Animation" id=19]
@@ -505,6 +506,7 @@ script = ExtResource( 2 )
 AnimationTreeNodePath = NodePath("AnimationTree")
 RifleNodePath = NodePath("Position2D")
 SoundEffectsNodePath = NodePath("Shot")
+Bullet = ExtResource( 4 )
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )
@@ -542,7 +544,7 @@ tree_root = SubResource( 26 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
 parameters/playback = SubResource( 27 )
-parameters/Idle/blend_position = Vector2( -0.941953, 0 )
+parameters/Idle/blend_position = Vector2( -0.929453, -0.0775862 )
 parameters/Walk/blend_position = Vector2( -0.00263852, 0.00578034 )
 
 [node name="Position2D" type="Position2D" parent="."]

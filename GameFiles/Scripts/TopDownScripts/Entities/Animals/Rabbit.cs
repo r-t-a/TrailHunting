@@ -14,7 +14,7 @@ public class Rabbit : AnimalEntity
         RunSpeed = 100;
         Connect(nameof(SmallGameDead), Tree.GetNode("TopDownStart"), "_on_Rabbit_SmallGameDead");
     }
-    public void WasShot()
+    public override void WasShot()
     {
         if (HP == 0) 
             return;
@@ -32,13 +32,7 @@ public class Rabbit : AnimalEntity
         }
     }
 
-    private void _on_Timer_timeout()
-    {
-        (Motion, MoveDirection) = RandomizeMovement(new Random());
-    }
+    private void _on_Timer_timeout() => (Motion, MoveDirection) = RandomizeMovement(new Random());
 
-    private void _on_VisibilityNotifier2D_screen_exited()
-    {
-        QueueFree();
-    }
+    private void _on_VisibilityNotifier2D_screen_exited() => QueueFree();
 }

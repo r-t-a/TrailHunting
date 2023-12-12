@@ -60,13 +60,12 @@
         public static string BottomRight = "ui_bottomright";
         public static string BottomLeft = "ui_bottomleft";
         public static string WalkControl = "walk";
-        public static string Num1 = "num1";
-        public static string Num8 = "num8";
-        public static string Num9 = "num9";
         public static string Shoot = "shoot";
+        public static string Pause = "pause";
 
         // Animations
         public static string Idle = "Idle";
+        public static string Run = "Run";
         public static string Start = "Start";
         public static string End = "End";
         public static string EndIdle = "EndIdle";
@@ -74,6 +73,11 @@
         public static string Walk = "Walk";
         public static string WoodsFrame = "Woods";
         public static string RiverFrame = "River";
+        public static string PopIn = "PopIn";
+        public static string Default = "Default";
+        public static string Open = "Open";
+        public static string Close = "Close";
+        public static string Dead = "Dead";
 
         // Groups
         public static string Animals = "Animals";

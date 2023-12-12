@@ -1,55 +1,39 @@
 using Godot;
 using TrailHunting.Scripts;
-using TrailHunting.Scripts.Enums;
 using TrailHunting.Scripts.Managers;
 
 public class MainMenu : Control
 {
     #region Exports
     [Export]
-    protected NodePath WindowsDialogNodePath;
+    protected NodePath PanelAnimationNodePath { get; private set; }
     [Export]
-    protected NodePath GameTypeNodePath;
+    protected NodePath FocusTransparentBackgroundNodePath { get; private set; }
     [Export]
-    protected NodePath GameOptionNodePath;
+    protected NodePath GeeseCountNodePath { get; private set; }
     [Export]
-    protected NodePath FirearmNodePath;
+    protected NodePath DuckCountNodePath { get; private set; }
     [Export]
-    protected NodePath PanelAnimationNodePath;
+    protected NodePath RabbitCountNodePath { get; private set; }
     [Export]
-    protected NodePath GeeseCountNodePath;
+    protected NodePath SquirrelCountNodePath { get; private set; }
     [Export]
-    protected NodePath DuckCountNodePath;
+    protected NodePath DoeCountNodePath { get; private set; }
     [Export]
-    protected NodePath RabbitCountNodePath;
+    protected NodePath BuckCountNodePath { get; private set; }
     [Export]
-    protected NodePath SquirrelCountNodePath;
+    protected NodePath CaribouCountNodePath { get; private set; }
     [Export]
-    protected NodePath DoeCountNodePath;
+    protected NodePath ElkCountNodePath { get; private set; }
     [Export]
-    protected NodePath BuckCountNodePath;
+    protected NodePath BearCountNodePath { get; private set; }
     [Export]
-    protected NodePath CaribouCoundNodePath;
-    [Export]
-    protected NodePath ElkCountNodePath;
-    [Export]
-    protected NodePath BearCountNodePath;
-    [Export]
-    protected NodePath BuffaloCountNodePath;
-    [Export]
-    protected NodePath FlintlockCountNodePath;
-    [Export]
-    protected NodePath RepeaterCountNodePath;
-    [Export]
-    protected NodePath PistolCountNodePath;
+    protected NodePath BuffaloCountNodePath { get; private set; }
     #endregion
 
     #region Properties
-    private WindowDialog optionsDialog;
     private AnimationPlayer panelAnimation;
-    private OptionButton gameTypeButton;
-    private OptionButton gameOptionButton;
-    private OptionButton firearmButton;
+    private ColorRect focusTransparentBackground;
     private Label geeseCountLabel;
     private Label duckCountLabel;
     private Label rabbitCountLabel;
@@ -60,124 +44,63 @@ public class MainMenu : Control
     private Label elkCountLabel;
     private Label bearCountLabel;
     private Label buffaloCountLabel;
-    private Label flintLockCountLabel;
-    private Label repeaterCountLabel;
-    private Label pistolCountLabel;
     #endregion
 
     #region Overrides
     public override void _Ready()
     {
-        optionsDialog = GetNodeOrNull<WindowDialog>(WindowsDialogNodePath);
         panelAnimation = GetNodeOrNull<AnimationPlayer>(PanelAnimationNodePath);
-        gameTypeButton = GetNodeOrNull<OptionButton>(GameTypeNodePath);
-        gameOptionButton = GetNodeOrNull<OptionButton>(GameOptionNodePath);
-        firearmButton = GetNodeOrNull<OptionButton>(FirearmNodePath);
+        focusTransparentBackground = GetNodeOrNull<ColorRect>(FocusTransparentBackgroundNodePath);
         geeseCountLabel = GetNodeOrNull<Label>(GeeseCountNodePath);
         duckCountLabel = GetNodeOrNull<Label>(DuckCountNodePath);
         rabbitCountLabel = GetNodeOrNull<Label>(RabbitCountNodePath);
         squirrelCountLabel = GetNodeOrNull<Label>(SquirrelCountNodePath);
         doeCountLabel = GetNodeOrNull<Label>(DoeCountNodePath);
         buckCountLabel = GetNodeOrNull<Label>(BuckCountNodePath);
-        caribouCountLabel = GetNodeOrNull<Label>(CaribouCoundNodePath);
+        caribouCountLabel = GetNodeOrNull<Label>(CaribouCountNodePath);
         elkCountLabel = GetNodeOrNull<Label>(ElkCountNodePath);
         bearCountLabel = GetNodeOrNull<Label>(BearCountNodePath);
         buffaloCountLabel = GetNodeOrNull<Label>(BuffaloCountNodePath);
-        flintLockCountLabel = GetNodeOrNull<Label>(FlintlockCountNodePath);
-        repeaterCountLabel = GetNodeOrNull<Label>(RepeaterCountNodePath);
-        pistolCountLabel = GetNodeOrNull<Label>(PistolCountNodePath);
 
         GameManager.Load();
         GameManager.LoadVariables();
-        if (GameManager.PlayerManager.IsFirstPersonStyle)
-        {
-            gameOptionButton.Selected = 1;
-        }
-        if (GameManager.PlayerManager.IsEndless)
-        {
-            gameTypeButton.Selected = 1;
-        }
-        firearmButton.Selected = (int)GameManager.PlayerManager.FirearmType;
-        panelAnimation.Play("Default");
+        panelAnimation.Play(Constants.Default);
+        focusTransparentBackground.Hide();
         SetPlayerStats();
-    }
-
-    public override void _Input(InputEvent inputEvent)
-    {
-        if (optionsDialog.Visible)
-        {
-            return;
-        }
-        if (inputEvent.IsActionPressed(Constants.Num1))
-        {
-            if (GameManager.PlayerManager.IsFirstPersonStyle)
-            {
-                GetTree().ChangeScene(Constants.FirstPersonStart);
-            }
-            else
-            {
-                GetTree().ChangeScene(Constants.TopDownStart);
-            }
-        }
-        if (inputEvent.IsActionPressed(Constants.Num8))
-        {
-            if (!optionsDialog.Visible)
-            {
-                optionsDialog.Popup_();
-            }
-        }
-        if (inputEvent.IsActionPressed(Constants.Num9))
-        {
-            GameManager.Save();
-            GetTree().Quit();
-        }
     }
     #endregion
 
     #region Events
-    private void _on_GameTypeButton_item_selected(int selected)
+    private void _on_ModeA_pressed()
     {
-        if (selected == 0)
-        {
-            GameManager.SetGameType(false);
-        }
-        else
-        {
-            GameManager.SetGameType(true);
-        }
+        if (focusTransparentBackground.Visible) return;
+        GetTree().ChangeScene(Constants.TopDownStart);
     }
 
-    private void _on_GameOptionButton_item_selected(int selected)
+    private void _on_ModeB_pressed()
     {
-        if (selected == 0)
-        {
-            GameManager.SetGameOption(false);
-        }
-        else
-        {
-            GameManager.SetGameOption(true);
-        }
-    }
-
-    private void _on_GunTypeButton_item_selected(int selected)
-    {
-        GameManager.PlayerManager.FirearmType = (FirearmsType)selected;
-    }
-
-    private void _on_StatsButton_button_up()
-    {
-        optionsDialog.Hide();
-        panelAnimation.Play("Open");
+        if (focusTransparentBackground.Visible) return;
+        GetTree().ChangeScene(Constants.FirstPersonStart);
     }
 
     private void _on_ClosePanelButton_button_up()
     {
-        panelAnimation.Play("Close");
+        focusTransparentBackground.Hide();
+        panelAnimation.Play(Constants.Close);
     }
 
-    private void _on_OptionsDialog_popup_hide()
+    private void _on_Stats_pressed()
     {
+        if (focusTransparentBackground.Visible) return;
+        focusTransparentBackground.Show();
+        panelAnimation.Play(Constants.Open);
+    }
+
+    private void _on_Exit_pressed()
+    {
+        if (focusTransparentBackground.Visible) return;
         GameManager.Save();
+        GetTree().Quit();
     }
     #endregion
 
@@ -194,9 +117,6 @@ public class MainMenu : Control
         elkCountLabel.Text = GameManager.PlayerManager.ElkTotal.ToString();
         bearCountLabel.Text = GameManager.PlayerManager.BearTotal.ToString();
         buffaloCountLabel.Text = GameManager.PlayerManager.BuffaloTotal.ToString();
-        flintLockCountLabel.Text = GameManager.PlayerManager.FlintlockTotal.ToString();
-        repeaterCountLabel.Text = GameManager.PlayerManager.RepeaterTotal.ToString();
-        pistolCountLabel.Text = GameManager.PlayerManager.PistolTotal.ToString();
     }
     #endregion
 }

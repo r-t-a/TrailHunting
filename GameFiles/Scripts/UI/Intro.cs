@@ -1,85 +1,59 @@
 using Godot;
+using System.Threading.Tasks;
 using TrailHunting.Scripts;
 
 public class Intro : Control
 {
+    #region Exports
     [Export]
-    protected NodePath AnimatedNodePath;
+    protected NodePath TimerNodePath { get; private set; }
     [Export]
-    protected NodePath TimerNodePath;
+    protected NodePath ContainerNodePath { get; private set; }
+    [Export]
+    protected NodePath AudioStreamPlayerNodePath { get; private set; }
+    [Export]
+    protected NodePath AnimationPlayerNodePath { get; private set; }
+    #endregion
 
-    private AnimatedSprite animatedSprite;
-    private Timer startTimer;
-    private int escapeCount = 0;
-    private int waitTime = 3;
-    private float time = 0;
+    #region Properties
+    private Timer timer;
+    private VBoxContainer container;
+    private AudioStreamPlayer audioStreamPlayer;
+    private AnimationPlayer animationPlayer;
+    #endregion
 
+    #region Overrides
     public override void _Ready()
     {
-        animatedSprite = GetNodeOrNull<AnimatedSprite>(AnimatedNodePath);
-        startTimer = GetNodeOrNull<Timer>(TimerNodePath);
-        animatedSprite.Play(Constants.Idle);
-        animatedSprite.Playing = true;
+        timer = GetNodeOrNull<Timer>(TimerNodePath);
+        container = GetNodeOrNull<VBoxContainer>(ContainerNodePath);
+        audioStreamPlayer = GetNodeOrNull<AudioStreamPlayer>(AudioStreamPlayerNodePath);
+        animationPlayer = GetNodeOrNull<AnimationPlayer>(AnimationPlayerNodePath);
+        Setup();
     }
+    #endregion
 
-    public override void _Process(float delta)
-    {
-        time += delta;
-        if (time > waitTime)
-        {
-            if (animatedSprite.Animation == Constants.Idle)
-            {
-                animatedSprite.Play(Constants.Start);
-            }
-            time = 0;
-        }
-    }
+    #region Events
+    private void _on_Timer_timeout() => animationPlayer.Play(Constants.PopIn);
 
-    public override void _Input(InputEvent inputEvent)
+    private async void _on_AnimationPlayer_animation_finished(string animation)
     {
-        if (inputEvent.IsActionPressed(Constants.Cancel))
+        if (animation == Constants.PopIn)
         {
-            escapeCount++;
-            if (escapeCount == 3)
-            {
-                GetTree().ChangeScene(Constants.MainMenu);
-            }
+            audioStreamPlayer.VolumeDb = -3;
+            audioStreamPlayer.Play();
+            await Task.Delay(2000);
+            GetTree().ChangeScene(Constants.MainMenu);
         }
     }
+    #endregion
 
-    private void _on_AnimatedSprite_animation_finished()
+    #region Methods
+    private void Setup()
     {
-        if (animatedSprite.Animation == Constants.Idle)
-        {
-            return;
-        }
-        if (animatedSprite.Animation == Constants.End)
-        {
-            animatedSprite.Playing = false;
-            animatedSprite.Frame = 3;
-            startTimer.Start();
-        }
-        if (animatedSprite.Animation == Constants.EndIdle)
-        {
-            animatedSprite.Play(Constants.End);
-        }
-        if (animatedSprite.Animation == Constants.PrintDir)
-        {
-            animatedSprite.Play(Constants.EndIdle);
-        }
-        if (animatedSprite.Animation == Constants.Start)
-        {
-            animatedSprite.Play(Constants.PrintDir);
-        }
+        container.Hide();
+        if (timer.IsStopped())
+            timer.Start();
     }
-
-    private void _on_StartTimer_timeout()
-    {
-        ChangeToMainMenu();
-    }
-
-    private void ChangeToMainMenu()
-    {
-        GetTree().ChangeScene(Constants.MainMenu);
-    }
+    #endregion
 }

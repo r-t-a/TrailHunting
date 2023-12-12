@@ -11,18 +11,31 @@ public class TopDownStart : Node2D
 {
     #region Exports
     [Export]
-    protected NodePath TileMapPath;
+    protected NodePath ResultsPopupNodePath { get; private set; }
     [Export]
-    protected NodePath SpawnTimerPath;
+    protected NodePath TileMapPath { get; private set; }
     [Export]
-    protected NodePath GameTimerPath;
+    protected NodePath SpawnTimerPath { get; private set; }
     [Export]
-    protected NodePath EndButtonPath;
+    protected NodePath SpawnNodePath { get; private set; }
     [Export]
-    protected NodePath DisplayTimePath;
+    protected NodePath AmmoValueNodePath { get; private set; }
     [Export]
-    protected NodePath SpawnNodePath;
-
+    protected NodePath ScoreValueNodePath { get; private set; }
+    [Export]
+    protected PackedScene HuntingPlayer { get; private set; }
+    [Export]
+    protected PackedScene Deer { get; private set; }
+    [Export]
+    protected PackedScene Rabbit { get; private set; }
+    [Export]
+    protected PackedScene Squirrel { get; private set; }
+    [Export]
+    protected PackedScene Bear { get; private set; }
+    [Export]
+    protected PackedScene Buck { get; private set; }
+    [Export]
+    protected PackedScene Buffalo { get; private set; }
     #endregion
 
     #region Properties
@@ -30,20 +43,14 @@ public class TopDownStart : Node2D
     public int MediumGameCounter;
     public int MedLargeGameCounter;
     public int LargeGameCounter;
-    
+
+    private HuntingPlayer Player;
+    private Results resultsPopup;
     private TileMap groundTileMap;
     private Timer spawnTimer;
-    private Timer gameTimer;
-    private Button endButton;
-    private Label displayTimer;
-
-    private PackedScene player;
-    private PackedScene deer;
-    private PackedScene rabbit;
-    private PackedScene squirrel;
-    private PackedScene bear;
-    private PackedScene buck;
-    private PackedScene buffalo;
+    private Label ammoValue;
+    private Label scoreValue;
+    private int hitCount = 0;
 
     private List<Area2D> spawns = new List<Area2D>();
     private MapType currentMap;
@@ -52,19 +59,11 @@ public class TopDownStart : Node2D
     #region Overrides
     public override void _Ready()
     {
+        resultsPopup = GetNodeOrNull<Results>(ResultsPopupNodePath);
         groundTileMap = GetNodeOrNull<TileMap>(TileMapPath);
         spawnTimer = GetNodeOrNull<Timer>(SpawnTimerPath);
-        gameTimer = GetNodeOrNull<Timer>(GameTimerPath);
-        endButton = GetNodeOrNull<Button>(EndButtonPath);
-        displayTimer = GetNodeOrNull<Label>(DisplayTimePath);
-
-        player = (PackedScene)ResourceLoader.Load(Constants.HuntingPlayer);
-        deer = (PackedScene)ResourceLoader.Load(Constants.TopDownDeer);
-        rabbit = (PackedScene)ResourceLoader.Load(Constants.TopDownRabbit);
-        squirrel = (PackedScene)ResourceLoader.Load(Constants.TopDownSquirrel);
-        buffalo = (PackedScene)ResourceLoader.Load(Constants.TopDownBuffalo);
-        bear = (PackedScene)ResourceLoader.Load(Constants.TopDownBear);
-        buck = (PackedScene)ResourceLoader.Load(Constants.TopDownBuck);
+        ammoValue = GetNodeOrNull<Label>(AmmoValueNodePath);
+        scoreValue = GetNodeOrNull<Label>(ScoreValueNodePath);
 
         spawns.Add(GetNodeOrNull<Area2D>($"{SpawnNodePath}/Spawn1"));
         spawns.Add(GetNodeOrNull<Area2D>($"{SpawnNodePath}/Spawn2"));
@@ -76,68 +75,62 @@ public class TopDownStart : Node2D
         spawns.Add(GetNodeOrNull<Area2D>($"{SpawnNodePath}/Spawn8"));
         spawns.Add(GetNodeOrNull<Area2D>($"{SpawnNodePath}/Spawn9"));
         spawns.Add(GetNodeOrNull<Area2D>($"{SpawnNodePath}/Spawn10"));
-        spawns.Add(GetNodeOrNull<Area2D>($"{SpawnNodePath}/Spawn11"));
-        spawns.Add(GetNodeOrNull<Area2D>($"{SpawnNodePath}/Spawn12"));
-
-        if (GameManager.PlayerManager.IsEndless)
-        {
-            endButton.Visible = true;
-            displayTimer.Visible = false;
-            gameTimer.Stop();
-        }
-        else
-        {
-            endButton.Visible = false;
-            displayTimer.Visible = true;
-            gameTimer.Start();
-        }
 
         BuildLevel();
     }
 
     public override void _Process(float delta)
     {
-        if (displayTimer.Visible)
-        {
-            displayTimer.Text = Mathf.FloorToInt(gameTimer.TimeLeft).ToString();
-        }
+        scoreValue.Text = GameManager.CurrentScore.ToString();
     }
     #endregion
 
     #region Events
+    private void onShotBullet()
+    {
+        ammoValue.Text = Player.AmmoCount.ToString();
+        if (Player.AmmoCount == 0) spawnTimer.Stop();
+    }
+
+    private void onBulletHit()
+    {
+        hitCount += 1;
+        GameManager.UpdateScore(100);
+    }
+
     private void _on_Squirrel_SmallGameDead()
     {
-        GameManager.UpdatePlayerStats(false, Animals.Squirrel);
+        GameManager.UpdatePlayerStats(Animals.Squirrel);
         SmallGameCounter += 1;
     }
 
     private void _on_Rabbit_SmallGameDead()
     {
-        GameManager.UpdatePlayerStats(false, Animals.Rabbit);
+        GameManager.UpdatePlayerStats(Animals.Rabbit);
         SmallGameCounter += 1;
     }
 
     private void _on_Deer_MediumGameDead()
     {
-        GameManager.UpdatePlayerStats(false, Animals.Doe);
+        GameManager.UpdatePlayerStats(Animals.Doe);
         MediumGameCounter += 1;
     }
 
     private void _on_Buck_MediumGameDead()
     {
-        GameManager.UpdatePlayerStats(false, Animals.Buck);
+        GameManager.UpdatePlayerStats(Animals.Buck);
         MediumGameCounter += 1;
     }
 
     private void _on_Bear_MedLargeGameDead()
     {
-        GameManager.UpdatePlayerStats(false, Animals.Bear);
+        GameManager.UpdatePlayerStats(Animals.Bear);
         MedLargeGameCounter += 1;
     }
 
     private void _on_Buffalo_LargeGameDead()
     {
-        GameManager.UpdatePlayerStats(false, Animals.Buffalo);
+        GameManager.UpdatePlayerStats(Animals.Buffalo);
         LargeGameCounter += 1;
     }
 
@@ -168,32 +161,6 @@ public class TopDownStart : Node2D
             SpawnAnimal(randAnimal, spawnTile, SpawnQuadrant.Bottom);
         }
     }
-
-    private void _on_GameTimer_timeout()
-    {
-        spawnTimer.Stop();
-        GameManager.BuildTopDownResultsDialog(SmallGameCounter, MediumGameCounter, MedLargeGameCounter, LargeGameCounter);
-        GameManager.ResultsDialog.Show();
-    }
-
-    private void _on_AcceptDialog_modal_closed()
-    {
-        GameManager.ResultsDialog.Hide();
-        GameManager.End();
-    }
-
-    private void _on_AcceptDialog_confirmed()
-    {
-        GameManager.ResultsDialog.Hide();
-        GameManager.End();
-    }
-
-    private void _on_End_button_up()
-    {
-        spawnTimer.Stop();
-        GameManager.BuildTopDownResultsDialog(SmallGameCounter, MediumGameCounter, MedLargeGameCounter, LargeGameCounter);
-        GameManager.ResultsDialog.Show();
-    }
     #endregion
 
     #region Methods
@@ -201,15 +168,23 @@ public class TopDownStart : Node2D
     {
         SpawnPlayer();
         BuildMap();
+        SetupUI();
+    }
+
+    private void SetupUI()
+    {
+        resultsPopup.Hide();
+        ammoValue.Text = Player.AmmoCount.ToString();
+        scoreValue.Text = GameManager.CurrentScore.ToString();
     }
 
     private void SpawnPlayer()
     {
         var spawnPoint = spawns.FirstOrDefault(x => x.Name == GameManager.GetSpawnPoint());
-        spawnPoint = spawnPoint ?? GetNodeOrNull<Area2D>($"{SpawnNodePath}/Spawn1"); // If something goes wrong default to Spawn1
-        var user = (KinematicBody2D)player.Instance();
-        user.Position = spawnPoint.Position;
-        AddChild(user);
+        spawnPoint = spawnPoint ?? GetNodeOrNull<Area2D>($"{SpawnNodePath}/Spawn1"); // Default to Spawn 1 if null
+        Player = HuntingPlayer.Instance() as HuntingPlayer;
+        Player.Position = spawnPoint.Position;
+        AddChild(Player);
         spawns.Remove(spawnPoint);
     }
 
@@ -231,47 +206,47 @@ public class TopDownStart : Node2D
         switch ((Animals)animal)
         {
             case Animals.Squirrel:
-                var spawnSquirrel = (KinematicBody2D)squirrel.Instance();
+                var spawnSquirrel = (KinematicBody2D)Squirrel.Instance();
                 spawnSquirrel.GlobalPosition = global;
                 spawnSquirrel.Call(Constants.SetSpawn, (int)spawn);
                 AddChild(spawnSquirrel);
                 break;
             case Animals.Rabbit:
-                var spawnRabbit = (KinematicBody2D)rabbit.Instance();
+                var spawnRabbit = (KinematicBody2D)Rabbit.Instance();
                 spawnRabbit.GlobalPosition = global;
                 spawnRabbit.Call(Constants.SetSpawn, (int)spawn);
                 AddChild(spawnRabbit);
                 break;
             case Animals.Doe:
-                var spawnDoe = (KinematicBody2D)deer.Instance();
+                var spawnDoe = (KinematicBody2D)Deer.Instance();
                 spawnDoe.GlobalPosition = global;
                 spawnDoe.Call(Constants.SetSpawn, (int)spawn);
                 AddChild(spawnDoe);
                 break;
             case Animals.Buck:
-                var spawnBuck = (KinematicBody2D)buck.Instance();
+                var spawnBuck = (KinematicBody2D)Buck.Instance();
                 spawnBuck.GlobalPosition = global;
                 spawnBuck.Call(Constants.SetSpawn, (int)spawn);
                 AddChild(spawnBuck);
                 break;
             case Animals.Bear:
                 var spawnBearOrRabbit = currentMap != MapType.Mountains || currentMap != MapType.Woods
-                    ? (KinematicBody2D)rabbit.Instance()
-                    : (KinematicBody2D)bear.Instance();
+                    ? (KinematicBody2D)Rabbit.Instance()
+                    : (KinematicBody2D)Bear.Instance();
                 spawnBearOrRabbit.GlobalPosition = global;
                 spawnBearOrRabbit.Call(Constants.SetSpawn, (int)spawn);
                 AddChild(spawnBearOrRabbit);
                 break;
             case Animals.Buffalo:
                 var spawnBuffaloOrSquirrel = currentMap != MapType.Plains 
-                    ? (KinematicBody2D)buffalo.Instance()
-                    : (KinematicBody2D)squirrel.Instance();
+                    ? (KinematicBody2D)Buffalo.Instance()
+                    : (KinematicBody2D)Squirrel.Instance();
                 spawnBuffaloOrSquirrel.GlobalPosition = global;
                 spawnBuffaloOrSquirrel.Call(Constants.SetSpawn, (int)spawn);
                 AddChild(spawnBuffaloOrSquirrel);
                 break;
             default:
-                var defaultMoreSquirrel = (KinematicBody2D)squirrel.Instance();
+                var defaultMoreSquirrel = (KinematicBody2D)Squirrel.Instance();
                 defaultMoreSquirrel.GlobalPosition = global;
                 defaultMoreSquirrel.Call(Constants.SetSpawn, (int)spawn);
                 AddChild(defaultMoreSquirrel);

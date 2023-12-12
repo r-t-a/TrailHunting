@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/trailhunting_main.png-db7e910ca5ca3c1d4c06549e5811bf86.stex"
+path="res://.import/main_menu.png-4e5ac408c2f5355bc3b2b931441e1733.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Splash/trailhunting_main.png"
-dest_files=[ "res://.import/trailhunting_main.png-db7e910ca5ca3c1d4c06549e5811bf86.stex" ]
+source_file="res://Images/UI/main_menu.png"
+dest_files=[ "res://.import/main_menu.png-4e5ac408c2f5355bc3b2b931441e1733.stex" ]
 
 [params]
 

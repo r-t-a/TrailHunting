@@ -11,15 +11,18 @@ public class HuntingPlayer : KinematicBody2D
 
     #region Exports
     [Export]
-    protected NodePath AnimationTreeNodePath;
+    protected NodePath AnimationTreeNodePath { get; private set; }
     [Export] 
-    protected NodePath RifleNodePath;
+    protected NodePath RifleNodePath { get; private set; }
     [Export]
-    protected NodePath SoundEffectsNodePath;
+    protected NodePath SoundEffectsNodePath { get; private set; }
+    [Export]
+    public int AmmoCount { get; private set; } = 30;
+    [Export]
+    protected PackedScene Bullet { get; private set; }
     #endregion
 
     #region Properties
-    private PackedScene bullet;
     private AnimationTree animationTree;
     private AnimationNodeStateMachinePlayback animationNode;
     private Position2D riflePosition;
@@ -33,12 +36,13 @@ public class HuntingPlayer : KinematicBody2D
     #region Overrides
     public override void _Ready()
     {
-        bullet = (PackedScene)ResourceLoader.Load(Constants.Bullet);
         animationTree = GetNodeOrNull<AnimationTree>(AnimationTreeNodePath);
         riflePosition = GetNodeOrNull<Position2D>(RifleNodePath);
         shotSfx = GetNodeOrNull<AudioStreamPlayer2D>(SoundEffectsNodePath);
+
         animationNode = (AnimationNodeStateMachinePlayback)animationTree.Get("parameters/playback");
         lookDirection = new Vector2(-1, 0);
+        Connect(nameof(ShotBullet), GetTree().Root.GetNode(GetTree().CurrentScene.Name), "onShotBullet");
     }
 
     public override void _PhysicsProcess(float delta)
@@ -155,16 +159,14 @@ public class HuntingPlayer : KinematicBody2D
         }
         if (inputEvent.IsActionPressed(Constants.Shoot))
         {
-            if (isMoving)
-            {
-                return;
-            }
+            if (isMoving || AmmoCount == 0) return;
 
+            AmmoCount -= 1;
             shotSfx.Play();
-            var bulletSpawn = (KinematicBody2D)bullet.Instance();
+            var bulletSpawn = (Bullet)Bullet.Instance();
             GetParent().AddChild(bulletSpawn);
             bulletSpawn.GlobalPosition = riflePosition.GlobalPosition;
-            bulletSpawn.Call(Constants.SetDirection, lookDirection);
+            bulletSpawn.SetDirection(lookDirection);
             EmitSignal(nameof(ShotBullet));
         }
     }

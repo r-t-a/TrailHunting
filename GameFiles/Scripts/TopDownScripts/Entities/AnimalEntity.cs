@@ -18,6 +18,7 @@ namespace TrailHunting.Scripts.TopDownScripts.Entities
 
         public virtual void Init() { }
         public virtual void UpdatePhysics() { }
+        public virtual void WasShot() { }
 
         public sealed override void _Ready()
         {
@@ -25,8 +26,8 @@ namespace TrailHunting.Scripts.TopDownScripts.Entities
             CollisionLayer = 2;
             CollisionMask = 2;
             AnimatedSprite = GetNodeOrNull<AnimatedSprite>("AnimatedSprite");
-            AnimatedSprite.Play("Idle");
-            AddToGroup("Animals");
+            AnimatedSprite.Play(Constants.Idle);
+            AddToGroup(Constants.Animals);
             Init();
         }
 
@@ -38,22 +39,24 @@ namespace TrailHunting.Scripts.TopDownScripts.Entities
             {
                 if (MoveDirection == MoveDirection.Left || MoveDirection == MoveDirection.UpLeft || MoveDirection == MoveDirection.DownLeft || MoveDirection == MoveDirection.Up)
                 {
-                    AnimatedSprite.Play("RunRight");
+                    AnimatedSprite.Play(Constants.Run);
+                    AnimatedSprite.FlipH = true;
                 }
                 if (MoveDirection == MoveDirection.Right || MoveDirection == MoveDirection.UpRight || MoveDirection == MoveDirection.DownRight || MoveDirection == MoveDirection.Down)
                 {
-                    AnimatedSprite.Play("RunLeft");
+                    AnimatedSprite.Play(Constants.Run);
+                    AnimatedSprite.FlipH = false;
                 }
                 MoveAndCollide(Motion * RunSpeed * Delta);
             }
             else
             {
-                AnimatedSprite.Play("Dead");
+                AnimatedSprite.Play(Constants.Dead);
                 MoveAndCollide(Vector2.Zero);
                 // Remove from group to continue spawning alive Animals
-                if (IsInGroup("Animals"))
+                if (IsInGroup(Constants.Animals))
                 {
-                    RemoveFromGroup("Animals");
+                    RemoveFromGroup(Constants.Animals);
                 }
             }
             UpdatePhysics();

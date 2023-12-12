@@ -4,8 +4,8 @@ namespace TrailHunting.Scripts.Managers
 {
     public class PlayerManager
     {
-        public bool IsFirstPersonStyle { get; set; }
-        public bool IsEndless { get; set; }
+        public int ModeAHighScore { get; set; }
+        public int ModeBHighScore { get; set; }
         public FirearmsType FirearmType { get; set; }
         public int FirstPersonTotal { get; set; }
         public int TopDownTotal { get; set; }
@@ -19,9 +19,6 @@ namespace TrailHunting.Scripts.Managers
         public int BuffaloTotal { get; set; }
         public int DuckTotal { get; set; }
         public int GooseTotal { get; set; }
-        public int FlintlockTotal { get; set; }
-        public int RepeaterTotal { get; set; }
-        public int PistolTotal { get; set; }
 
         public bool NeedsToReload { get; set; }
         public bool HasAmmo { get; set; }

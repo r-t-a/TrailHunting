@@ -12,7 +12,7 @@ namespace TrailHunting.Scripts.Managers
         public static PlayerManager PlayerManager { get; private set; }
         public static Linker Linker { get; private set; }
         public static AcceptDialog ResultsDialog { get; private set; }
-        public static int TopDownPlayerSpeed { get; private set; }
+        public static int TopDownPlayerSpeed { get; private set; } = 10;
         public static int TopDownBulletSpeed { get; private set; }
         public static int MaxAnimalSpawn { get; private set; }
         public static int MaxTerrainSpawn { get; private set; }
@@ -24,6 +24,9 @@ namespace TrailHunting.Scripts.Managers
         public static int MediumGame { get; private set; }
         public static int MediumLargeGame { get; private set; }
         public static int LargeGame { get; private set; }
+        public static int ModeAHighScore { get; private set; }
+        public static int ModeBHighScore { get; private set; }
+        public static int CurrentScore { get; private set; }
 
         public GameManager(Linker linker)
         {
@@ -37,65 +40,61 @@ namespace TrailHunting.Scripts.Managers
             Save();
         }
 
-        public static void UpdatePlayerStats(bool isFirstPerson, Animals animalShot)
+        public static void ResetGame()
+        {
+            CurrentScore = 0;
+        }
+
+        public static void UpdateScore(int pts)
+        {
+            CurrentScore += pts;
+        }
+
+        public static void UpdatePlayerStats(Animals animalShot)
         {
             switch (animalShot)
             {
                 case Animals.Squirrel:
                     PlayerManager.SquirrelTotal += 1;
+                    UpdateScore(100);
                     break;
                 case Animals.Rabbit:
                     PlayerManager.RabbitTotal += 1;
+                    UpdateScore(100);
                     break;
                 case Animals.Doe:
                     PlayerManager.DoeTotal += 1;
+                    UpdateScore(300);
                     break;
                 case Animals.Buck:
                     PlayerManager.BuckTotal += 1;
+                    UpdateScore(1000);
                     break;
                 case Animals.Bear:
                     PlayerManager.BearTotal += 1;
+                    UpdateScore(2000);
                     break;
                 case Animals.Buffalo:
                     PlayerManager.BuffaloTotal += 1;
+                    UpdateScore(5000);
                     break;
                 case Animals.Caribou:
                     PlayerManager.CaribouTotal += 1;
+                    UpdateScore(1000);
                     break;
                 case Animals.Elk:
                     PlayerManager.ElkTotal += 1;
+                    UpdateScore(4000);
                     break;
                 case Animals.Duck:
                     PlayerManager.DuckTotal += 1;
+                    UpdateScore(100);
                     break;
                 case Animals.Goose:
                     PlayerManager.GooseTotal += 1;
+                    UpdateScore(100);
                     break;
             }
-
-            if (isFirstPerson)
-            {
-                switch (PlayerManager.FirearmType)
-                {
-                    default:
-                    case FirearmsType.Flintlock:
-                        PlayerManager.FlintlockTotal += 1;
-                        break;
-                    case FirearmsType.Repeating:
-                        PlayerManager.RepeaterTotal += 1;
-                        break;
-                    case FirearmsType.Pistol:
-                        PlayerManager.PistolTotal += 1;
-                        break;
-                }
-            }
-        }
-
-        public static void BuildTopDownResultsDialog(int smallCounter, int mediumCounter, int medLargeCounter, int largeCounter)
-        {
-            ResultsDialog = Linker.GetTree().Root.GetNode("TopDownStart").GetNodeOrNull<AcceptDialog>("CanvasLayer/AcceptDialog");
-            var label = ResultsDialog.GetNodeOrNull<Label>("ResultsText");
-            label.Text = $"Total Meat Hunted:{System.Environment.NewLine}{GetTotal(smallCounter, mediumCounter, medLargeCounter, largeCounter)}";
         }
 
         public static void BuildFirstPersonResultsDialog(int smallCounter, int mediumCounter, int medLargeCounter, int largeCounter)
@@ -108,16 +107,6 @@ namespace TrailHunting.Scripts.Managers
         private static int GetTotal(int smallCounter, int mediumCounter, int medLargeCounter, int largeCounter)
         {
             return (smallCounter * SmallGame) + (mediumCounter * MediumGame) + (medLargeCounter * MediumLargeGame) + (largeCounter * LargeGame);
-        }
-
-        public static void SetGameOption(bool isFirstPerson)
-        {
-            PlayerManager.IsFirstPersonStyle = isFirstPerson;
-        }
-
-        public static void SetGameType(bool isEndless)
-        {
-            PlayerManager.IsEndless = isEndless;
         }
 
         public static (MapType, List<int>) BuildTopDownLevel()
@@ -154,7 +143,7 @@ namespace TrailHunting.Scripts.Managers
 
         public static string GetSpawnPoint()
         {
-            var spawnPoint = new Random().Next(1, 13);
+            var spawnPoint = new Random().Next(1, 11);
             return $"{Constants.Spawn}{spawnPoint}";
         }
 
@@ -176,8 +165,6 @@ namespace TrailHunting.Scripts.Managers
             return $"{Constants.TimedSpawn}{spawnPoint}";
         }
 
-
-
         public static void Load()
         {
             try
@@ -192,8 +179,8 @@ namespace TrailHunting.Scripts.Managers
                     {
                         PlayerManager = new PlayerManager()
                         {
-                            IsFirstPersonStyle = player.IsFirstPersonStyle,
-                            IsEndless = player.IsEndless,
+                            ModeAHighScore = player.ModeAHighScore,
+                            ModeBHighScore = player.ModeBHighScore,
                             FirearmType = player.FirearmType,
                             FirstPersonTotal = player.FirstPersonTotal,
                             TopDownTotal = player.TopDownTotal,
@@ -207,9 +194,6 @@ namespace TrailHunting.Scripts.Managers
                             BuffaloTotal = player.BuffaloTotal,
                             DuckTotal = player.DuckTotal,
                             GooseTotal = player.GooseTotal,
-                            FlintlockTotal = player.FlintLockTotal,
-                            RepeaterTotal = player.RepeaterTotal,
-                            PistolTotal = player.PistolTotal,
                         };
                     }
                 }
@@ -260,7 +244,6 @@ namespace TrailHunting.Scripts.Managers
                 GD.Print($"Exception: {e.InnerException.Message}");
             }
         }
-
         public static void Save()
         {
             try

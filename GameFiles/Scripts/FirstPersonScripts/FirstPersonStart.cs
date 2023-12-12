@@ -20,10 +20,6 @@ public class FirstPersonStart : Node2D
     [Export]
     protected NodePath GameTimerNodePath;
     [Export]
-    protected NodePath EndButtonNodePath;
-    [Export]
-    protected NodePath DisplayTimeNodePath;
-    [Export]
     protected NodePath FirearmSpriteNodePath;
     #endregion
 
@@ -39,8 +35,6 @@ public class FirstPersonStart : Node2D
     private TextureButton reloadButton;
     private Timer spawnTimer;
     private Timer gameTimer;
-    private Button endButton;
-    private Label displayTimer;
 
     private PackedScene bulletDisplay;
 
@@ -77,8 +71,6 @@ public class FirstPersonStart : Node2D
         gameTimer = GetNodeOrNull<Timer>(GameTimerNodePath);
         ammoContainer = GetNodeOrNull<GridContainer>(AmmoNodePath);
         reloadButton = GetNodeOrNull<TextureButton>(ReloadButtonNodePath);
-        endButton = GetNodeOrNull<Button>(EndButtonNodePath);
-        displayTimer = GetNodeOrNull<Label>(DisplayTimeNodePath);
         firearmSprite = GetNodeOrNull<AnimatedSprite>(FirearmSpriteNodePath);
 
         bulletDisplay = (PackedScene)ResourceLoader.Load("res://Scenes/UI/BulletDisplay.tscn");
@@ -98,29 +90,8 @@ public class FirstPersonStart : Node2D
         rabbit = (PackedScene)ResourceLoader.Load(Constants.FirstPersonRabbit);
         squirrel = (PackedScene)ResourceLoader.Load(Constants.FirstPersonSquirrel);
 
-        if (GameManager.PlayerManager.IsEndless)
-        {
-            endButton.Visible = true;
-            displayTimer.Visible = false;
-            gameTimer.Stop();
-        }
-        else
-        {
-            endButton.Visible = false;
-            displayTimer.Visible = true;
-            gameTimer.Start();
-        }
-
         SetWeaponAndAmmo();
         BuildLevel();
-    }
-
-    public override void _Process(float delta)
-    {
-        if (displayTimer.Visible)
-        {
-            displayTimer.Text = Mathf.FloorToInt(gameTimer.TimeLeft).ToString();
-        }
     }
     #endregion
 
@@ -162,55 +133,55 @@ public class FirstPersonStart : Node2D
 
     private void _on_Goose_SmallGameDead()
     {
-        GameManager.UpdatePlayerStats(true, Animals.Goose);
+        GameManager.UpdatePlayerStats(Animals.Goose);
         SmallGameCounter += 1;
     }
 
     private void _on_Duck_SmallGameDead()
     {
-        GameManager.UpdatePlayerStats(true, Animals.Duck);
+        GameManager.UpdatePlayerStats(Animals.Duck);
         SmallGameCounter += 1;
     }
 
     private void _on_Bear_MediumLargeGameDead()
     {
-        GameManager.UpdatePlayerStats(true, Animals.Bear);
+        GameManager.UpdatePlayerStats(Animals.Bear);
         MedLargeGameCounter += 1;
     }
 
     private void _on_Buffalo_LargeGameDead()
     {
-        GameManager.UpdatePlayerStats(true, Animals.Buffalo);
+        GameManager.UpdatePlayerStats(Animals.Buffalo);
         LargeGameCounter += 1;
     }
 
     private void _on_Elk_MediumLargeGameDead()
     {
-        GameManager.UpdatePlayerStats(true, Animals.Elk);
+        GameManager.UpdatePlayerStats(Animals.Elk);
         MedLargeGameCounter += 1;
     }
 
     private void _on_Caribou_MediumGameDead()
     {
-        GameManager.UpdatePlayerStats(true, Animals.Caribou);
+        GameManager.UpdatePlayerStats(Animals.Caribou);
         MediumGameCounter += 1;
     }
 
     private void _on_Deer_MediumGameDead()
     {
-        GameManager.UpdatePlayerStats(true, Animals.Buck);
+        GameManager.UpdatePlayerStats(Animals.Buck);
         MediumGameCounter += 1;
     }
 
     private void _on_Rabbit_SmallGameDead()
     {
-        GameManager.UpdatePlayerStats(true, Animals.Rabbit);
+        GameManager.UpdatePlayerStats(Animals.Rabbit);
         SmallGameCounter += 1;
     }
 
     private void _on_Squirrel_SmallGameDead()
     {
-        GameManager.UpdatePlayerStats(true, Animals.Squirrel);
+        GameManager.UpdatePlayerStats(Animals.Squirrel);
         SmallGameCounter += 1;
     }
 
@@ -278,8 +249,8 @@ public class FirstPersonStart : Node2D
         var ammoTexture = ammoContainer.GetChildren().OfType<ColorRect>();
         foreach (var ammo in ammoTexture)
         {
-            var isready = (bool)ammo.Call(Constants.GetAmmoAvailable);
-            if (isready)
+            var isReady = (bool)ammo.Call(Constants.GetAmmoAvailable);
+            if (isReady)
             {
                 ammo.Call(Constants.BulletUsed);
                 break;

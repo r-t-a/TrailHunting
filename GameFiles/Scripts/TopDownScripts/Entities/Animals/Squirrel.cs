@@ -15,9 +15,9 @@ public class Squirrel : AnimalEntity
         Connect(nameof(SmallGameDead), Tree.GetNode("TopDownStart"), "_on_Squirrel_SmallGameDead");
     }
 
-    public void WasShot()
+    public override void WasShot()
     {
-        if (HP == 0) 
+        if (HP == 0)
             return;
         HP -= 1;
         if (HP == 0)
@@ -33,13 +33,7 @@ public class Squirrel : AnimalEntity
         }
     }
 
-    private void _on_Timer_timeout()
-    {
-        (Motion, MoveDirection) = RandomizeMovement(new Random());
-    }
+    private void _on_Timer_timeout() => (Motion, MoveDirection) = RandomizeMovement(new Random());
 
-    private void _on_VisibilityNotifier2D_screen_exited()
-    {
-        QueueFree();
-    }
+    private void _on_VisibilityNotifier2D_screen_exited() => QueueFree();
 }
