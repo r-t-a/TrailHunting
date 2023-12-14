@@ -237,6 +237,16 @@ namespace TrailHunting.Scripts.Managers
                 else
                 {
                     GD.Print("No Saved Data");
+                    TopDownBulletSpeed = 130;
+                    TopDownPlayerSpeed = 80;
+                    MaxAnimalSpawn = 3;
+                    MaxTerrainSpawn = 6;
+                    MaxAnimalFirstPersonSpawn = 10;
+                    FlintlockAmmo = 20;
+                    SmallGame = 4;
+                    MediumGame = 90;
+                    MediumLargeGame = 200;
+                    LargeGame = 400;
                 }
             }
             catch (Exception e)

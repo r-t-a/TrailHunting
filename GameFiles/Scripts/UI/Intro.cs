@@ -36,15 +36,18 @@ public class Intro : Control
     #region Events
     private void _on_Timer_timeout() => animationPlayer.Play(Constants.PopIn);
 
-    private async void _on_AnimationPlayer_animation_finished(string animation)
+    private void _on_AnimationPlayer_animation_finished(string animation)
     {
         if (animation == Constants.PopIn)
         {
             audioStreamPlayer.VolumeDb = -3;
             audioStreamPlayer.Play();
-            await Task.Delay(2000);
-            GetTree().ChangeScene(Constants.MainMenu);
         }
+    }
+
+    private void _on_Next_timeout()
+    {
+        GetTree().ChangeScene(Constants.MainMenu);
     }
     #endregion
 

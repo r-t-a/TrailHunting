@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Images/UI/rifle.png" type="Texture" id=1]
 [ext_resource path="res://Images/UI/repeater.png" type="Texture" id=2]
 [ext_resource path="res://Scripts/FirstPersonScripts/FirstPersonStart.cs" type="Script" id=3]
+[ext_resource path="res://Scenes/PauseMenu.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Styles/Themes/MainTheme_Large.tres" type="Theme" id=5]
 [ext_resource path="res://Images/UI/rifle_reload1.png" type="Texture" id=6]
 [ext_resource path="res://Images/UI/rifle_reload2.png" type="Texture" id=7]
@@ -47,16 +48,19 @@ extents = Vector2( 384, 32.5 )
 [node name="FirstPersonStart" type="Node2D"]
 position = Vector2( 0, 8 )
 script = ExtResource( 3 )
-AmmoNodePath = NodePath("CanvasLayer/Background/MarginContainer/HBoxContainer/GridContainer")
-ReloadButtonNodePath = NodePath("CanvasLayer/Background/MarginContainer/HBoxContainer/Reload")
+AmmoNodePath = NodePath("HUD/Background/MarginContainer/HBoxContainer/GridContainer")
+ReloadButtonNodePath = NodePath("HUD/Background/MarginContainer/HBoxContainer/Reload")
 SpawnTimerNodePath = NodePath("SpawnTimer")
 GameTimerNodePath = NodePath("GameTimer")
-FirearmSpriteNodePath = NodePath("CanvasLayer/Background/MarginContainer/HBoxContainer/TextureRect/FirearmSprite")
+FirearmSpriteNodePath = NodePath("HUD/Background/MarginContainer/HBoxContainer/TextureRect/FirearmSprite")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="HUD" type="CanvasLayer" parent="."]
 follow_viewport_enable = true
 
-[node name="Background" type="ColorRect" parent="CanvasLayer"]
+[node name="PauseMenu" parent="HUD" instance=ExtResource( 4 )]
+visible = false
+
+[node name="Background" type="ColorRect" parent="HUD"]
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -64,7 +68,7 @@ margin_top = -96.0
 theme = ExtResource( 5 )
 color = Color( 0.968627, 0.768627, 0.647059, 1 )
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Background"]
+[node name="MarginContainer" type="MarginContainer" parent="HUD/Background"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_constants/margin_right = 8
@@ -72,25 +76,25 @@ custom_constants/margin_top = 8
 custom_constants/margin_left = 8
 custom_constants/margin_bottom = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Background/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HUD/Background/MarginContainer"]
 margin_left = 8.0
 margin_top = 8.0
 margin_right = 632.0
 margin_bottom = 88.0
 custom_constants/separation = 16
 
-[node name="TextureRect" type="ColorRect" parent="CanvasLayer/Background/MarginContainer/HBoxContainer"]
+[node name="TextureRect" type="ColorRect" parent="HUD/Background/MarginContainer/HBoxContainer"]
 margin_right = 200.0
 margin_bottom = 80.0
 rect_min_size = Vector2( 200, 80 )
 color = Color( 0.968627, 0.768627, 0.647059, 1 )
 
-[node name="FirearmSprite" type="AnimatedSprite" parent="CanvasLayer/Background/MarginContainer/HBoxContainer/TextureRect"]
+[node name="FirearmSprite" type="AnimatedSprite" parent="HUD/Background/MarginContainer/HBoxContainer/TextureRect"]
 frames = SubResource( 5 )
 animation = "Flintlock"
 centered = false
 
-[node name="GridContainer" type="GridContainer" parent="CanvasLayer/Background/MarginContainer/HBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="HUD/Background/MarginContainer/HBoxContainer"]
 margin_left = 216.0
 margin_right = 396.0
 margin_bottom = 80.0
@@ -99,7 +103,7 @@ grow_vertical = 2
 rect_min_size = Vector2( 180, 80 )
 columns = 5
 
-[node name="Reload" type="TextureButton" parent="CanvasLayer/Background/MarginContainer/HBoxContainer"]
+[node name="Reload" type="TextureButton" parent="HUD/Background/MarginContainer/HBoxContainer"]
 margin_left = 420.0
 margin_top = 15.0
 margin_right = 480.0
@@ -114,7 +118,7 @@ texture_disabled = ExtResource( 7 )
 expand = true
 stretch_mode = 4
 
-[node name="Move" type="Button" parent="CanvasLayer/Background/MarginContainer/HBoxContainer"]
+[node name="Move" type="Button" parent="HUD/Background/MarginContainer/HBoxContainer"]
 margin_left = 504.0
 margin_top = 20.0
 margin_right = 624.0
@@ -149,8 +153,8 @@ autostart = true
 wait_time = 60.0
 one_shot = true
 
-[connection signal="pressed" from="CanvasLayer/Background/MarginContainer/HBoxContainer/Reload" to="." method="_on_Reload_pressed"]
-[connection signal="button_up" from="CanvasLayer/Background/MarginContainer/HBoxContainer/Move" to="." method="_on_Move_button_up"]
+[connection signal="pressed" from="HUD/Background/MarginContainer/HBoxContainer/Reload" to="." method="_on_Reload_pressed"]
+[connection signal="button_up" from="HUD/Background/MarginContainer/HBoxContainer/Move" to="." method="_on_Move_button_up"]
 [connection signal="input_event" from="BackgroundArea" to="." method="_on_BackgroundArea_input_event"]
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_SpawnTimer_timeout"]
 [connection signal="timeout" from="GameTimer" to="." method="_on_GameTimer_timeout"]
