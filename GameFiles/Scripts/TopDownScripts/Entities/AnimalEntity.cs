@@ -57,6 +57,7 @@ namespace TrailHunting.Scripts.TopDownScripts.Entities
                 if (IsInGroup(Constants.Animals))
                 {
                     RemoveFromGroup(Constants.Animals);
+                    AddToGroup(Constants.DeadAnimals);
                 }
             }
             UpdatePhysics();

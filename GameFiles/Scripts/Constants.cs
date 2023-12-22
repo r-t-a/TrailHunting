@@ -81,6 +81,7 @@
 
         // Groups
         public static string Animals = "Animals";
+        public static string DeadAnimals = "DeadAnimals";
 
         // Call Methods
         public static string SetSpawn = "SetSpawn";

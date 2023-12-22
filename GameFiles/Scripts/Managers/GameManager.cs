@@ -101,10 +101,10 @@ namespace TrailHunting.Scripts.Managers
         {
             ResultsDialog = Linker.GetTree().Root.GetNode("FirstPersonStart").GetNodeOrNull<AcceptDialog>("CanvasLayer/AcceptDialog");
             var label = ResultsDialog.GetNodeOrNull<Label>("ResultsText");
-            label.Text = $"Total Meat Hunted:{System.Environment.NewLine}{GetTotal(smallCounter, mediumCounter, medLargeCounter, largeCounter)}";
+            label.Text = $"Total Meat Hunted:{System.Environment.NewLine}{GetTotalMeat(smallCounter, mediumCounter, medLargeCounter, largeCounter)}";
         }
 
-        private static int GetTotal(int smallCounter, int mediumCounter, int medLargeCounter, int largeCounter)
+        public static int GetTotalMeat(int smallCounter, int mediumCounter, int medLargeCounter, int largeCounter)
         {
             return (smallCounter * SmallGame) + (mediumCounter * MediumGame) + (medLargeCounter * MediumLargeGame) + (largeCounter * LargeGame);
         }
@@ -237,7 +237,7 @@ namespace TrailHunting.Scripts.Managers
                 else
                 {
                     GD.Print("No Saved Data");
-                    TopDownBulletSpeed = 130;
+                    TopDownBulletSpeed = 250;
                     TopDownPlayerSpeed = 80;
                     MaxAnimalSpawn = 3;
                     MaxTerrainSpawn = 6;

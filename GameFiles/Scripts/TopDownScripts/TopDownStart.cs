@@ -6,6 +6,7 @@ using TrailHunting.Scripts.Enums;
 using TrailHunting.Scripts.Managers;
 using TrailHunting.Scripts;
 using TrailHunting.Scripts.Enums.Terrain;
+using TrailHunting.Scripts.TopDownScripts.Entities;
 
 public class TopDownStart : Node2D
 {
@@ -161,6 +162,19 @@ public class TopDownStart : Node2D
             SpawnAnimal(randAnimal, spawnTile, SpawnQuadrant.Bottom);
         }
     }
+
+    private void _on_GameTimer_timeout()
+    {
+        resultsPopup.SetResults(SmallGameCounter, MediumGameCounter, MedLargeGameCounter, LargeGameCounter, hitCount, GameManager.CurrentScore);
+        resultsPopup.Show();
+    }
+
+    private void _on_Results_RestartGame()
+    {
+        GameManager.ResetGame();
+        GetTree().ChangeScene(Constants.MainMenu); // small enough game where this will be quick enough to restart
+        GetTree().ChangeScene(Constants.TopDownStart);
+    }
     #endregion
 
     #region Methods
@@ -206,49 +220,49 @@ public class TopDownStart : Node2D
         switch ((Animals)animal)
         {
             case Animals.Squirrel:
-                var spawnSquirrel = (KinematicBody2D)Squirrel.Instance();
+                var spawnSquirrel = (AnimalEntity)Squirrel.Instance();
                 spawnSquirrel.GlobalPosition = global;
-                spawnSquirrel.Call(Constants.SetSpawn, (int)spawn);
+                spawnSquirrel.SetSpawn((int)spawn);
                 AddChild(spawnSquirrel);
                 break;
             case Animals.Rabbit:
-                var spawnRabbit = (KinematicBody2D)Rabbit.Instance();
+                var spawnRabbit = (AnimalEntity)Rabbit.Instance();
                 spawnRabbit.GlobalPosition = global;
-                spawnRabbit.Call(Constants.SetSpawn, (int)spawn);
+                spawnRabbit.SetSpawn((int)spawn);
                 AddChild(spawnRabbit);
                 break;
             case Animals.Doe:
-                var spawnDoe = (KinematicBody2D)Deer.Instance();
+                var spawnDoe = (AnimalEntity)Deer.Instance();
                 spawnDoe.GlobalPosition = global;
-                spawnDoe.Call(Constants.SetSpawn, (int)spawn);
+                spawnDoe.SetSpawn((int)spawn);
                 AddChild(spawnDoe);
                 break;
             case Animals.Buck:
-                var spawnBuck = (KinematicBody2D)Buck.Instance();
+                var spawnBuck = (AnimalEntity)Buck.Instance();
                 spawnBuck.GlobalPosition = global;
-                spawnBuck.Call(Constants.SetSpawn, (int)spawn);
+                spawnBuck.SetSpawn((int)spawn);
                 AddChild(spawnBuck);
                 break;
             case Animals.Bear:
                 var spawnBearOrRabbit = currentMap != MapType.Mountains || currentMap != MapType.Woods
-                    ? (KinematicBody2D)Rabbit.Instance()
-                    : (KinematicBody2D)Bear.Instance();
+                    ? (AnimalEntity)Rabbit.Instance()
+                    : (AnimalEntity)Bear.Instance();
                 spawnBearOrRabbit.GlobalPosition = global;
-                spawnBearOrRabbit.Call(Constants.SetSpawn, (int)spawn);
+                spawnBearOrRabbit.SetSpawn((int)spawn);
                 AddChild(spawnBearOrRabbit);
                 break;
             case Animals.Buffalo:
                 var spawnBuffaloOrSquirrel = currentMap != MapType.Plains 
-                    ? (KinematicBody2D)Buffalo.Instance()
-                    : (KinematicBody2D)Squirrel.Instance();
+                    ? (AnimalEntity)Buffalo.Instance()
+                    : (AnimalEntity)Squirrel.Instance();
                 spawnBuffaloOrSquirrel.GlobalPosition = global;
-                spawnBuffaloOrSquirrel.Call(Constants.SetSpawn, (int)spawn);
+                spawnBuffaloOrSquirrel.SetSpawn((int)spawn);
                 AddChild(spawnBuffaloOrSquirrel);
                 break;
             default:
-                var defaultMoreSquirrel = (KinematicBody2D)Squirrel.Instance();
+                var defaultMoreSquirrel = (AnimalEntity)Squirrel.Instance();
                 defaultMoreSquirrel.GlobalPosition = global;
-                defaultMoreSquirrel.Call(Constants.SetSpawn, (int)spawn);
+                defaultMoreSquirrel.SetSpawn((int)spawn);
                 AddChild(defaultMoreSquirrel);
                 break;
         }

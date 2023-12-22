@@ -5,7 +5,7 @@
   "MaxTerrainSpawn": 6,
   "PistolAmmo": 10,
   "RepeaterAmmo": 15,
-  "TopDownBulletSpeed": 130,
+  "TopDownBulletSpeed": 250,
   "TopDownPlayerSpeed": 80,
   "SmallGame": 4,
   "MediumGame": 90,
