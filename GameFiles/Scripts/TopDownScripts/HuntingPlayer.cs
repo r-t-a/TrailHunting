@@ -4,11 +4,6 @@ using TrailHunting.Scripts.Managers;
 
 public class HuntingPlayer : KinematicBody2D
 {
-    #region Signals
-    [Signal]
-    public delegate void ShotBullet();
-    #endregion
-
     #region Exports
     [Export]
     protected NodePath AnimationTreeNodePath { get; private set; }
@@ -17,12 +12,11 @@ public class HuntingPlayer : KinematicBody2D
     [Export]
     protected NodePath SoundEffectsNodePath { get; private set; }
     [Export]
-    public int AmmoCount { get; private set; } = 30;
-    [Export]
     protected PackedScene Bullet { get; private set; }
     #endregion
 
     #region Properties
+    public int ShotCount { get; private set; }
     private AnimationTree animationTree;
     private AnimationNodeStateMachinePlayback animationNode;
     private Position2D riflePosition;
@@ -42,7 +36,6 @@ public class HuntingPlayer : KinematicBody2D
 
         animationNode = (AnimationNodeStateMachinePlayback)animationTree.Get("parameters/playback");
         lookDirection = new Vector2(-1, 0);
-        Connect(nameof(ShotBullet), GetTree().Root.GetNode(GetTree().CurrentScene.Name), "onShotBullet");
     }
 
     public override void _PhysicsProcess(float delta)
@@ -159,15 +152,14 @@ public class HuntingPlayer : KinematicBody2D
         }
         if (inputEvent.IsActionPressed(Constants.Shoot))
         {
-            if (isMoving || AmmoCount == 0) return;
+            if (isMoving) return;
 
-            AmmoCount -= 1;
+            ShotCount += 1;
             shotSfx.Play();
             var bulletSpawn = (Bullet)Bullet.Instance();
             GetParent().AddChild(bulletSpawn);
             bulletSpawn.GlobalPosition = riflePosition.GlobalPosition;
             bulletSpawn.SetDirection(lookDirection);
-            EmitSignal(nameof(ShotBullet));
         }
     }
     #endregion

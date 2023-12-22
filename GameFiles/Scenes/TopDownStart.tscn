@@ -63,8 +63,9 @@ ResultsPopupNodePath = NodePath("HUD/Results")
 TileMapPath = NodePath("TileMap")
 SpawnTimerPath = NodePath("SpawnTimer")
 SpawnNodePath = NodePath("Spawns")
-AmmoValueNodePath = NodePath("HUD/StatsBar/DisplayContainer/AmmoContainer/AmmoValue")
+RemainingLabelNodePath = NodePath("HUD/StatsBar/DisplayContainer/TimeRemaining")
 ScoreValueNodePath = NodePath("HUD/StatsBar/DisplayContainer/Score")
+GameTimerNodePath = NodePath("GameTimer")
 HuntingPlayer = ExtResource( 6 )
 Deer = ExtResource( 8 )
 Rabbit = ExtResource( 11 )
@@ -94,44 +95,26 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -104.0
-margin_top = -48.0
-margin_right = -16.0
-margin_bottom = -14.0
+margin_left = -120.0
+margin_top = -42.0
+margin_right = -8.0
+margin_bottom = -8.0
 custom_constants/separation = 8
 alignment = 1
 
-[node name="AmmoContainer" type="HBoxContainer" parent="HUD/StatsBar/DisplayContainer"]
+[node name="TimeRemaining" type="Label" parent="HUD/StatsBar/DisplayContainer"]
 margin_top = 5.0
-margin_right = 88.0
+margin_right = 112.0
 margin_bottom = 13.0
-size_flags_horizontal = 3
-theme = ExtResource( 5 )
-
-[node name="AmmoLabel" type="Label" parent="HUD/StatsBar/DisplayContainer/AmmoContainer"]
-margin_right = 40.0
-margin_bottom = 8.0
-theme = ExtResource( 5 )
-text = "Ammo:"
-align = 1
-valign = 1
-
-[node name="AmmoValue" type="Label" parent="HUD/StatsBar/DisplayContainer/AmmoContainer"]
-margin_left = 44.0
-margin_right = 88.0
-margin_bottom = 8.0
-size_flags_horizontal = 3
-text = "999"
-align = 2
+text = "Remaining: 30"
 valign = 1
 
 [node name="Score" type="Label" parent="HUD/StatsBar/DisplayContainer"]
 margin_top = 21.0
-margin_right = 88.0
+margin_right = 112.0
 margin_bottom = 29.0
 size_flags_horizontal = 3
-text = "10000000000"
-align = 2
+text = "123456790"
 valign = 1
 
 [node name="Results" parent="HUD" instance=ExtResource( 13 )]

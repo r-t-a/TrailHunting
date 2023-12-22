@@ -38,10 +38,10 @@ public class Results : ColorRect
         EmitSignal(nameof(RestartGame));
     }
 
-    public void SetResults(int small, int medium, int medLarge, int large, int hit, int score)
+    public void SetResults(int small, int medium, int medLarge, int large, int totalShot, int hit, int score)
     {
         meatCollectedLabel.Text = $"{GameManager.GetTotalMeat(small, medium, medLarge, large)}";
-        accuracyLabel.Text = $"{hit}";
+        accuracyLabel.Text = $"{hit}/{totalShot}";
         totalScoreLabel.Text = $"{score}";
     }
 }

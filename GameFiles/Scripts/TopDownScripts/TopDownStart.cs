@@ -20,9 +20,11 @@ public class TopDownStart : Node2D
     [Export]
     protected NodePath SpawnNodePath { get; private set; }
     [Export]
-    protected NodePath AmmoValueNodePath { get; private set; }
+    protected NodePath RemainingLabelNodePath { get; private set; }
     [Export]
     protected NodePath ScoreValueNodePath { get; private set; }
+    [Export]
+    protected NodePath GameTimerNodePath { get; private set; }
     [Export]
     protected PackedScene HuntingPlayer { get; private set; }
     [Export]
@@ -48,8 +50,8 @@ public class TopDownStart : Node2D
     private HuntingPlayer Player;
     private Results resultsPopup;
     private TileMap groundTileMap;
-    private Timer spawnTimer;
-    private Label ammoValue;
+    private Timer gameTimer;
+    private Label remainingTime;
     private Label scoreValue;
     private int hitCount = 0;
 
@@ -62,8 +64,8 @@ public class TopDownStart : Node2D
     {
         resultsPopup = GetNodeOrNull<Results>(ResultsPopupNodePath);
         groundTileMap = GetNodeOrNull<TileMap>(TileMapPath);
-        spawnTimer = GetNodeOrNull<Timer>(SpawnTimerPath);
-        ammoValue = GetNodeOrNull<Label>(AmmoValueNodePath);
+        gameTimer = GetNodeOrNull<Timer>(GameTimerNodePath);
+        remainingTime = GetNodeOrNull<Label>(RemainingLabelNodePath);
         scoreValue = GetNodeOrNull<Label>(ScoreValueNodePath);
 
         spawns.Add(GetNodeOrNull<Area2D>($"{SpawnNodePath}/Spawn1"));
@@ -83,16 +85,11 @@ public class TopDownStart : Node2D
     public override void _Process(float delta)
     {
         scoreValue.Text = GameManager.CurrentScore.ToString();
+        remainingTime.Text = $"Remaining: {Math.Round(gameTimer.TimeLeft)}";
     }
     #endregion
 
     #region Events
-    private void onShotBullet()
-    {
-        ammoValue.Text = Player.AmmoCount.ToString();
-        if (Player.AmmoCount == 0) spawnTimer.Stop();
-    }
-
     private void onBulletHit()
     {
         hitCount += 1;
@@ -165,7 +162,7 @@ public class TopDownStart : Node2D
 
     private void _on_GameTimer_timeout()
     {
-        resultsPopup.SetResults(SmallGameCounter, MediumGameCounter, MedLargeGameCounter, LargeGameCounter, hitCount, GameManager.CurrentScore);
+        resultsPopup.SetResults(SmallGameCounter, MediumGameCounter, MedLargeGameCounter, LargeGameCounter, Player.ShotCount, hitCount, GameManager.CurrentScore);
         resultsPopup.Show();
     }
 
@@ -188,7 +185,6 @@ public class TopDownStart : Node2D
     private void SetupUI()
     {
         resultsPopup.Hide();
-        ammoValue.Text = Player.AmmoCount.ToString();
         scoreValue.Text = GameManager.CurrentScore.ToString();
     }
 
